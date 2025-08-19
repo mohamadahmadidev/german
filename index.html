@@ -184,6 +184,19 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // --- Vocabulary Data ---
+        const a1_data = [
+            { "word": "ab", "article": null, "plural": null, "en_translation": "from, starting from", "fa_translation": "از", "ku_translation": "لەوە، لە", "exercise_sentence": "__ morgen muss ich wieder arbeiten.", "complete_sentence": "Ab morgen muss ich wieder arbeiten.", "en_sentence_translation": "Starting tomorrow, I have to work again.", "fa_sentence_translation": "از فردا دوباره باید کار کنم.", "ku_sentence_translation": "لە سبەینێوە دەبێت دووبارە کار بکەم." },
+            { "word": "aber", "article": null, "plural": null, "en_translation": "but, however", "fa_translation": "اما، ولی", "ku_translation": "بەڵام", "exercise_sentence": "Heute kann ich nicht kommen, __ morgen habe ich Zeit.", "complete_sentence": "Heute kann ich nicht kommen, aber morgen habe ich Zeit.", "en_sentence_translation": "I can't come today, but I have time tomorrow.", "fa_sentence_translation": "امروز نمی‌توانم بیایم، اما فردا وقت دارم.", "ku_sentence_translation": "ئەمڕۆ ناتوانم بێم، بەڵام سبەی کاتم هەیە." },
+            { "word": "das Baby", "article": "das", "plural": "die Babys", "en_translation": "baby", "fa_translation": "نوزاد", "ku_translation": "ساوا", "exercise_sentence": "Wir haben ein __. Es ist sechs Wochen alt.", "complete_sentence": "Wir haben ein Baby. Es ist sechs Wochen alt.", "en_sentence_translation": "We have a baby. It is six weeks old.", "fa_sentence_translation": "ما یک نوزاد داریم. او شش هفته دارد.", "ku_sentence_translation": "ساوایەکمان هەیە. تەمەنی شەش هەفتەیە." }
+        ];
+
+        const a2_data = [
+            { "word": "die Umwelt", "article": "die", "plural": "die Umwelten", "en_translation": "environment", "fa_translation": "محیط زیست", "ku_translation": "ژینگە", "exercise_sentence": "Wir müssen unsere __ schützen.", "complete_sentence": "Wir müssen unsere Umwelt schützen.", "en_sentence_translation": "We must protect our environment.", "fa_sentence_translation": "ما باید از محیط زیست خود محافظت کنیم.", "ku_sentence_translation": "ئێمە دەبێت ژینگەی خۆمان بپارێزین." },
+            { "word": "die Bedingung", "article": "die", "plural": "die Bedingungen", "en_translation": "condition, requirement", "fa_translation": "شرط، وضعیت", "ku_translation": "مەرج، بارودۆخ", "exercise_sentence": "Was sind die __en für diesen Job?", "complete_sentence": "Was sind die Bedingungen für diesen Job?", "en_sentence_translation": "What are the requirements for this job?", "fa_sentence_translation": "شرایط این کار چیست؟", "ku_sentence_translation": "مەرجەکانی ئەم کارە چین؟" },
+            { "word": "abhängen von", "article": null, "plural": null, "en_translation": "to depend on", "fa_translation": "بستگی داشتن به", "ku_translation": "پەیوەست بوون بە", "exercise_sentence": "Es __t vom Wetter __, ob wir grillen.", "complete_sentence": "Es hängt vom Wetter ab, ob wir grillen.", "en_sentence_translation": "It depends on the weather whether we have a barbecue.", "fa_sentence_translation": "اینکه کباب درست کنیم یا نه به هوا بستگی دارد.", "ku_sentence_translation": "ئەوەی کە کباب دەکەین یان نا، پەیوەستە بە کەش و هەواوە." }
+        ];
+
         // DOM Elements
         const setupArea = document.getElementById('setup-area');
         const languageSelect = document.getElementById('language-select');
@@ -291,46 +304,26 @@
         };
 
         // --- Game Logic ---
-        const startGame = async () => {
+        const startGame = () => {
             const level = levelSelect.value;
-            const filename = level === 'a1' ? 'a1_multi_language.json' : 'a2_multi_language.json';
+            vocabulary = (level === 'a1') ? a1_data : a2_data;
 
-            startBtn.textContent = 'Loading...';
-            startBtn.disabled = true;
-
-            try {
-                const response = await fetch(filename);
-                if (!response.ok) {
-                    throw new Error(`Network response was not ok. Status: ${response.status}`);
-                }
-                const data = await response.json();
-
-                if (!Array.isArray(data) || data.length === 0) {
-                    throw new Error("Loaded data is not a valid vocabulary array.");
-                }
-                vocabulary = data;
-
-                currentIndex = 0;
-                setupArea.classList.add('hidden');
-                practiceArea.classList.remove('hidden');
-                statsArea.classList.remove('hidden');
-                displayCurrentWord();
-
-            } catch (error) {
-                console.error('Failed to load vocabulary:', error);
-                // Use a more user-friendly message instead of alert()
-                const setupDiv = document.getElementById('setup-area');
-                let errorMsg = setupDiv.querySelector('.error-message');
-                if (!errorMsg) {
-                    errorMsg = document.createElement('p');
-                    errorMsg.className = 'error-message text-red-500 mt-4';
-                    setupDiv.appendChild(errorMsg);
-                }
-                errorMsg.textContent = `Error: Could not load "${filename}". Please ensure the file exists in the project's root directory.`;
-            } finally {
-                startBtn.textContent = 'Start Practice';
-                startBtn.disabled = false;
+            if (!vocabulary || vocabulary.length === 0) {
+                alert("No vocabulary found for this level.");
+                return;
             }
+
+            // Get the last saved index for this specific level
+            const savedIndexCookie = `lastIndex_${level}`;
+            let savedIndex = parseInt(getCookie(savedIndexCookie) || '0', 10);
+
+            // Ensure the saved index is valid
+            currentIndex = (savedIndex >= 0 && savedIndex < vocabulary.length) ? savedIndex : 0;
+
+            setupArea.classList.add('hidden');
+            practiceArea.classList.remove('hidden');
+            statsArea.classList.remove('hidden');
+            displayCurrentWord();
         };
 
         const showSetup = () => {
@@ -389,6 +382,11 @@
 
             generateQuizOptions(item);
             progressIndicator.textContent = `${currentIndex + 1} / ${vocabulary.length}`;
+
+            // Save the current index to a cookie specific to the level
+            const level = levelSelect.value;
+            const indexCookieName = `lastIndex_${level}`;
+            setCookie(indexCookieName, currentIndex, 30);
         };
 
         const generateQuizOptions = (correctItem) => {
