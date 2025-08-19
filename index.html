@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polyglot Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        /* Flip Card Styles */
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 250px;
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.is-flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border-radius: 1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .flip-card-front {
+            background-color: #f3f4f6; /* bg-gray-100 */
+            color: black;
+            cursor: pointer;
+        }
+        .flip-card-back {
+            background-color: #4f46e5; /* bg-indigo-600 */
+            color: white;
+            transform: rotateY(180deg);
+        }
+        /* Tab Styles */
+        .tab {
+            cursor: pointer;
+            padding: 10px 20px;
+            border-bottom: 3px solid transparent;
+        }
+        .tab.active {
+            border-bottom-color: #4f46e5; /* indigo-600 */
+            color: #4f46e5;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 flex items-center justify-center min-h-screen p-4">
+
+    <div id="app" class="w-full max-w-4xl mx-auto">
+        <div class="card p-6 md:p-8">
+            <header class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-indigo-600">Polyglot Practice</h1>
+                <p class="text-gray-500 mt-2">Select your level and start your interactive practice session.</p>
+            </header>
+
+            <!-- Initial Setup: Language/Level Selection -->
+            <div id="setup-area">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                        <label for="language-select" class="block text-sm font-medium text-gray-700 mb-2">Language to Learn</label>
+                        <select id="language-select" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="de">Deutsch (German)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="level-select" class="block text-sm font-medium text-gray-700 mb-2">Level</label>
+                        <select id="level-select" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="a1">A1</option>
+                            <option value="a2">A2</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-center">
+                     <button id="start-btn" class="btn bg-indigo-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-indigo-700 w-full md:w-auto">
+                        Start Practice
+                    </button>
+                </div>
+            </div>
+
+            <!-- Practice Area -->
+            <div id="practice-area" class="hidden">
+                 <!-- Top Bar: Back Button & Translation Selector -->
+                <div class="flex justify-between items-center mb-4">
+                    <button id="back-to-setup" class="btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300">&larr; Change Level</button>
+                    <div class="flex items-center">
+                        <label for="translation-select" class="text-sm font-medium text-gray-700 mr-2">Translation:</label>
+                        <select id="translation-select" class="p-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
+                            <option value="en">English</option>
+                            <option value="fa">Farsi</option>
+                            <option value="ku">Kurdish</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="flex justify-center border-b mb-6">
+                    <div id="vocab-tab" class="tab active">Vocab Cards</div>
+                    <div id="sentence-tab" class="tab">Sentence Cards</div>
+                    <div id="quiz-tab" class="tab">Quiz</div>
+                </div>
+
+                <!-- Tab Content -->
+                <div id="vocab-content" class="practice-content">
+                    <div id="vocab-flip-card" class="flip-card mx-auto">
+                        <div class="flip-card-inner">
+                            <div id="vocab-card-front" class="flip-card-front"></div>
+                            <div id="vocab-card-back" class="flip-card-back"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="sentence-content" class="practice-content hidden">
+                     <div id="sentence-flip-card" class="flip-card mx-auto">
+                        <div class="flip-card-inner">
+                            <div id="sentence-card-front" class="flip-card-front"></div>
+                            <div id="sentence-card-back" class="flip-card-back"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="quiz-content" class="practice-content hidden text-center">
+                    <div class="mb-6 p-6 bg-indigo-50 rounded-lg min-h-[100px] flex items-center justify-center">
+                        <p class="text-lg md:text-xl text-gray-700" id="quiz-sentence"></p>
+                    </div>
+                    <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+                    <p id="quiz-feedback" class="mt-4 font-semibold h-6"></p>
+                </div>
+
+                <!-- Navigation -->
+                <div class="flex justify-between items-center mt-6">
+                    <button id="prev-btn" class="btn bg-gray-500 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-gray-600">Previous</button>
+                    <span id="progress-indicator" class="text-gray-600 font-medium">1 / 10</span>
+                    <button id="next-btn" class="btn bg-gray-500 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-gray-600">Next</button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div id="stats-area" class="hidden mt-8 flex justify-center gap-8 text-center">
+                <div>
+                    <p class="text-3xl font-bold text-green-500" id="success-count">0</p>
+                    <p class="text-sm text-gray-500">Correct</p>
+                </div>
+                <div>
+                    <p class="text-3xl font-bold text-red-500" id="fail-count">0</p>
+                    <p class="text-sm text-gray-500">Incorrect</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // DOM Elements
+        const setupArea = document.getElementById('setup-area');
+        const languageSelect = document.getElementById('language-select');
+        const levelSelect = document.getElementById('level-select');
+        const startBtn = document.getElementById('start-btn');
+
+        const practiceArea = document.getElementById('practice-area');
+        const statsArea = document.getElementById('stats-area');
+        const translationSelect = document.getElementById('translation-select');
+        const backToSetupBtn = document.getElementById('back-to-setup');
+
+        const tabs = document.querySelectorAll('.tab');
+        const practiceContents = document.querySelectorAll('.practice-content');
+        const vocabFlipCard = document.getElementById('vocab-flip-card');
+        const vocabCardFront = document.getElementById('vocab-card-front');
+        const vocabCardBack = document.getElementById('vocab-card-back');
+        const sentenceFlipCard = document.getElementById('sentence-flip-card');
+        const sentenceCardFront = document.getElementById('sentence-card-front');
+        const sentenceCardBack = document.getElementById('sentence-card-back');
+        const quizSentence = document.getElementById('quiz-sentence');
+        const quizOptions = document.getElementById('quiz-options');
+        const quizFeedback = document.getElementById('quiz-feedback');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const progressIndicator = document.getElementById('progress-indicator');
+        const successCountEl = document.getElementById('success-count');
+        const failCountEl = document.getElementById('fail-count');
+
+        // App State
+        let vocabulary = [];
+        let currentIndex = 0;
+        let successCount = 0;
+        let failCount = 0;
+
+        // --- Cookie Management ---
+        const setCookie = (name, value, days) => {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = `${name}=${value || ""}${expires}; path=/; SameSite=Lax`;
+        };
+
+        const getCookie = (name) => {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i=0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        };
+
+        // --- Text-to-Speech ---
+        const speak = (text, lang) => {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = lang;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                console.error("Browser doesn't support text-to-speech.");
+            }
+        };
+
+        // --- Initialization ---
+        const initialize = () => {
+            loadStateFromCookies();
+
+            // Event Listeners
+            startBtn.addEventListener('click', startGame);
+            backToSetupBtn.addEventListener('click', showSetup);
+
+            tabs.forEach(tab => tab.addEventListener('click', switchTab));
+            vocabFlipCard.addEventListener('click', () => vocabFlipCard.classList.toggle('is-flipped'));
+            sentenceFlipCard.addEventListener('click', () => sentenceFlipCard.classList.toggle('is-flipped'));
+            prevBtn.addEventListener('click', showPrevious);
+            nextBtn.addEventListener('click', showNext);
+
+            translationSelect.addEventListener('change', () => {
+                setCookie('lastTranslationLang', translationSelect.value, 30);
+                if (vocabulary.length > 0) displayCurrentWord();
+            });
+            languageSelect.addEventListener('change', () => setCookie('lastLanguage', languageSelect.value, 30));
+            levelSelect.addEventListener('change', () => setCookie('lastLevel', levelSelect.value, 30));
+        };
+
+        const loadStateFromCookies = () => {
+            languageSelect.value = getCookie('lastLanguage') || 'de';
+            levelSelect.value = getCookie('lastLevel') || 'a1';
+            translationSelect.value = getCookie('lastTranslationLang') || 'en';
+            successCount = parseInt(getCookie('successCount') || '0', 10);
+            failCount = parseInt(getCookie('failCount') || '0', 10);
+            updateStats();
+        };
+
+        const updateStats = () => {
+            successCountEl.textContent = successCount;
+            failCountEl.textContent = failCount;
+            setCookie('successCount', successCount, 30);
+            setCookie('failCount', failCount, 30);
+        };
+
+        // --- Game Logic ---
+        const startGame = async () => {
+            const level = levelSelect.value;
+            const filename = level === 'a1' ? 'a1_multi_language.json' : 'a2_multi_language.json';
+
+            startBtn.textContent = 'Loading...';
+            startBtn.disabled = true;
+
+            try {
+                const response = await fetch(filename);
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok. Status: ${response.status}`);
+                }
+                const data = await response.json();
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    throw new Error("Loaded data is not a valid vocabulary array.");
+                }
+                vocabulary = data;
+
+                currentIndex = 0;
+                setupArea.classList.add('hidden');
+                practiceArea.classList.remove('hidden');
+                statsArea.classList.remove('hidden');
+                displayCurrentWord();
+
+            } catch (error) {
+                console.error('Failed to load vocabulary:', error);
+                // Use a more user-friendly message instead of alert()
+                const setupDiv = document.getElementById('setup-area');
+                let errorMsg = setupDiv.querySelector('.error-message');
+                if (!errorMsg) {
+                    errorMsg = document.createElement('p');
+                    errorMsg.className = 'error-message text-red-500 mt-4';
+                    setupDiv.appendChild(errorMsg);
+                }
+                errorMsg.textContent = `Error: Could not load "${filename}". Please ensure the file exists in the project's root directory.`;
+            } finally {
+                startBtn.textContent = 'Start Practice';
+                startBtn.disabled = false;
+            }
+        };
+
+        const showSetup = () => {
+            window.speechSynthesis.cancel();
+            practiceArea.classList.add('hidden');
+            statsArea.classList.add('hidden');
+            setupArea.classList.remove('hidden');
+        };
+
+        const displayCurrentWord = () => {
+            if (vocabulary.length === 0) return;
+            const item = vocabulary[currentIndex];
+
+            const learnLang = languageSelect.value;
+            const ttsLangCode = learnLang === 'de' ? 'de-DE' : 'en-US';
+            const translationLang = translationSelect.value;
+            const translationKey = `${translationLang}_translation`;
+            const sentenceTranslationKey = `${translationLang}_sentence_translation`;
+
+            vocabFlipCard.classList.remove('is-flipped');
+            sentenceFlipCard.classList.remove('is-flipped');
+
+            vocabCardFront.innerHTML = `
+                <div class="relative w-full h-full flex flex-col justify-center items-center">
+                    <h2 class="text-4xl font-bold">${item.word}</h2>
+                    <p class="text-gray-500 mt-2">${item.plural ? `(${item.plural})` : ''}</p>
+                    <p class="mt-4 text-sm text-gray-400">Click card to flip</p>
+                    <button id="speak-vocab-btn" class="absolute top-4 right-4 text-gray-500 hover:text-indigo-600 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                    </button>
+                </div>`;
+            vocabCardBack.innerHTML = `<p class="text-3xl font-semibold">${item[translationKey] || 'N/A'}</p>`;
+
+            sentenceCardFront.innerHTML = `
+                <div class="relative w-full h-full flex flex-col justify-center items-center">
+                    <p class="text-xl px-4">${item.exercise_sentence.replace(/__/g, '<strong>_______</strong>')}</p>
+                    <p class="mt-4 text-sm text-gray-400">Click card to flip</p>
+                    <button id="speak-sentence-btn" class="absolute top-4 right-4 text-gray-500 hover:text-indigo-600 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                    </button>
+                </div>`;
+            sentenceCardBack.innerHTML = `
+                <p class="font-semibold text-lg">${item.complete_sentence}</p>
+                <div class="text-md mt-4 text-center w-full border-t pt-4">
+                    <p>${item[sentenceTranslationKey] || 'N/A'}</p>
+                </div>`;
+
+            document.getElementById('speak-vocab-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                speak(item.word, ttsLangCode);
+            });
+            document.getElementById('speak-sentence-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                speak(item.complete_sentence, ttsLangCode);
+            });
+
+            generateQuizOptions(item);
+            progressIndicator.textContent = `${currentIndex + 1} / ${vocabulary.length}`;
+        };
+
+        const generateQuizOptions = (correctItem) => {
+            quizOptions.innerHTML = '';
+            quizFeedback.textContent = '';
+
+            const correctAnswer = correctItem.word.split(' ').pop();
+            let options = [correctAnswer];
+
+            const wrongAnswers = vocabulary
+                .map(v => v.word.split(' ').pop())
+                .filter(w => w.toLowerCase() !== correctAnswer.toLowerCase());
+
+            while (options.length < 4 && wrongAnswers.length > 0) {
+                const randomIndex = Math.floor(Math.random() * wrongAnswers.length);
+                const randomWord = wrongAnswers.splice(randomIndex, 1)[0];
+                if (!options.includes(randomWord)) options.push(randomWord);
+            }
+
+            options.sort(() => Math.random() - 0.5);
+
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.className = "btn w-full p-4 border rounded-lg text-lg hover:bg-gray-100";
+                button.addEventListener('click', () => checkQuizAnswer(option, correctAnswer));
+                quizOptions.appendChild(button);
+            });
+        };
+
+        const checkQuizAnswer = (selected, correct) => {
+            quizOptions.querySelectorAll('button').forEach(b => b.disabled = true);
+
+            if (selected.toLowerCase() === correct.toLowerCase()) {
+                successCount++;
+                quizFeedback.textContent = "Correct! 🎉";
+                quizFeedback.className = "mt-4 font-semibold h-6 text-green-500";
+            } else {
+                failCount++;
+                quizFeedback.textContent = `Not quite. The answer is "${correct}".`;
+                quizFeedback.className = "mt-4 font-semibold h-6 text-red-500";
+            }
+            updateStats();
+        };
+
+        // --- Navigation ---
+        const showNext = () => {
+            window.speechSynthesis.cancel();
+            currentIndex = (currentIndex + 1) % vocabulary.length;
+            displayCurrentWord();
+        };
+
+        const showPrevious = () => {
+            window.speechSynthesis.cancel();
+            currentIndex = (currentIndex - 1 + vocabulary.length) % vocabulary.length;
+            displayCurrentWord();
+        };
+
+        const switchTab = (event) => {
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            practiceContents.forEach(content => content.classList.add('hidden'));
+            document.getElementById(event.target.id.replace('-tab', '-content')).classList.remove('hidden');
+        };
+
+        // Start the app
+        initialize();
+    });
+    </script>
+</body>
+</html>
