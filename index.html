@@ -285,6 +285,11 @@
             });
             languageSelect.addEventListener('change', () => setCookie('lastLanguage', languageSelect.value, 30));
             levelSelect.addEventListener('change', () => setCookie('lastLevel', levelSelect.value, 30));
+
+            // Auto-start if a session was previously active
+            if (getCookie('sessionActive') === 'true') {
+                startGame();
+            }
         };
 
         const loadStateFromCookies = () => {
@@ -313,6 +318,9 @@
                 return;
             }
 
+            // Set the session as active
+            setCookie('sessionActive', 'true', 1);
+
             // Get the last saved index for this specific level
             const savedIndexCookie = `lastIndex_${level}`;
             let savedIndex = parseInt(getCookie(savedIndexCookie) || '0', 10);
@@ -328,6 +336,9 @@
 
         const showSetup = () => {
             window.speechSynthesis.cancel();
+            // Clear the active session cookie to prevent auto-start next time
+            setCookie('sessionActive', '', -1);
+
             practiceArea.classList.add('hidden');
             statsArea.classList.add('hidden');
             setupArea.classList.remove('hidden');
