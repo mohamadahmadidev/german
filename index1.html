@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>German Learning Journey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Baloo+2:wght@700;800&family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; /* slate-100 */ }
+        .font-display { font-family: 'Baloo 2', cursive; }
+        .font-fa { font-family: 'Vazirmatn', sans-serif; }
+
+        /* Tab Navigation Styles */
+        .progress-nav-item { transition: all 0.3s ease; cursor: pointer; }
+        .progress-nav-item .nav-bubble { transition: all 0.3s ease; }
+        .progress-nav-item.active .nav-bubble { background-color: #3b82f6; color: white; border-color: #2563eb; transform: scale(1.1); }
+        .progress-nav-item.active .nav-label { color: #1e3a8a; font-weight: 600; }
+        .progress-nav-item.locked { cursor: not-allowed; color: #9ca3af; }
+        .progress-nav-item.locked .nav-bubble { background-color: #e5e7eb; border-color: #d1d5db; color: #9ca3af; }
+        .progress-arrow { color: #d1d5db; }
+        .progress-nav-item.completed .progress-arrow { color: #3b82f6; }
+
+        /* General App & Module Styles */
+        .app-section { display: none; }
+        .app-section.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .rtl { direction: rtl; }
+
+        /* Vocab Town Styles */
+        .town-modal { transition: opacity 0.3s ease-in-out; }
+        .flashcard { perspective: 1000px; }
+        .flashcard-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flashcard.is-flipped .flashcard-inner { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 0.75rem; padding: 1rem; text-align: center; background-size: cover; background-position: center; color: white; }
+        .card-overlay { position: absolute; inset: 0; background-color: rgba(0,0,0,0.5); border-radius: 0.75rem; z-index: 1; }
+        .card-content { position: relative; z-index: 2; }
+        .flashcard-back { transform: rotateY(180deg); }
+        .town-building { transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; }
+        .town-building:hover { transform: translateY(-10px) scale(1.05); }
+        .quiz-option.correct { background-color: #10B981 !important; border-color: #059669 !important; color: white !important; }
+        .quiz-option.incorrect { background-color: #EF4444 !important; border-color: #DC2626 !important; color: white !important; }
+
+        /* Sentence Patterns Styles */
+        .case-card { transition: all 0.3s ease-in-out; }
+        .practice-mode .answer { background-color: #e5e7eb; color: #e5e7eb; border-radius: 4px; padding: 0 4px; cursor: pointer; transition: all 0.2s ease; }
+        .practice-mode .answer.revealed { background-color: transparent; color: inherit; }
+        .translation { color: #6b7280; }
+
+        /* Alphabet Styles */
+        .alphabet-grid-container { grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); }
+        @media (min-width: 640px) { .alphabet-grid-container { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); } }
+        .letter-btn {
+            background-color: #f1f5f9;
+            color: #334155;
+            border: 2px solid #e2e8f0;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .letter-btn:hover:not(.disabled) {
+            background-color: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        .letter-btn.active {
+            background-color: #3b82f6 !important;
+            color: white !important;
+            border-color: #2563eb !important;
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+        .letter-btn.disabled {
+            background-color: #f8fafc;
+            color: #94a3b8;
+            border-color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .letter-btn.disabled:hover {
+            transform: none;
+            background-color: #f8fafc;
+        }
+
+        /* A1/A2 Levels Styles */
+        .level-card.is-flipped .level-card-inner { transform: rotateY(180deg); }
+
+        /* Pagination Styles */
+        #pagination-container button:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #pagination-container button:disabled {
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 640px) {
+            #pagination-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            #pagination-container .flex {
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <!-- Global Header -->
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="font-display text-2xl font-bold text-blue-600">Lern-Weg</h1>
+                </div>
+                <div class="flex items-center">
+                    <label for="language-select" class="sr-only">Language</label>
+                    <select id="language-select" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm">
+                        <option value="en">🇺🇸 English</option>
+                        <option value="fa">🇮🇷 فارسی</option>
+                        <option value="ku">🇹🇯 کوردی</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <!-- New Progress Navigation Bar -->
+        <nav id="progress-nav" class="bg-white border-t border-slate-200">
+            <div id="progress-nav-inner" class="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3 overflow-x-auto">
+                <!-- Nav items will be injected here -->
+            </div>
+        </nav>
+    </header>
+
+    <main id="app-container" class="container mx-auto p-4 md:p-8">
+        <section id="alphabet-view" class="app-section"></section>
+        <section id="levels-view" class="app-section"></section>
+        <section id="town-view" class="app-section"></section>
+        <section id="patterns-view" class="app-section"></section>
+    </main>
+
+    <script>
+    // --- FULL SCRIPT ---
+    (function() {
+        // --- GLOBAL STATE & DATA ---
+        let currentLanguage = 'en';
+        let userProgress = { completedStations: ['alphabet'] };
+        let initializedModules = [];
+        let vocabularyData = { a1: [], a2: [], a1_attachments: [], a2_attachments: [] };
+
+        const uiTranslations = {
+            'station-alphabet-title': { en: 'Alphabet', fa: 'الفبا', ku: 'ئەلفوبێ' },
+            'station-levels-title': { en: 'A1/A2 Vocab', fa: 'واژگان A1/A2', ku: 'وشەکانی A1/A2' },
+            'station-town-title': { en: 'Vocab Town', fa: 'شهر واژگان', ku: 'شاری وشەکان' },
+            'station-patterns-title': { en: 'Sentence Patterns', fa: 'الگوهای جمله', ku: 'شێوازەکانی ڕستە' },
+        };
+
+        const navStations = [
+            { id: 'alphabet', title: 'station-alphabet-title', icon: '🔤', dependsOn: null },
+            { id: 'levels', title: 'station-levels-title', icon: '📚', dependsOn: 'alphabet' },
+            { id: 'town', title: 'station-town-title', icon: '🏘️', dependsOn: 'levels' },
+            { id: 'patterns', title: 'station-patterns-title', icon: '🧩', dependsOn: 'town' },
+        ];
+
+        // --- CORE APP LOGIC ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadAllData();
+
+            const langSelect = document.getElementById('language-select');
+            langSelect.addEventListener('change', (e) => {
+                currentLanguage = e.target.value;
+                document.documentElement.lang = currentLanguage;
+                document.documentElement.dir = (currentLanguage === 'fa' || currentLanguage === 'ku') ? 'rtl' : 'ltr';
+                updateUIText();
+                const activeSectionId = document.querySelector('.app-section.active')?.id.replace('-view', '');
+                if (activeSectionId && initializedModules.includes(activeSectionId)) {
+                    showSection(activeSectionId, true);
+                }
+            });
+
+            initializeNavigation();
+            showSection('alphabet');
+        });
+
+        async function loadAllData() {
+            try {
+                const [a1Res, a2Res, a1AttachRes, a2AttachRes] = await Promise.all([
+                    fetch('a1_multi_language.json').then(res => res.json()),
+                    fetch('a2_multi_language.json').then(res => res.json()),
+                    fetch('a1_atachments.json').then(res => res.json()),
+                    fetch('a2_attachments.json').then(res => res.json())
+                ]);
+                vocabularyData.a1 = a1Res;
+                vocabularyData.a2 = a2Res;
+                vocabularyData.a1_attachments = a1AttachRes;
+                vocabularyData.a2_attachments = a2AttachRes;
+            } catch (error) {
+                console.error("Failed to load vocabulary data:", error);
+            }
+        }
+
+        function updateUIText() {
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                const key = el.dataset.translateKey;
+                if (uiTranslations[key] && uiTranslations[key][currentLanguage]) {
+                    el.textContent = uiTranslations[key][currentLanguage];
+                }
+            });
+        }
+
+        function initializeNavigation() {
+            const navContainer = document.getElementById('progress-nav-inner');
+            navContainer.innerHTML = '';
+            navStations.forEach((station, index) => {
+                const isLocked = station.dependsOn && !userProgress.completedStations.includes(station.dependsOn);
+                const isCompleted = userProgress.completedStations.includes(station.id);
+                const navItem = document.createElement('div');
+                navItem.className = `progress-nav-item flex items-center ${isLocked ? 'locked' : ''} ${isCompleted ? 'completed' : ''}`;
+                navItem.dataset.stationId = station.id;
+                navItem.innerHTML = `<div class="text-center"><div class="nav-bubble w-12 h-12 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center text-2xl mx-auto">${station.icon}</div><p data-translate-key="${station.title}" class="nav-label text-xs text-slate-500 mt-1">${uiTranslations[station.title][currentLanguage]}</p></div>`;
+                if (!isLocked) {
+                    navItem.addEventListener('click', () => {
+                        showSection(station.id);
+                        if (!userProgress.completedStations.includes(station.id)) {
+                            userProgress.completedStations.push(station.id);
+                            initializeNavigation();
+                        }
+                    });
+                }
+                navContainer.appendChild(navItem);
+                if (index < navStations.length - 1) {
+                    const arrow = document.createElement('div');
+                    arrow.className = 'progress-arrow flex-grow h-1 bg-gray-300 mx-2';
+                    if(isCompleted) arrow.style.background = '#3b82f6';
+                    navContainer.appendChild(arrow);
+                }
+            });
+            updateUIText();
+        }
+
+        function showSection(stationId, forceReload = false) {
+            document.querySelectorAll('.progress-nav-item').forEach(item => item.classList.toggle('active', item.dataset.stationId === stationId));
+            document.querySelectorAll('.app-section').forEach(section => section.classList.toggle('active', section.id === `${stationId}-view`));
+            if (!initializedModules.includes(stationId) || forceReload) {
+                const sectionView = document.getElementById(`${stationId}-view`);
+                switch(stationId) {
+                    case 'town': initializeTown(sectionView); break;
+                    case 'levels': initializeVocabularyLevels(sectionView); break;
+                    case 'alphabet': initializeAlphabet(sectionView); break;
+                    case 'patterns': initializePatternDrill(sectionView); break;
+                }
+                if (!initializedModules.includes(stationId)) initializedModules.push(stationId);
+            }
+        }
+
+        // --- MODULE INITIALIZATION FUNCTIONS ---
+
+        function initializeTown(container) {
+            const data = vocabularyData.a1_attachments;
+            if (!data || data.length === 0) {
+                container.innerHTML = `<p class="text-center text-slate-500">Town vocabulary data could not be loaded.</p>`;
+                return;
+            }
+
+            // Group words by their starting letter to create themed "districts"
+            const letterCategories = data.reduce((acc, wordObj) => {
+                const firstLetter = wordObj.word.charAt(0).toUpperCase();
+                if (!acc[firstLetter]) {
+                    acc[firstLetter] = [];
+                }
+                acc[firstLetter].push(wordObj);
+                return acc;
+            }, {});
+
+            // Create buildings HTML dynamically
+            const buildingsHTML = Object.keys(letterCategories).map((letter, index) => {
+                const colors = [
+                    'bg-red-400 bg-red-200 text-red-500',
+                    'bg-blue-500 bg-blue-200 text-blue-600',
+                    'bg-green-500 bg-green-200 text-green-600',
+                    'bg-purple-500 bg-purple-200 text-purple-600',
+                    'bg-yellow-500 bg-yellow-200 text-yellow-600',
+                    'bg-pink-500 bg-pink-200 text-pink-600',
+                    'bg-indigo-500 bg-indigo-200 text-indigo-600',
+                    'bg-teal-500 bg-teal-200 text-teal-600'
+                ];
+                const colorSet = colors[index % colors.length].split(' ');
+                const roofColor = colorSet[0];
+                const wallColor = colorSet[1];
+                const iconColor = colorSet[2];
+
+                const wordCount = letterCategories[letter].length;
+
+                return `
+                    <div class="town-building" data-category="${letter}">
+                        <div class="${roofColor} p-4 rounded-t-lg text-center text-white font-bold shadow-md">
+                            Letter ${letter} <span class="text-sm opacity-75">(${wordCount} words)</span>
+                        </div>
+                        <div class="${wallColor} h-40 rounded-b-lg flex items-center justify-center shadow-lg">
+                            <div class="text-center">
+                                <div class="text-6xl font-bold ${iconColor} mb-2">${letter}</div>
+                                <div class="text-sm ${iconColor} font-medium">${letterCategories[letter][0].word}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+            <div class="relative bg-[#f0f9ff] rounded-2xl overflow-hidden">
+                <div class="container mx-auto px-4 py-8 min-h-[70vh] flex flex-col justify-center items-center relative">
+                    <header class="text-center mb-12">
+                        <h1 class="font-display text-5xl md:text-6xl text-sky-700 mb-2">Willkommen in der Lern-Stadt!</h1>
+                        <p class="text-lg text-gray-600">Klicken Sie auf ein Gebäude, um den Wortschatz zu entdecken.</p>
+                    </header>
+                    <main class="w-full max-w-6xl grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 md:gap-12 z-10">
+                        ${buildingsHTML}
+                    </main>
+                </div>
+                <div id="vocab-modal" class="town-modal absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
+                    <div id="modal-content" class="bg-white w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col">
+                        <div class="p-6 border-b border-gray-200 flex justify-between items-center flex-shrink-0">
+                            <h2 id="modal-title" class="font-display text-3xl text-gray-700">Wortschatz</h2>
+                            <button id="close-modal" class="text-gray-400 hover:text-gray-700 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </button>
+                        </div>
+                        <div id="modal-body" class="p-6 md:p-8 overflow-y-auto flex-grow">
+                            <div id="flashcard-view">
+                                <div class="text-center mb-6"><button id="start-practice-btn" class="bg-green-500 text-white font-bold py-2 px-6 rounded-full hover:bg-green-600 transition-colors">Start Practice</button></div>
+                                <div id="flashcard-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                            </div>
+                            <div id="quiz-view" class="hidden"><div class="text-center max-w-lg mx-auto"><div class="mb-4 flex justify-between items-center"><button id="back-to-cards-btn" class="text-sm text-blue-600 hover:underline">&larr; Back to Flashcards</button><div id="quiz-progress" class="text-lg font-semibold text-gray-700"></div></div><div class="bg-gray-100 p-8 rounded-lg shadow-inner"><p class="text-gray-600 mb-2">What is the English translation of:</p><h3 id="quiz-question-word" class="text-4xl font-bold text-sky-700 mb-6"></h3><div id="quiz-options" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div></div><div id="quiz-feedback" class="mt-4 h-12 flex items-center justify-center"><button id="next-question-btn" class="hidden bg-blue-500 text-white font-bold py-2 px-8 rounded-full hover:bg-blue-600 transition-colors">Next</button></div></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
+            // Use the actual vocabulary data
+            const vocabulary = letterCategories;
+            const categoryTitles = Object.keys(letterCategories).reduce((acc, letter) => {
+                acc[letter] = `Letter ${letter} - Words`;
+                return acc;
+            }, {});
+
+            const buildings = container.querySelectorAll('.town-building');
+            const modal = container.querySelector('#vocab-modal');
+            const modalContent = container.querySelector('#modal-content');
+            const modalTitle = container.querySelector('#modal-title');
+            const closeModalBtn = container.querySelector('#close-modal');
+            const flashcardContainer = container.querySelector('#flashcard-container');
+            const flashcardView = container.querySelector('#flashcard-view');
+            const quizView = container.querySelector('#quiz-view');
+            const startPracticeBtn = container.querySelector('#start-practice-btn');
+            const backToCardsBtn = container.querySelector('#back-to-cards-btn');
+            const quizQuestionWord = container.querySelector('#quiz-question-word');
+            const quizOptions = container.querySelector('#quiz-options');
+            const quizFeedback = container.querySelector('#quiz-feedback');
+            const nextQuestionBtn = container.querySelector('#next-question-btn');
+            const quizProgress = container.querySelector('#quiz-progress');
+            let currentCategory = '';
+            let quizWords = [];
+            let currentQuestionIndex = 0;
+            let score = 0;
+            const QUIZ_LENGTH = Math.min(5, Math.max(...Object.values(vocabulary).map(arr => arr.length)));
+
+            function createFlashcard(word) {
+                const card = document.createElement('div');
+                card.className = 'flashcard h-64';
+                // Generate a simple colored background since we don't have images
+                const colors = ['#f87171', '#60a5fa', '#34d399', '#fbbf24', '#a78bfa', '#fb7185'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+                card.innerHTML = `<div class="flashcard-inner"><div class="flashcard-front bg-gradient-to-br from-slate-200 to-slate-300"><div class="card-overlay bg-black opacity-20"></div><div class="card-content p-4 text-center text-slate-800"><div class="text-sm text-slate-600 mb-2">${word.article || ''}</div><p class="text-2xl font-semibold mb-4">${word.word}</p><p class="text-sm italic">${word.complete_sentence}</p></div><div class="absolute bottom-2 right-2"><button class="flip-btn p-1 text-slate-600" title="Übersetzung anzeigen"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg></button></div></div><div class="flashcard-back bg-indigo-800 text-indigo-100"><div class="card-content p-4 text-center"><p class="text-xl font-semibold mb-4">${word[currentLanguage + '_translation']}</p><p class="text-sm italic">${word[currentLanguage + '_sentence_translation']}</p></div><div class="absolute bottom-2 right-2"><button class="flip-btn p-1" title="Zurück"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" /></svg></button></div></div></div>`;
+                card.querySelectorAll('.flip-btn').forEach(btn => btn.addEventListener('click', e => { e.stopPropagation(); card.classList.toggle('is-flipped'); }));
+                return card;
+            }
+
+            function openVocabModal(category) {
+                currentCategory = category;
+                const words = vocabulary[category];
+                if (!words) return;
+                modalTitle.textContent = categoryTitles[category] || 'Wortschatz';
+                flashcardContainer.innerHTML = '';
+                words.forEach(word => flashcardContainer.appendChild(createFlashcard(word)));
+                flashcardView.classList.remove('hidden');
+                quizView.classList.add('hidden');
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modalContent.classList.remove('scale-95');
+            }
+
+            function closeVocabModal() {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                modalContent.classList.add('scale-95');
+            }
+
+            function startPractice() {
+                flashcardView.classList.add('hidden');
+                quizView.classList.remove('hidden');
+                let allWords = [...vocabulary[currentCategory]];
+                const availableWords = Math.min(QUIZ_LENGTH, allWords.length);
+                quizWords = allWords.sort(() => 0.5 - Math.random()).slice(0, availableWords);
+                currentQuestionIndex = 0;
+                score = 0;
+                if (quizWords.length < 2) {
+                    quizQuestionWord.textContent = "Not enough words for quiz.";
+                    quizOptions.innerHTML = "";
+                    return;
+                }
+                displayQuestion();
+            }
+
+            function displayQuestion() {
+                if (currentQuestionIndex >= quizWords.length) {
+                    showFinalScore();
+                    return;
+                }
+                quizProgress.textContent = `Question ${currentQuestionIndex + 1} / ${quizWords.length}`;
+                const currentWord = quizWords[currentQuestionIndex];
+                quizQuestionWord.textContent = currentWord.word;
+
+                // Get all other words from all categories for wrong answers
+                const allOtherWords = Object.values(vocabulary).flat().filter(w => w.word !== currentWord.word);
+                const options = [currentWord];
+
+                while (options.length < Math.min(4, allOtherWords.length + 1)) {
+                    let randomWord = allOtherWords[Math.floor(Math.random() * allOtherWords.length)];
+                    if (!options.some(o => o.word === randomWord.word)) {
+                        options.push(randomWord);
+                    }
+                }
+                options.sort(() => 0.5 - Math.random());
+
+                quizOptions.innerHTML = '';
+                options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.textContent = option[currentLanguage + '_translation'];
+                    button.className = 'quiz-option w-full bg-white border-2 p-3 rounded-lg hover:bg-slate-50';
+                    button.onclick = () => checkAnswer(option.word === currentWord.word, button);
+                    quizOptions.appendChild(button);
+                });
+                nextQuestionBtn.classList.add('hidden');
+            }
+
+            function checkAnswer(isCorrect, button) {
+                document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = true);
+                if (isCorrect) {
+                    score++;
+                    button.classList.add('correct');
+                } else {
+                    button.classList.add('incorrect');
+                    // Highlight correct answer
+                    const currentWord = quizWords[currentQuestionIndex];
+                    document.querySelectorAll('.quiz-option').forEach(btn => {
+                        if (btn.textContent === currentWord[currentLanguage + '_translation']) {
+                            btn.classList.add('correct');
+                        }
+                    });
+                }
+                currentQuestionIndex++;
+                nextQuestionBtn.classList.remove('hidden');
+            }
+
+            function showFinalScore() {
+                quizQuestionWord.textContent = "Practice Complete!";
+                quizOptions.innerHTML = `<p class="text-lg">Your score: ${score} / ${quizWords.length}</p>`;
+                nextQuestionBtn.textContent = 'Practice Again';
+                nextQuestionBtn.classList.remove('hidden');
+            }
+
+            buildings.forEach(b => b.addEventListener('click', () => openVocabModal(b.dataset.category)));
+            closeModalBtn.addEventListener('click', closeVocabModal);
+            startPracticeBtn.addEventListener('click', startPractice);
+            backToCardsBtn.addEventListener('click', () => {
+                quizView.classList.add('hidden');
+                flashcardView.classList.remove('hidden');
+            });
+            nextQuestionBtn.addEventListener('click', () => {
+                 if (currentQuestionIndex >= quizWords.length) { startPractice(); } else { displayQuestion(); }
+            });
+        }
+
+        function initializeAlphabet(container) {
+            container.innerHTML = getAlphabetContent();
+            const data = vocabularyData.a1_attachments;
+
+            if (!data || data.length === 0) {
+                container.innerHTML = `<p class="text-center text-slate-500">Alphabet data could not be loaded. Please refresh the page.</p>`;
+                return;
+            }
+
+            const alphabetData = data.reduce((acc, wordObj) => {
+                const firstLetter = wordObj.word.charAt(0).toUpperCase();
+                if (!acc[firstLetter]) {
+                    acc[firstLetter] = [];
+                }
+                acc[firstLetter].push(wordObj);
+
+                // Special case: if the word contains "ß", also add it to the ß category
+                if (wordObj.word.includes('ß')) {
+                    if (!acc['ẞ']) {
+                        acc['ẞ'] = [];
+                    }
+                    acc['ẞ'].push(wordObj);
+                }
+
+                return acc;
+            }, {});
+
+            const germanAlphabetLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞ".split('');
+            let currentLetterIndex = 0;
+            let availableLetters = []; // Will store letters that have words
+
+            const displayLetter = container.querySelector('#display-letter');
+            const displayPronunciation = container.querySelector('#display-pronunciation');
+            const letterAudioBtn = container.querySelector('#letter-audio-btn');
+            const examplesContainer = container.querySelector('#examples-container');
+            const alphabetGrid = container.querySelector('#alphabet-grid');
+
+            // Check if all required elements are found
+            if (!displayLetter || !displayPronunciation || !letterAudioBtn || !examplesContainer || !alphabetGrid) {
+                console.error('Required DOM elements not found for alphabet initialization');
+                container.innerHTML = '<p class="text-center text-red-500">Error: Required elements not found. Please refresh the page.</p>';
+                return;
+            }
+
+            let activeLetterButton = null;
+
+            // Touch gesture variables
+            let touchStartX = 0;
+            let touchEndX = 0;
+            let touchStartY = 0;
+            let touchEndY = 0;
+            const minSwipeDistance = 50;
+
+            function speak(text) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'de-DE';
+                    utterance.rate = 0.9;
+                    window.speechSynthesis.speak(utterance);
+                }
+            }
+
+            function navigateToLetter(letter) {
+                const button = alphabetGrid.querySelector(`button[data-letter="${letter}"]`);
+                if (button) {
+                    button.click();
+                    // Scroll the button into view
+                    button.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            }
+
+            function navigateToNextLetter() {
+                if (currentLetterIndex < availableLetters.length - 1) {
+                    currentLetterIndex++;
+                    navigateToLetter(availableLetters[currentLetterIndex]);
+                }
+            }
+
+            function navigateToPrevLetter() {
+                if (currentLetterIndex > 0) {
+                    currentLetterIndex--;
+                    navigateToLetter(availableLetters[currentLetterIndex]);
+                }
+            }
+
+            function updateDisplay(letter) {
+                displayLetter.textContent = `${letter} ${letter.toLowerCase()}`;
+                if (letter === 'ẞ') displayLetter.textContent = 'ß';
+
+                if (letter === 'ẞ') {
+                    displayPronunciation.textContent = `Words containing ß`;
+                } else {
+                    displayPronunciation.textContent = `Words starting with ${letter}`;
+                }
+
+                const words = alphabetData[letter] || [];
+                examplesContainer.innerHTML = '';
+                words.slice(0,3).forEach(wordData => {
+                    const card = document.createElement('button');
+                    card.className = 'example-card bg-white/20 hover:bg-white/30 p-4 rounded-lg text-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-white';
+
+                    // Get the translation based on current language
+                    let translation = '';
+                    if (currentLanguage === 'en' && wordData.en_translation) {
+                        translation = wordData.en_translation;
+                    } else if (currentLanguage === 'fa' && wordData.fa_translation) {
+                        translation = wordData.fa_translation;
+                    } else if (currentLanguage === 'ku' && wordData.ku_translation) {
+                        translation = wordData.ku_translation;
+                    } else if (wordData.en_translation) {
+                        translation = wordData.en_translation; // fallback to English
+                    }
+
+                    card.innerHTML = `<p class="font-semibold text-lg">${wordData.word}</p><p class="text-blue-200 text-sm">${translation}</p>`;
+                    card.addEventListener('click', () => speak(wordData.word));
+                    examplesContainer.appendChild(card);
+                });
+                letterAudioBtn.onclick = () => speak(letter);
+
+                // Update current index
+                currentLetterIndex = availableLetters.indexOf(letter);
+            }
+
+            alphabetGrid.innerHTML = '';
+            availableLetters = []; // Reset available letters list
+
+            germanAlphabetLetters.forEach(letter => {
+                const button = document.createElement('button');
+                button.className = 'letter-btn py-3 rounded-lg transition-all duration-200 text-xl md:text-2xl';
+                button.textContent = letter;
+                button.dataset.letter = letter; // Add data attribute for easy selection
+
+                // Check if this letter has words available
+                if (alphabetData[letter] && alphabetData[letter].length > 0) {
+                    availableLetters.push(letter); // Add to available letters list
+
+                    // Letter has words - make it clickable
+                    button.addEventListener('click', () => {
+                        updateDisplay(letter);
+                        if (activeLetterButton) activeLetterButton.classList.remove('active');
+                        button.classList.add('active');
+                        activeLetterButton = button;
+                    });
+                } else {
+                    // Letter has no words - make it disabled but visible
+                    button.classList.add('disabled');
+                    button.title = `No words available starting with ${letter}`;
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        // Show message that no words are available for this letter
+                        displayLetter.textContent = `${letter} ${letter.toLowerCase()}`;
+                        if (letter === 'ẞ') displayLetter.textContent = 'ß';
+
+                        if (letter === 'ẞ') {
+                            displayPronunciation.textContent = `No words containing ß available`;
+                        } else {
+                            displayPronunciation.textContent = `No words available starting with ${letter}`;
+                        }
+
+                        examplesContainer.innerHTML = '<p class="text-white/60 text-center py-8">No example words available for this letter yet.</p>';
+                        letterAudioBtn.onclick = () => speak(letter);
+
+                        if (activeLetterButton) activeLetterButton.classList.remove('active');
+                        button.classList.add('active');
+                        activeLetterButton = button;
+                    });
+                }
+                alphabetGrid.appendChild(button);
+            });
+
+            // Select first available letter
+            const firstButton = alphabetGrid.querySelector('button:not(.disabled)');
+            if (firstButton) {
+                setTimeout(() => firstButton.click(), 100); // Small delay to ensure DOM is ready
+            } else {
+                // If no buttons with words are available, click the first button anyway
+                const anyButton = alphabetGrid.querySelector('button');
+                if (anyButton) {
+                    setTimeout(() => anyButton.click(), 100);
+                }
+            }
+
+            // Add touch gesture support to the main display area
+            const alphabetDisplayArea = container.querySelector('.bg-gradient-to-br');
+
+            // Touch event handlers
+            function handleTouchStart(e) {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            }
+
+            function handleTouchEnd(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                touchEndY = e.changedTouches[0].screenY;
+                handleGesture();
+            }
+
+            function handleGesture() {
+                const deltaX = touchEndX - touchStartX;
+                const deltaY = touchEndY - touchStartY;
+
+                // Check if horizontal swipe is more significant than vertical
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    // Horizontal swipe detected
+                    if (Math.abs(deltaX) > minSwipeDistance) {
+                        if (deltaX > 0) {
+                            // Swipe right - go to previous letter
+                            navigateToPrevLetter();
+                        } else {
+                            // Swipe left - go to next letter
+                            navigateToNextLetter();
+                        }
+                    }
+                }
+            }
+
+            // Add keyboard navigation support
+            function handleKeyDown(e) {
+                // Only handle keyboard events when alphabet section is active
+                const alphabetSection = document.querySelector('[data-section="alphabet"]');
+                if (!alphabetSection || !alphabetSection.style.display || alphabetSection.style.display === 'none') {
+                    return;
+                }
+
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        navigateToPrevLetter();
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        navigateToNextLetter();
+                        break;
+                }
+            }
+
+            // Attach event listeners
+            if (alphabetDisplayArea) {
+                alphabetDisplayArea.addEventListener('touchstart', handleTouchStart, { passive: true });
+                alphabetDisplayArea.addEventListener('touchend', handleTouchEnd, { passive: true });
+            }
+
+            // Add keyboard support
+            document.addEventListener('keydown', handleKeyDown);
+
+            // Cleanup function (store for later use if needed)
+            container._cleanup = () => {
+                if (alphabetDisplayArea) {
+                    alphabetDisplayArea.removeEventListener('touchstart', handleTouchStart);
+                    alphabetDisplayArea.removeEventListener('touchend', handleTouchEnd);
+                }
+                document.removeEventListener('keydown', handleKeyDown);
+            };
+        }
+
+        function initializePatternDrill(container) {
+            container.innerHTML = getPatternsContent();
+            const data = vocabularyData.a2_attachments;
+            if (!data || data.length === 0) {
+                 container.innerHTML = `<p class="text-center text-slate-500">Patterns data could not be loaded.</p>`;
+                return;
+            }
+            const mainContent = container.querySelector('#main-content');
+            mainContent.innerHTML = '';
+
+            const categories = [...new Set(data.map(item => item.category))];
+
+            categories.forEach(category => {
+                const section = document.createElement('section');
+                section.id = category.toLowerCase();
+                section.className = 'p-6 bg-white rounded-2xl shadow-md';
+
+                const wordsInCategory = data.filter(item => item.category === category);
+
+                let listItems = wordsInCategory.map(word => `
+                    <li class="p-3 bg-slate-50 rounded-md">
+                        <p class="font-semibold text-slate-800">${word.complete_sentence}</p>
+                        <p class="text-sm text-slate-500 ${currentLanguage === 'fa' || currentLanguage === 'ku' ? 'font-fa' : ''}">${word[currentLanguage + '_sentence_translation']}</p>
+                    </li>
+                `).join('');
+
+                section.innerHTML = `
+                    <h2 class="text-2xl font-bold mb-4 border-b-4 border-blue-500 pb-2">${category}</h2>
+                    <ul class="space-y-2">${listItems}</ul>
+                `;
+                mainContent.appendChild(section);
+            });
+        }
+
+        function initializeVocabularyLevels(container) {
+            container.innerHTML = getLevelsContent();
+            const levelSelect = container.querySelector('#level-select');
+            const langSelect = container.querySelector('#lang-select');
+            const cardsContainer = container.querySelector('#level-cards-container');
+            const paginationContainer = container.querySelector('#pagination-container');
+            const currentPageSpan = container.querySelector('#current-page');
+            const totalPagesSpan = container.querySelector('#total-pages');
+            const prevButton = container.querySelector('#prev-page');
+            const nextButton = container.querySelector('#next-page');
+            const firstButton = container.querySelector('#first-page');
+            const lastButton = container.querySelector('#last-page');
+            const wordsInfoSpan = container.querySelector('#words-info');
+
+            langSelect.value = currentLanguage;
+
+            let currentPage = 1;
+            const wordsPerPage = 12; // Show 12 cards per page
+
+            function renderCards() {
+                const level = levelSelect.value;
+                const lang = langSelect.value;
+                const isRTL = lang === 'fa' || lang === 'ku';
+                cardsContainer.innerHTML = '';
+                cardsContainer.dir = isRTL ? 'rtl' : 'ltr';
+
+                const data = vocabularyData[level];
+                if (!data || data.length === 0) {
+                    cardsContainer.innerHTML = `<p class="col-span-full text-center text-slate-500">Vocabulary data could not be loaded.</p>`;
+                    paginationContainer.style.display = 'none';
+                    return;
+                }
+
+                // Calculate pagination
+                const totalWords = data.length;
+                const totalPages = Math.ceil(totalWords / wordsPerPage);
+                const startIndex = (currentPage - 1) * wordsPerPage;
+                const endIndex = Math.min(startIndex + wordsPerPage, totalWords);
+                const currentPageData = data.slice(startIndex, endIndex);
+
+                // Update pagination info
+                currentPageSpan.textContent = currentPage;
+                totalPagesSpan.textContent = totalPages;
+                wordsInfoSpan.textContent = `${startIndex + 1}-${endIndex} of ${totalWords} words`;
+
+                // Update button states
+                prevButton.disabled = currentPage === 1;
+                nextButton.disabled = currentPage === totalPages;
+                firstButton.disabled = currentPage === 1;
+                lastButton.disabled = currentPage === totalPages;
+
+                // Show/hide pagination if needed
+                if (totalPages > 1) {
+                    paginationContainer.style.display = 'flex';
+                } else {
+                    paginationContainer.style.display = 'none';
+                }
+
+                // Render cards for current page
+                currentPageData.forEach(word => {
+                    const card = document.createElement('div');
+                    card.className = 'level-card h-80 flashcard';
+                    card.innerHTML = `
+                        <div class="level-card-inner flashcard-inner w-full h-full">
+                            <div class="flashcard-front bg-white border rounded-lg p-4 flex flex-col justify-between shadow-md">
+                                <div>
+                                    <p class="text-sm text-slate-500">${word.article || ''}</p>
+                                    <h3 class="text-3xl font-bold text-slate-800 mb-4">${word.word}</h3>
+                                    <p class="text-slate-600 text-lg">${word.exercise_sentence.replace(/__/g, `<span class="font-bold text-blue-500">${word.word}</span>`)}</p>
+                                </div>
+                                <button class="flip-btn self-center text-blue-500 font-semibold">Show Translation &rarr;</button>
+                            </div>
+                            <div class="flashcard-back bg-slate-800 text-white rounded-lg p-4 flex flex-col justify-between shadow-md">
+                                <div class="text-center">
+                                    <h4 class="text-2xl font-bold ${isRTL ? 'font-fa' : ''}">${word[lang + '_translation']}</h4>
+                                    <p class="text-slate-300 mt-4 ${isRTL ? 'font-fa' : ''}">${word[lang + '_sentence_translation']}</p>
+                                </div>
+                                <button class="flip-btn self-center text-slate-300 font-semibold">&larr; Back to German</button>
+                            </div>
+                        </div>`;
+                    card.querySelectorAll('.flip-btn').forEach(btn => {
+                        btn.addEventListener('click', () => card.classList.toggle('is-flipped'));
+                    });
+                    cardsContainer.appendChild(card);
+                });
+
+                // Smooth scroll to top of cards when changing pages
+                if (currentPage > 1) {
+                    cardsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+
+            // Event listeners for pagination
+            prevButton.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderCards();
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                const totalPages = Math.ceil(vocabularyData[levelSelect.value].length / wordsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderCards();
+                }
+            });
+
+            firstButton.addEventListener('click', () => {
+                currentPage = 1;
+                renderCards();
+            });
+
+            lastButton.addEventListener('click', () => {
+                currentPage = Math.ceil(vocabularyData[levelSelect.value].length / wordsPerPage);
+                renderCards();
+            });
+
+            levelSelect.addEventListener('change', () => {
+                currentPage = 1; // Reset to first page when changing level
+                renderCards();
+            });
+
+            langSelect.addEventListener('change', (e) => {
+                currentLanguage = e.target.value;
+                document.documentElement.lang = currentLanguage;
+                document.documentElement.dir = (currentLanguage === 'fa' || currentLanguage === 'ku') ? 'rtl' : 'ltr';
+                renderCards();
+                updateUIText();
+            });
+
+            renderCards();
+        }
+
+        // --- TEMPLATE FUNCTIONS ---
+        function getAlphabetContent() {
+            return `
+                <div class="alphabet-section">
+                    <header class="text-center mb-12 bg-gradient-to-r from-purple-500 to-blue-500 text-white p-8 rounded-2xl">
+                        <h1 data-translate-key="alphabet-title" class="font-display text-5xl md:text-6xl mb-4">German Alphabet</h1>
+                        <p class="text-xl opacity-90">Learn the German alphabet with pronunciation and example words</p>
+                    </header>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-gradient-to-br from-blue-500 to-purple-600 text-white p-8 rounded-2xl">
+                            <div class="text-center mb-6">
+                                <div id="display-letter" class="text-8xl font-bold mb-2">A a</div>
+                                <p id="display-pronunciation" class="text-xl opacity-90">Words starting with A</p>
+                                <button id="letter-audio-btn" class="mt-4 bg-white/20 hover:bg-white/30 px-6 py-3 rounded-full text-white font-semibold transition-colors">
+                                    🔊 Play Sound
+                                </button>
+                            </div>
+                            <div id="examples-container" class="grid grid-cols-1 gap-3 mt-6">
+                                <!-- Example words will be loaded here -->
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-2xl shadow-lg">
+                            <h3 class="text-2xl font-bold text-slate-800 mb-6 text-center">Select a Letter</h3>
+                            <div id="alphabet-grid" class="alphabet-grid-container grid gap-2">
+                                <!-- Alphabet buttons will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getPatternsContent() {
+            return `
+                <div class="patterns-section">
+                    <header class="text-center mb-12 bg-gradient-to-r from-green-500 to-teal-500 text-white p-8 rounded-2xl">
+                        <h1 data-translate-key="patterns-title" class="font-display text-5xl md:text-6xl mb-4">Sentence Patterns</h1>
+                        <p class="text-xl opacity-90">Master German sentence structures with examples</p>
+                    </header>
+
+                    <div id="main-content" class="space-y-6">
+                        <!-- Pattern categories will be loaded here -->
+                    </div>
+                </div>
+            `;
+        }
+
+        function getLevelsContent() {
+            return `
+                <div class="levels-section">
+                    <header class="text-center mb-8 bg-gradient-to-r from-orange-500 to-red-500 text-white p-8 rounded-2xl">
+                        <h1 data-translate-key="levels-title" class="font-display text-5xl md:text-6xl mb-4">A1/A2 Vocabulary</h1>
+                        <p class="text-xl opacity-90">Essential German words for beginners</p>
+                    </header>
+
+                    <div class="controls mb-8 flex flex-wrap gap-4 justify-center">
+                        <div>
+                            <label for="level-select" class="block text-sm font-medium text-slate-700 mb-2">Level:</label>
+                            <select id="level-select" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                <option value="a1">A1 - Beginner</option>
+                                <option value="a2">A2 - Elementary</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="lang-select" class="block text-sm font-medium text-slate-700 mb-2">Translation Language:</label>
+                            <select id="lang-select" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                <option value="en">🇺🇸 English</option>
+                                <option value="fa">🇮🇷 فارسی</option>
+                                <option value="ku">🇹🇯 کوردی</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Pagination Info and Controls -->
+                    <div id="pagination-container" class="flex flex-col sm:flex-row items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-sm">
+                        <div class="text-slate-600 mb-4 sm:mb-0">
+                            <span id="words-info">1-12 of 1000 words</span> •
+                            Page <span id="current-page">1</span> of <span id="total-pages">1</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button id="first-page" class="px-3 py-1 text-sm bg-slate-200 hover:bg-slate-300 text-slate-700 rounded disabled:opacity-50 disabled:cursor-not-allowed">
+                                First
+                            </button>
+                            <button id="prev-page" class="px-3 py-1 text-sm bg-slate-200 hover:bg-slate-300 text-slate-700 rounded disabled:opacity-50 disabled:cursor-not-allowed">
+                                ← Prev
+                            </button>
+                            <button id="next-page" class="px-3 py-1 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed">
+                                Next →
+                            </button>
+                            <button id="last-page" class="px-3 py-1 text-sm bg-slate-200 hover:bg-slate-300 text-slate-700 rounded disabled:opacity-50 disabled:cursor-not-allowed">
+                                Last
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="level-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <!-- Vocabulary cards will be loaded here -->
+                    </div>
+                </div>
+            `;
+        }
+
+    })();
+    </script>
+</body>
+</html>
