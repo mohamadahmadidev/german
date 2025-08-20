@@ -57,6 +57,268 @@
         .practice-mode .answer.revealed { background-color: transparent; color: inherit; }
         .translation { color: #6b7280; }
 
+        /* Flashcard Pattern Styles */
+        .ending {
+            font-weight: 700;
+            color: #3b82f6; /* blue-500 */
+        }
+        .flashcard-container, .practice-container {
+            display: none; /* Hidden by default */
+        }
+
+        /* Enhanced Pattern Section Styles */
+        .patterns-section {
+            min-height: 100vh;
+        }
+
+        .case-tab {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .case-tab:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s;
+        }
+
+        .case-tab:hover:before {
+            left: 100%;
+        }
+
+        .case-tab.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border-color: #1d4ed8 !important;
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .case-section {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .case-section:hover {
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        #gender-selector {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        #gender-selector:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+
+        #gender-selector:hover {
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+        }
+
+        .flashcard-sentence-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flashcard-sentence-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.1) 100%);
+            pointer-events: none;
+        }
+
+        .flashcard-sentence-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(102, 126, 234, 0.4);
+        }
+
+        .pattern-nav-btn {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 2px solid #cbd5e1;
+            color: #475569;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pattern-nav-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            border-color: #94a3b8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .pattern-nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border: 2px solid #1d4ed8;
+            color: white;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .primary-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s;
+        }
+
+        .primary-btn:hover:before {
+            left: 100%;
+        }
+
+        .primary-btn:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        .choice-btn {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid #e2e8f0;
+            color: #475569;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .choice-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: all 0.5s;
+        }
+
+        .choice-btn:hover:not(:disabled):before {
+            left: 100%;
+        }
+
+        .choice-btn:hover:not(:disabled) {
+            border-color: #3b82f6;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .choice-btn.correct {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%) !important;
+            border-color: #22c55e !important;
+            color: #166534 !important;
+            font-weight: 600 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3) !important;
+        }
+
+        .choice-btn.incorrect {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%) !important;
+            border-color: #ef4444 !important;
+            color: #991b1b !important;
+            font-weight: 600 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3) !important;
+        }
+
+        .choice-btn:disabled:not(.correct):not(.incorrect) {
+            opacity: 0.6;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .practice-item {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .practice-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .form-display {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            font-family: 'Inter', monospace;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* Animated progress indicator */
+        .progress-counter {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        /* Add subtle animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .slide-in {
+            animation: slideInUp 0.5s ease-out;
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
         /* Alphabet Styles */
         .alphabet-grid-container { grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); }
         @media (min-width: 640px) { .alphabet-grid-container { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); } }
@@ -859,36 +1121,260 @@
 
         function initializePatternDrill(container) {
             container.innerHTML = getPatternsContent();
-            const data = vocabularyData.a2_attachments;
-            if (!data || data.length === 0) {
-                 container.innerHTML = `<p class="text-center text-slate-500">Patterns data could not be loaded.</p>`;
-                return;
-            }
-            const mainContent = container.querySelector('#main-content');
-            mainContent.innerHTML = '';
 
-            const categories = [...new Set(data.map(item => item.category))];
+            // Load sentence structure data
+            fetch('./sentence_structur.json')
+                .then(response => response.json())
+                .then(germanData => {
+                    const contentArea = container.querySelector('#content-area');
+                    const caseTabs = container.querySelectorAll('.case-tab');
+                    let currentFlashcardIndex = 0;
 
-            categories.forEach(category => {
-                const section = document.createElement('section');
-                section.id = category.toLowerCase();
-                section.className = 'p-6 bg-white rounded-2xl shadow-md';
+                    function renderCase(caseName) {
+                        const data = germanData[caseName];
+                        if (!data) return;
 
-                const wordsInCategory = data.filter(item => item.category === category);
+                        const html = `
+                            <section id="${caseName}-section" class="case-section bg-white p-8 md:p-10 rounded-3xl shadow-2xl slide-in">
+                                <div class="relative mb-8">
+                                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25"></div>
+                                    <div class="relative bg-white rounded-2xl p-6 border border-slate-200">
+                                        <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-3">${data.title}</h2>
+                                        <p class="text-slate-600 text-lg leading-relaxed max-w-prose">${data.explanation}</p>
+                                    </div>
+                                </div>
 
-                let listItems = wordsInCategory.map(word => `
-                    <li class="p-3 bg-slate-50 rounded-md">
-                        <p class="font-semibold text-slate-800">${word.complete_sentence}</p>
-                        <p class="text-sm text-slate-500 ${currentLanguage === 'fa' || currentLanguage === 'ku' ? 'font-fa' : ''}">${word[currentLanguage + '_sentence_translation']}</p>
-                    </li>
-                `).join('');
+                                <div class="mb-8">
+                                    <h3 class="text-2xl font-bold text-slate-700 mb-4 flex items-center">
+                                        <span class="bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">1</span>
+                                        Choose a Gender to Study
+                                    </h3>
+                                    <div class="max-w-sm relative">
+                                        <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-xl blur opacity-20"></div>
+                                        <select id="gender-selector" data-case="${caseName}" class="relative w-full bg-white border-2 border-slate-200 rounded-xl py-4 px-6 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg font-semibold shadow-lg">
+                                            <option value="">✨ Select Gender ✨</option>
+                                            <option value="masculine">🦁 Masculine (der)</option>
+                                            <option value="feminine">🌸 Feminine (die)</option>
+                                            <option value="neuter">⭐ Neuter (das)</option>
+                                            <option value="plural">🎪 Plural (die)</option>
+                                        </select>
+                                    </div>
+                                </div>
 
-                section.innerHTML = `
-                    <h2 class="text-2xl font-bold mb-4 border-b-4 border-blue-500 pb-2">${category}</h2>
-                    <ul class="space-y-2">${listItems}</ul>
-                `;
-                mainContent.appendChild(section);
-            });
+                                <div id="study-area" class="mt-10">
+                                    <div id="flashcard-container" class="flashcard-container" style="display: none;"></div>
+                                    <div id="practice-container" class="practice-container" style="display: none;"></div>
+                                </div>
+                            </section>
+                        `;
+                        contentArea.innerHTML = html;
+                        addGenderSelectorListener();
+                    }
+
+                    function addGenderSelectorListener() {
+                        const selector = container.querySelector('#gender-selector');
+                        selector.addEventListener('change', (e) => {
+                            const caseName = e.currentTarget.dataset.case;
+                            const genderKey = e.currentTarget.value;
+                            if (genderKey) {
+                                startFlashcards(caseName, genderKey);
+                            } else {
+                                // Clear the study area if the user selects the placeholder
+                                container.querySelector('#flashcard-container').style.display = 'none';
+                                container.querySelector('#practice-container').style.display = 'none';
+                            }
+                        });
+                    }
+
+                    function startFlashcards(caseName, genderKey) {
+                        currentFlashcardIndex = 0;
+                        container.querySelector('#practice-container').style.display = 'none';
+                        container.querySelector('#practice-container').innerHTML = '';
+                        container.querySelector('#flashcard-container').style.display = 'block';
+                        renderFlashcard(caseName, genderKey);
+                    }
+
+                    function renderFlashcard(caseName, genderKey) {
+                        const genderData = germanData[caseName].genders[genderKey];
+                        const flashcards = genderData.flashcards;
+                        const card = flashcards[currentFlashcardIndex];
+                        const flashcardContainer = container.querySelector('#flashcard-container');
+                        const isLastCard = currentFlashcardIndex === flashcards.length - 1;
+
+                        flashcardContainer.innerHTML = `
+                            <div class="mb-8">
+                                <h3 class="text-2xl font-bold text-slate-700 mb-4 flex items-center">
+                                    <span class="bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">2</span>
+                                    Repeat the Sentences
+                                </h3>
+                                <div class="mb-6">
+                                    <p class="text-slate-600 mb-3 text-lg">📝 <strong>Studying Form:</strong></p>
+                                    <div class="form-display inline-block px-6 py-3 rounded-xl text-lg font-semibold shadow-inner">
+                                        ${genderData.form}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flashcard-sentence-card rounded-3xl p-8 md:p-12 text-center min-h-[200px] flex flex-col justify-center mb-8 text-white relative overflow-hidden">
+                                <div class="absolute top-4 left-4 progress-counter px-4 py-2 rounded-full text-sm">
+                                    📚 Card ${currentFlashcardIndex + 1} of ${flashcards.length}
+                                </div>
+                                <div class="relative z-10">
+                                    <p class="text-3xl md:text-4xl font-bold mb-6 leading-relaxed drop-shadow-lg">${card.sentence}</p>
+                                    <div class="w-16 h-1 bg-white/30 mx-auto mb-6 rounded-full"></div>
+                                    <p class="text-xl md:text-2xl italic opacity-90 font-medium">${card.translation}</p>
+                                </div>
+                                <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
+                                <div class="absolute -top-8 -left-8 w-32 h-32 bg-white/5 rounded-full"></div>
+                            </div>
+
+                            <div class="flex justify-between items-center">
+                                <button id="prev-btn" class="pattern-nav-btn px-6 py-3 rounded-xl shadow-lg hover:shadow-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center space-x-2">
+                                    <span>←</span>
+                                    <span>Previous</span>
+                                </button>
+                                <div class="progress-counter px-6 py-3 rounded-xl shadow-md">
+                                    <span class="font-bold text-lg">${currentFlashcardIndex + 1}</span>
+                                    <span class="mx-2 text-slate-400">/</span>
+                                    <span class="text-slate-600">${flashcards.length}</span>
+                                </div>
+                                <button id="next-btn" class="primary-btn px-6 py-3 rounded-xl shadow-lg hover:shadow-xl font-semibold transition-all duration-300 flex items-center space-x-2">
+                                    <span>${isLastCard ? '🚀 Start Practice' : 'Next'}</span>
+                                    <span>→</span>
+                                </button>
+                            </div>
+                        `;
+
+                        const prevBtn = container.querySelector('#prev-btn');
+                        const nextBtn = container.querySelector('#next-btn');
+
+                        prevBtn.disabled = currentFlashcardIndex === 0;
+
+                        prevBtn.addEventListener('click', () => {
+                            if (currentFlashcardIndex > 0) {
+                                currentFlashcardIndex--;
+                                renderFlashcard(caseName, genderKey);
+                            }
+                        });
+
+                        nextBtn.addEventListener('click', () => {
+                            if (!isLastCard) {
+                                currentFlashcardIndex++;
+                                renderFlashcard(caseName, genderKey);
+                            } else {
+                                renderPractice(caseName, genderKey);
+                            }
+                        });
+                    }
+
+                    function renderPractice(caseName, genderKey) {
+                        const practiceData = germanData[caseName].genders[genderKey].practice;
+                        const practiceContainer = container.querySelector('#practice-container');
+                        container.querySelector('#flashcard-container').style.display = 'none';
+                        practiceContainer.style.display = 'block';
+
+                        if (!practiceData || practiceData.length === 0) {
+                            practiceContainer.innerHTML = `
+                                <div class="text-center py-12">
+                                    <div class="relative">
+                                        <div class="absolute inset-0 bg-gradient-to-r from-green-400 to-blue-500 rounded-3xl transform rotate-3"></div>
+                                        <div class="relative bg-gradient-to-r from-green-500 to-teal-500 text-white p-8 rounded-3xl shadow-2xl">
+                                            <div class="text-6xl mb-4">🎉</div>
+                                            <h3 class="text-3xl font-bold mb-4">Practice Complete!</h3>
+                                            <p class="text-xl opacity-90">Fantastic work! Select another gender to continue your learning journey.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            return;
+                        }
+
+                        const practiceItems = practiceData.map((item, index) => {
+                            const choiceButtons = item.options.map(option =>
+                                `<button class="choice-btn w-full sm:w-auto flex-grow text-center border-2 rounded-xl py-3 px-6 font-semibold transition-all duration-300 hover:transform hover:scale-105" data-answer="${option}">${option}</button>`
+                            ).join('');
+                            return `
+                                <li class="practice-item p-6 rounded-2xl mb-6 shadow-lg transition-all duration-300" data-correct-answer="${item.answer}">
+                                    <div class="mb-6">
+                                        <div class="flex items-center mb-3">
+                                            <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">${index + 1}</span>
+                                            <p class="text-slate-700 text-xl font-semibold">${item.sentence.replace('______', `<span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">(${item.pronoun})</span>`)}</p>
+                                        </div>
+                                        <p class="text-slate-500 italic ml-11 text-lg">${item.translation}</p>
+                                    </div>
+                                    <div class="flex flex-col sm:flex-row gap-3 ml-11">${choiceButtons}</div>
+                                </li>
+                            `;
+                        }).join('');
+
+                        practiceContainer.innerHTML = `
+                            <div class="mb-8">
+                                <h3 class="text-2xl font-bold text-slate-700 mb-6 flex items-center">
+                                    <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">3</span>
+                                    Test Your Knowledge
+                                </h3>
+                                <div class="bg-gradient-to-r from-purple-100 to-pink-100 p-4 rounded-2xl border border-purple-200">
+                                    <p class="text-purple-800 font-semibold flex items-center">
+                                        <span class="text-2xl mr-2">💡</span>
+                                        Choose the correct possessive pronoun for each sentence!
+                                    </p>
+                                </div>
+                            </div>
+                            <ul class="space-y-4">${practiceItems}</ul>
+                        `;
+                        addPracticeListeners();
+                    }
+
+                    function addPracticeListeners() {
+                        container.querySelectorAll('.practice-item').forEach(item => {
+                            const correctAnswer = item.dataset.correctAnswer;
+                            const buttons = item.querySelectorAll('.choice-btn');
+                            buttons.forEach(button => {
+                                button.addEventListener('click', () => {
+                                    buttons.forEach(btn => btn.disabled = true);
+                                    if (button.dataset.answer === correctAnswer) {
+                                        button.style.backgroundColor = '#dcfce7';
+                                        button.style.borderColor = '#22c55e';
+                                        button.style.color = '#166534';
+                                        button.style.fontWeight = '600';
+                                    } else {
+                                        button.style.backgroundColor = '#fee2e2';
+                                        button.style.borderColor = '#ef4444';
+                                        button.style.color = '#991b1b';
+                                        button.style.fontWeight = '600';
+                                        // Show correct answer
+                                        const correctBtn = item.querySelector(`[data-answer="${correctAnswer}"]`);
+                                        correctBtn.style.backgroundColor = '#dcfce7';
+                                        correctBtn.style.borderColor = '#22c55e';
+                                        correctBtn.style.color = '#166534';
+                                        correctBtn.style.fontWeight = '600';
+                                    }
+                                });
+                            });
+                        });
+                    }
+
+                    function handleTabClick(e) {
+                        const clickedTab = e.target.closest('.case-tab');
+                        if (!clickedTab) return;
+                        const caseName = clickedTab.dataset.case;
+                        caseTabs.forEach(tab => {
+                            tab.classList.toggle('border-blue-500', tab === clickedTab);
+                            tab.classList.toggle('text-blue-600', tab === clickedTab);
+                            tab.classList.toggle('border-transparent', tab !== clickedTab);
+                            tab.classList.toggle('text-slate-500', tab !== clickedTab);
+                        });
+                        renderCase(caseName);
+                    }
+
+                    // Initialize
+                    renderCase('nominative');
+                    caseTabs.forEach(tab => tab.addEventListener('click', handleTabClick));
+                })
+                .catch(error => {
+                    console.error('Error loading sentence structure data:', error);
+                    container.querySelector('#content-area').innerHTML = `<p class="text-center text-red-500">Error loading data. Please check if sentence_structur.json is available.</p>`;
+                });
         }
 
         function initializeVocabularyLevels(container) {
@@ -1190,14 +1676,47 @@
 
         function getPatternsContent() {
             return `
-                <div class="patterns-section">
-                    <header class="text-center mb-12 bg-gradient-to-r from-green-500 to-teal-500 text-white p-8 rounded-2xl">
-                        <h1 data-translate-key="patterns-title" class="font-display text-5xl md:text-6xl mb-4">Sentence Patterns</h1>
-                        <p class="text-xl opacity-90">Master German sentence structures with examples</p>
-                    </header>
+                <div class="patterns-section bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-slate-800 antialiased">
+                    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-6xl">
+                        <header class="text-center mb-12 relative">
+                            <div class="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-3xl transform -rotate-1"></div>
+                            <div class="relative bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white p-8 md:p-12 rounded-3xl shadow-2xl">
+                                <h1 class="font-display text-4xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-100">
+                                    ✨ Possessive Pronouns ✨
+                                </h1>
+                                <p class="text-xl md:text-2xl opacity-90 font-medium">Master German grammar with interactive flashcards!</p>
+                                <div class="absolute -top-4 -right-4 w-8 h-8 bg-yellow-300 rounded-full animate-ping"></div>
+                                <div class="absolute -bottom-2 -left-2 w-6 h-6 bg-pink-300 rounded-full animate-bounce"></div>
+                            </div>
+                        </header>
 
-                    <div id="main-content" class="space-y-6">
-                        <!-- Pattern categories will be loaded here -->
+                        <!-- Case Selection Tabs -->
+                        <div class="flex flex-wrap justify-center border-b-2 border-slate-200 mb-12 bg-white/50 backdrop-blur-sm rounded-2xl p-2 shadow-lg">
+                            <button data-case="nominative" class="case-tab text-lg font-bold py-4 px-8 rounded-xl mx-1 mb-2 border-b-4 border-blue-500 text-blue-600 transition-all duration-300">
+                                <span class="block text-2xl mb-1">🎯</span>
+                                1. Nominative
+                            </button>
+                            <button data-case="accusative" class="case-tab text-lg font-bold py-4 px-8 rounded-xl mx-1 mb-2 border-b-4 border-transparent text-slate-500 hover:text-blue-600 transition-all duration-300">
+                                <span class="block text-2xl mb-1">🎪</span>
+                                2. Accusative
+                            </button>
+                            <button data-case="dative" class="case-tab text-lg font-bold py-4 px-8 rounded-xl mx-1 mb-2 border-b-4 border-transparent text-slate-500 hover:text-blue-600 transition-all duration-300">
+                                <span class="block text-2xl mb-1">🎨</span>
+                                3. Dative
+                            </button>
+                        </div>
+
+                        <main id="content-area" class="slide-in">
+                            <!-- Content will be injected here by JavaScript -->
+                        </main>
+
+                        <footer class="text-center mt-16 text-slate-400">
+                            <div class="inline-flex items-center space-x-2 bg-white/30 backdrop-blur-sm rounded-full px-6 py-3">
+                                <span>Designed with</span>
+                                <span class="text-red-500 text-xl animate-pulse">❤️</span>
+                                <span>for German learners</span>
+                            </div>
+                        </footer>
                     </div>
                 </div>
             `;

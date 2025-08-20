@@ -1,0 +1,224 @@
+{
+  "nominative": {
+    "title": "The Nominative Case (Who or What?)",
+    "explanation": "The subject of the sentence. It's the person/thing performing the action.",
+    "genders": {
+      "masculine": {
+        "form": "mein / dein / sein / ihr",
+        "flashcards": [
+          { "sentence": "Mein Hund schläft.", "translation": "My dog is sleeping." },
+          { "sentence": "Dein Stuhl ist bequem.", "translation": "Your chair is comfortable." },
+          { "sentence": "Sein Apfel ist rot.", "translation": "His apple is red." },
+          { "sentence": "Ihr Lehrer ist nett.", "translation": "Her teacher is nice." },
+          { "sentence": "Mein Vater kocht.", "translation": "My father is cooking." },
+          { "sentence": "Dein Freund lacht.", "translation": "Your friend is laughing." },
+          { "sentence": "Sein Computer ist neu.", "translation": "His computer is new." },
+          { "sentence": "Ihr Tisch ist groß.", "translation": "Her table is big." }
+        ],
+        "practice": [
+          { "sentence": "______ Hund ist groß.", "pronoun": "dein", "options": ["dein", "deine", "deinen", "deinem"], "answer": "dein", "translation": "(Your dog is big.)" },
+          { "sentence": "______ Lehrer erklärt die Regel.", "pronoun": "mein", "options": ["mein", "meine", "meinen", "meinem"], "answer": "mein", "translation": "(My teacher explains the rule.)" }
+        ]
+      },
+      "feminine": {
+        "form": "mein<span class='ending'>e</span> / dein<span class='ending'>e</span> / sein<span class='ending'>e</span> / ihr<span class='ending'>e</span>",
+        "flashcards": [
+          { "sentence": "Meine Katze spielt.", "translation": "My cat is playing." },
+          { "sentence": "Deine Tasche ist hier.", "translation": "Your bag is here." },
+          { "sentence": "Seine Lampe ist an.", "translation": "His lamp is on." },
+          { "sentence": "Ihre Blume duftet gut.", "translation": "Her flower smells good." },
+          { "sentence": "Meine Schwester singt.", "translation": "My sister is singing." },
+          { "sentence": "Deine Idee ist super.", "translation": "Your idea is great." },
+          { "sentence": "Seine Flasche ist leer.", "translation": "His bottle is empty." },
+          { "sentence": "Ihre Jacke ist warm.", "translation": "Her jacket is warm." }
+        ],
+        "practice": [
+          { "sentence": "______ Tasche ist rot.", "pronoun": "ihr", "options": ["ihr", "ihre", "ihren", "ihrer"], "answer": "ihre", "translation": "(Her bag is red.)" },
+          { "sentence": "______ Schwester lernt Deutsch.", "pronoun": "sein", "options": ["sein", "seine", "seinen", "seiner"], "answer": "seine", "translation": "(His sister is learning German.)" }
+        ]
+      },
+      "neuter": {
+        "form": "mein / dein / sein / ihr",
+        "flashcards": [
+          { "sentence": "Sein Buch ist interessant.", "translation": "His book is interesting." },
+          { "sentence": "Ihr Auto ist schnell.", "translation": "Her car is fast." },
+          { "sentence": "Mein Fahrrad ist kaputt.", "translation": "My bicycle is broken." },
+          { "sentence": "Dein Fenster ist offen.", "translation": "Your window is open." },
+          { "sentence": "Sein Bild hängt an der Wand.", "translation": "His picture is hanging on the wall." },
+          { "sentence": "Ihr Hotel ist schön.", "translation": "Her hotel is beautiful." },
+          { "sentence": "Mein Glas ist voll.", "translation": "My glass is full." },
+          { "sentence": "Dein Handy klingelt.", "translation": "Your mobile phone is ringing." }
+        ],
+        "practice": [
+          { "sentence": "______ Auto fährt nicht.", "pronoun": "sein", "options": ["sein", "seine", "seinen", "seinem"], "answer": "sein", "translation": "(His car doesn't drive.)" },
+          { "sentence": "______ Fahrrad ist neu.", "pronoun": "mein", "options": ["mein", "meine", "meinen", "meinem"], "answer": "mein", "translation": "(My bicycle is new.)" }
+        ]
+      },
+      "plural": {
+        "form": "mein<span class='ending'>e</span> / dein<span class='ending'>e</span> / sein<span class='ending'>e</span> / ihr<span class='ending'>e</span>",
+        "flashcards": [
+          { "sentence": "Meine Bücher sind neu.", "translation": "My books are new." },
+          { "sentence": "Deine Eltern sind nett.", "translation": "Your parents are nice." },
+          { "sentence": "Seine Schuhe sind schmutzig.", "translation": "His shoes are dirty." },
+          { "sentence": "Ihre Kinder spielen draußen.", "translation": "Her children are playing outside." },
+          { "sentence": "Meine Freunde kommen heute.", "translation": "My friends are coming today." },
+          { "sentence": "Deine Stifte schreiben gut.", "translation": "Your pens write well." },
+          { "sentence": "Seine Augen sind blau.", "translation": "His eyes are blue." },
+          { "sentence": "Ihre Tickets sind hier.", "translation": "Her tickets are here." }
+        ],
+        "practice": [
+          { "sentence": "______ Bücher liegen auf dem Tisch.", "pronoun": "mein", "options": ["mein", "meine", "meinen", "meinem"], "answer": "meine", "translation": "(My books are on the table.)" },
+          { "sentence": "______ Kinder sind laut.", "pronoun": "ihr", "options": ["ihr", "ihre", "ihren", "ihrer"], "answer": "ihre", "translation": "(Her children are loud.)" }
+        ]
+      }
+    }
+  },
+  "accusative": {
+    "title": "The Accusative Case (Whom or What?)",
+    "explanation": "The direct object of the sentence. It receives the action.",
+    "genders": {
+      "masculine": {
+        "form": "mein<span class='ending'>en</span> / dein<span class='ending'>en</span> / sein<span class='ending'>en</span> / ihr<span class='ending'>en</span>",
+        "flashcards": [
+          { "sentence": "Ich sehe meinen Hund.", "translation": "I see my dog." },
+          { "sentence": "Sie liest seinen Brief.", "translation": "She is reading his letter." },
+          { "sentence": "Er isst deinen Apfel.", "translation": "He is eating your apple." },
+          { "sentence": "Ich frage ihren Lehrer.", "translation": "I am asking her teacher." },
+          { "sentence": "Sie braucht meinen Stuhl.", "translation": "She needs my chair." },
+          { "sentence": "Ich brauche meinen Schlüssel.", "translation": "I need my key." },
+          { "sentence": "Er repariert seinen Tisch.", "translation": "He is repairing his table." },
+          { "sentence": "Wir besuchen ihren Vater.", "translation": "We are visiting her father." }
+        ],
+        "practice": [
+          { "sentence": "Er mag ______ Hund.", "pronoun": "sein", "options": ["sein", "seine", "seinen", "seinem"], "answer": "seinen", "translation": "(He likes his dog.)" },
+          { "sentence": "Ich nehme ______ Stift.", "pronoun": "dein", "options": ["dein", "deine", "deinen", "deinem"], "answer": "deinen", "translation": "(I'll take your pen.)" }
+        ]
+      },
+      "feminine": {
+        "form": "mein<span class='ending'>e</span> / dein<span class='ending'>e</span> / sein<span class='ending'>e</span> / ihr<span class='ending'>e</span>",
+        "flashcards": [
+          { "sentence": "Ich kaufe deine Tasche.", "translation": "I am buying your bag." },
+          { "sentence": "Sie hat ihre Lampe.", "translation": "She has her lamp." },
+          { "sentence": "Er öffnet seine Flasche.", "translation": "He is opening his bottle." },
+          { "sentence": "Ich sehe meine Katze.", "translation": "I see my cat." },
+          { "sentence": "Sie trägt ihre Jacke.", "translation": "She is wearing her jacket." },
+          { "sentence": "Wir hören deine Musik.", "translation": "We are listening to your music." },
+          { "sentence": "Er findet seine Brille.", "translation": "He finds his glasses." },
+          { "sentence": "Ich mag ihre Idee.", "translation": "I like her idea." }
+        ],
+        "practice": [
+          { "sentence": "Ich kaufe ______ Tasche.", "pronoun": "dein", "options": ["dein", "deine", "deinen", "deiner"], "answer": "deine", "translation": "(I am buying your bag.)" },
+          { "sentence": "Er liest ______ Zeitung.", "pronoun": "mein", "options": ["mein", "meine", "meinen", "meiner"], "answer": "meine", "translation": "(He is reading my newspaper.)" }
+        ]
+      },
+      "neuter": {
+        "form": "mein / dein / sein / ihr",
+        "flashcards": [
+          { "sentence": "Sie putzt ihr Auto.", "translation": "She is cleaning her car." },
+          { "sentence": "Er verkauft sein Fahrrad.", "translation": "He is selling his bike." },
+          { "sentence": "Ich lese mein Buch.", "translation": "I am reading my book." },
+          { "sentence": "Er schließt dein Fenster.", "translation": "He is closing your window." },
+          { "sentence": "Sie malt ihr Bild.", "translation": "She is painting her picture." },
+          { "sentence": "Wir buchen euer Hotel.", "translation": "We are booking your hotel." },
+          { "sentence": "Ich lade mein Handy.", "translation": "I am charging my phone." },
+          { "sentence": "Sie isst ihr Brot.", "translation": "She is eating her bread." }
+        ],
+        "practice": [
+          { "sentence": "Sie putzt ______ Auto.", "pronoun": "ihr", "options": ["ihr", "ihre", "ihren", "ihrem"], "answer": "ihr", "translation": "(She is cleaning her car.)" },
+          { "sentence": "Ich sehe ______ Kind.", "pronoun": "sein", "options": ["sein", "seine", "seinen", "seinem"], "answer": "sein", "translation": "(I see his child.)" }
+        ]
+      },
+      "plural": {
+        "form": "mein<span class='ending'>e</span> / dein<span class='ending'>e</span> / sein<span class='ending'>e</span> / ihr<span class='ending'>e</span>",
+        "flashcards": [
+          { "sentence": "Er liest meine Bücher.", "translation": "He is reading my books." },
+          { "sentence": "Wir besuchen deine Freunde.", "translation": "We are visiting your friends." },
+          { "sentence": "Sie kauft seine Schuhe.", "translation": "She is buying his shoes." },
+          { "sentence": "Ich treffe ihre Kinder.", "translation": "I am meeting her children." },
+          { "sentence": "Er vergisst meine Schlüssel.", "translation": "He forgets my keys." },
+          { "sentence": "Sie zählt ihre Stifte.", "translation": "She is counting her pens." },
+          { "sentence": "Ich sehe deine Augen.", "translation": "I see your eyes." },
+          { "sentence": "Wir haben unsere Tickets.", "translation": "We have our tickets." }
+        ],
+        "practice": [
+          { "sentence": "Wir verkaufen ______ Bücher.", "pronoun": "mein", "options": ["mein", "meine", "meinen", "meinem"], "answer": "meine", "translation": "(We are selling my books.)" },
+          { "sentence": "Er kennt ______ Eltern.", "pronoun": "ihr", "options": ["ihr", "ihre", "ihren", "ihrer"], "answer": "ihre", "translation": "(He knows her parents.)" }
+        ]
+      }
+    }
+  },
+  "dative": {
+    "title": "The Dative Case (To/For Whom?)",
+    "explanation": "The indirect object of the sentence. It's often the recipient.",
+    "genders": {
+      "masculine": {
+        "form": "mein<span class='ending'>em</span> / dein<span class='ending'>em</span> / sein<span class='ending'>em</span> / ihr<span class='ending'>em</span>",
+        "flashcards": [
+          { "sentence": "Ich helfe meinem Bruder.", "translation": "I am helping my brother." },
+          { "sentence": "Er dankt seinem Lehrer.", "translation": "He thanks his teacher." },
+          { "sentence": "Das gehört deinem Vater.", "translation": "That belongs to your father." },
+          { "sentence": "Ich antworte ihrem Freund.", "translation": "I am answering her friend." },
+          { "sentence": "Sie gibt meinem Hund Futter.", "translation": "She gives food to my dog." },
+          { "sentence": "Ich spiele mit deinem Ball.", "translation": "I am playing with your ball." },
+          { "sentence": "Das Auto gehört seinem Onkel.", "translation": "The car belongs to his uncle." },
+          { "sentence": "Ich gratuliere ihrem Sohn.", "translation": "I congratulate her son." }
+        ],
+        "practice": [
+          { "sentence": "Ich gebe ______ Hund Wasser.", "pronoun": "mein", "options": ["mein", "meine", "meinen", "meinem"], "answer": "meinem", "translation": "(I give water to my dog.)" },
+          { "sentence": "Das Buch gehört ______ Lehrer.", "pronoun": "sein", "options": ["sein", "seine", "seinem", "seinen"], "answer": "seinem", "translation": "(The book belongs to his teacher.)" }
+        ]
+      },
+      "feminine": {
+        "form": "mein<span class='ending'>er</span> / dein<span class='ending'>er</span> / sein<span class='ending'>er</span> / ihr<span class='ending'>er</span>",
+        "flashcards": [
+          { "sentence": "Ich antworte meiner Mutter.", "translation": "I answer my mother." },
+          { "sentence": "Das Auto gehört deiner Schwester.", "translation": "The car belongs to your sister." },
+          { "sentence": "Er hilft seiner Tante.", "translation": "He is helping his aunt." },
+          { "sentence": "Das Geschenk ist von ihrer Freundin.", "translation": "The gift is from her friend." },
+          { "sentence": "Ich komme aus meiner Wohnung.", "translation": "I am coming from my apartment." },
+          { "sentence": "Er spricht mit deiner Kollegin.", "translation": "He is speaking with your colleague." },
+          { "sentence": "Das gefällt seiner Frau.", "translation": "His wife likes that." },
+          { "sentence": "Wir vertrauen ihrer Ärztin.", "translation": "We trust her doctor." }
+        ],
+        "practice": [
+          { "sentence": "Das Geschenk ist von ______ Freundin.", "pronoun": "dein", "options": ["dein", "deine", "deinen", "deiner"], "answer": "deiner", "translation": "(The gift is from your girlfriend.)" },
+          { "sentence": "Er hilft ______ Mutter.", "pronoun": "ihr", "options": ["ihr", "ihre", "ihren", "ihrer"], "answer": "ihrer", "translation": "(He is helping her mother.)" }
+        ]
+      },
+      "neuter": {
+        "form": "mein<span class='ending'>em</span> / dein<span class='ending'>em</span> / sein<span class='ending'>em</span> / ihr<span class='ending'>em</span>",
+        "flashcards": [
+          { "sentence": "Sie spielt mit deinem Auto.", "translation": "She is playing with your car." },
+          { "sentence": "Ich wohne in meinem Haus.", "translation": "I live in my house." },
+          { "sentence": "Er sitzt auf seinem Fahrrad.", "translation": "He is sitting on his bicycle." },
+          { "sentence": "Das Kind spielt mit ihrem Spielzeug.", "translation": "The child is playing with her toy." },
+          { "sentence": "Ich lerne in meinem Zimmer.", "translation": "I am learning in my room." },
+          { "sentence": "Sie ist in deinem Büro.", "translation": "She is in your office." },
+          { "sentence": "Er arbeitet an seinem Projekt.", "translation": "He is working on his project." },
+          { "sentence": "Das Bild hängt in ihrem Wohnzimmer.", "translation": "The picture is hanging in her living room." }
+        ],
+        "practice": [
+          { "sentence": "Er spielt mit ______ Auto.", "pronoun": "sein", "options": ["sein", "seine", "seinen", "seinem"], "answer": "seinem", "translation": "(He plays with his car.)" },
+          { "sentence": "Ich bin in ______ Zimmer.", "pronoun": "mein", "options": ["mein", "meine", "meinen", "meinem"], "answer": "meinem", "translation": "(I am in my room.)" }
+        ]
+      },
+      "plural": {
+        "form": "mein<span class='ending'>en</span> / dein<span class='ending'>en</span> / sein<span class='ending'>en</span> / ihr<span class='ending'>en</span>",
+        "flashcards": [
+          { "sentence": "Ich lerne mit meinen Büchern.", "translation": "I am learning with my books." },
+          { "sentence": "Sie spricht mit deinen Eltern.", "translation": "She is speaking with your parents." },
+          { "sentence": "Er spielt mit seinen Freunden.", "translation": "He is playing with his friends." },
+          { "sentence": "Ich helfe ihren Kindern.", "translation": "I am helping her children." },
+          { "sentence": "Wir reisen mit unseren Koffern.", "translation": "We are traveling with our suitcases." },
+          { "sentence": "Er spricht mit deinen Kollegen.", "translation": "He is speaking with your colleagues." },
+          { "sentence": "Sie dankt ihren Großeltern.", "translation": "She is thanking her grandparents." },
+          { "sentence": "Wir essen mit unseren Gabeln.", "translation": "We are eating with our forks." }
+        ],
+        "practice": [
+          { "sentence": "Sie spricht mit ______ Eltern.", "pronoun": "ihr", "options": ["ihr", "ihre", "ihren", "ihrem"], "answer": "ihren", "translation": "(She speaks with her parents.)" },
+          { "sentence": "Ich spiele mit ______ Freunden.", "pronoun": "mein", "options": ["mein", "meine", "meinen", "meinem"], "answer": "meinen", "translation": "(I am playing with my friends.)" }
+        ]
+      }
+    }
+  }
+}
