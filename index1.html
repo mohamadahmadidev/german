@@ -99,6 +99,20 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
+        /* Speaker Button Styles */
+        .speaker-btn {
+            transition: all 0.2s ease-in-out;
+            color: #64748b;
+        }
+        .speaker-btn:hover:not(:disabled) {
+            color: #3b82f6;
+            transform: scale(1.1);
+        }
+        .speaker-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         #pagination-container button:disabled {
             cursor: not-allowed;
         }
@@ -381,8 +395,29 @@
                 const colors = ['#f87171', '#60a5fa', '#34d399', '#fbbf24', '#a78bfa', '#fb7185'];
                 const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
-                card.innerHTML = `<div class="flashcard-inner"><div class="flashcard-front bg-gradient-to-br from-slate-200 to-slate-300"><div class="card-overlay bg-black opacity-20"></div><div class="card-content p-4 text-center text-slate-800"><div class="text-sm text-slate-600 mb-2">${word.article || ''}</div><p class="text-2xl font-semibold mb-4">${word.word}</p><p class="text-sm italic">${word.complete_sentence}</p></div><div class="absolute bottom-2 right-2"><button class="flip-btn p-1 text-slate-600" title="Übersetzung anzeigen"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg></button></div></div><div class="flashcard-back bg-indigo-800 text-indigo-100"><div class="card-content p-4 text-center"><p class="text-xl font-semibold mb-4">${word[currentLanguage + '_translation']}</p><p class="text-sm italic">${word[currentLanguage + '_sentence_translation']}</p></div><div class="absolute bottom-2 right-2"><button class="flip-btn p-1" title="Zurück"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" /></svg></button></div></div></div>`;
+                card.innerHTML = `<div class="flashcard-inner"><div class="flashcard-front bg-gradient-to-br from-slate-200 to-slate-300"><div class="card-overlay bg-black opacity-20"></div><div class="card-content p-4 text-center text-slate-800"><div class="text-sm text-slate-600 mb-2">${word.article || ''}</div><p class="text-2xl font-semibold mb-4">${word.word}</p><p class="text-sm italic">${word.complete_sentence}</p></div><div class="absolute top-2 right-2"><button class="vocab-speaker-btn speaker-btn p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30" title="🔊 Read word and sentence"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg></button></div><div class="absolute bottom-2 right-2"><button class="flip-btn p-1 text-slate-600" title="Übersetzung anzeigen"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg></button></div></div><div class="flashcard-back bg-indigo-800 text-indigo-100"><div class="card-content p-4 text-center"><p class="text-xl font-semibold mb-4">${word[currentLanguage + '_translation']}</p><p class="text-sm italic">${word[currentLanguage + '_sentence_translation']}</p></div><div class="absolute top-2 right-2"><button class="vocab-speaker-back-btn speaker-btn p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20" title="🔊 Read word and sentence"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg></button></div><div class="absolute bottom-2 right-2"><button class="flip-btn p-1" title="Zurück"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" /></svg></button></div></div></div>`;
                 card.querySelectorAll('.flip-btn').forEach(btn => btn.addEventListener('click', e => { e.stopPropagation(); card.classList.toggle('is-flipped'); }));
+
+                // Add speaker button event listeners - single button reads word + sentence
+                const vocabSpeakerBtn = card.querySelector('.vocab-speaker-btn');
+                const vocabSpeakerBackBtn = card.querySelector('.vocab-speaker-back-btn');
+
+                if (vocabSpeakerBtn) {
+                    vocabSpeakerBtn.addEventListener('click', e => {
+                        e.stopPropagation();
+                        // Read both word and sentence with a pause
+                        speakWordAndSentence(word.word, word.complete_sentence, vocabSpeakerBtn);
+                    });
+                }
+
+                if (vocabSpeakerBackBtn) {
+                    vocabSpeakerBackBtn.addEventListener('click', e => {
+                        e.stopPropagation();
+                        // Read both word and sentence with a pause
+                        speakWordAndSentence(word.word, word.complete_sentence, vocabSpeakerBackBtn);
+                    });
+                }
+
                 return card;
             }
 
@@ -543,13 +578,89 @@
             let touchEndY = 0;
             const minSwipeDistance = 50;
 
-            function speak(text) {
+            function speak(text, button = null) {
                 if ('speechSynthesis' in window) {
                     window.speechSynthesis.cancel();
                     const utterance = new SpeechSynthesisUtterance(text);
                     utterance.lang = 'de-DE';
                     utterance.rate = 0.9;
+
+                    // Visual feedback
+                    if (button) {
+                        button.classList.add('text-blue-400', 'animate-pulse');
+                        button.disabled = true;
+                    }
+
+                    utterance.onend = () => {
+                        if (button) {
+                            button.classList.remove('text-blue-400', 'animate-pulse');
+                            button.disabled = false;
+                        }
+                    };
+
+                    utterance.onerror = () => {
+                        if (button) {
+                            button.classList.remove('text-blue-400', 'animate-pulse');
+                            button.disabled = false;
+                        }
+                    };
+
                     window.speechSynthesis.speak(utterance);
+                } else {
+                    alert("Your browser doesn't support text-to-speech. Please use Chrome, Firefox, or Safari.");
+                }
+            }
+
+            function speakWordAndSentence(word, sentence, button = null) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+
+                    // Visual feedback
+                    if (button) {
+                        button.classList.add('text-blue-400', 'animate-pulse');
+                        button.disabled = true;
+                    }
+
+                    // First, speak the word
+                    const wordUtterance = new SpeechSynthesisUtterance(word);
+                    wordUtterance.lang = 'de-DE';
+                    wordUtterance.rate = 0.8; // Slightly slower for clarity
+
+                    wordUtterance.onend = () => {
+                        // After word is spoken, pause briefly then speak the sentence
+                        setTimeout(() => {
+                            const sentenceUtterance = new SpeechSynthesisUtterance(sentence);
+                            sentenceUtterance.lang = 'de-DE';
+                            sentenceUtterance.rate = 0.9;
+
+                            sentenceUtterance.onend = () => {
+                                if (button) {
+                                    button.classList.remove('text-blue-400', 'animate-pulse');
+                                    button.disabled = false;
+                                }
+                            };
+
+                            sentenceUtterance.onerror = () => {
+                                if (button) {
+                                    button.classList.remove('text-blue-400', 'animate-pulse');
+                                    button.disabled = false;
+                                }
+                            };
+
+                            window.speechSynthesis.speak(sentenceUtterance);
+                        }, 800); // 800ms pause between word and sentence
+                    };
+
+                    wordUtterance.onerror = () => {
+                        if (button) {
+                            button.classList.remove('text-blue-400', 'animate-pulse');
+                            button.disabled = false;
+                        }
+                    };
+
+                    window.speechSynthesis.speak(wordUtterance);
+                } else {
+                    alert("Your browser doesn't support text-to-speech. Please use Chrome, Firefox, or Safari.");
                 }
             }
 
@@ -608,7 +719,7 @@
                     card.addEventListener('click', () => speak(wordData.word));
                     examplesContainer.appendChild(card);
                 });
-                letterAudioBtn.onclick = () => speak(letter);
+                letterAudioBtn.onclick = () => speak(letter, letterAudioBtn);
 
                 // Update current index
                 currentLetterIndex = availableLetters.indexOf(letter);
@@ -651,7 +762,7 @@
                         }
 
                         examplesContainer.innerHTML = '<p class="text-white/60 text-center py-8">No example words available for this letter yet.</p>';
-                        letterAudioBtn.onclick = () => speak(letter);
+                        letterAudioBtn.onclick = () => speak(letter, letterAudioBtn);
 
                         if (activeLetterButton) activeLetterButton.classList.remove('active');
                         button.classList.add('active');
@@ -854,6 +965,58 @@
             // Flashcard event listeners
             flashcardContainer.addEventListener('click', () => {
                 flashcardContainer.classList.toggle('is-flipped');
+            });
+
+            // Speaker button event listeners
+            document.getElementById('main-speaker-front').addEventListener('click', (e) => {
+                e.stopPropagation();
+                const data = vocabularyData[levelSelect.value];
+                if (data && data[currentVocabIndex]) {
+                    speakWordAndSentence(data[currentVocabIndex].word, data[currentVocabIndex].complete_sentence, e.target.closest('button'));
+                }
+            });
+
+            document.getElementById('main-speaker-back').addEventListener('click', (e) => {
+                e.stopPropagation();
+                const data = vocabularyData[levelSelect.value];
+                if (data && data[currentVocabIndex]) {
+                    speakWordAndSentence(data[currentVocabIndex].word, data[currentVocabIndex].complete_sentence, e.target.closest('button'));
+                }
+            });
+
+            // Add keyboard shortcuts for better accessibility
+            document.addEventListener('keydown', (e) => {
+                // Only handle keyboard shortcuts when in the A1/A2 section
+                const currentSection = document.querySelector('.app-section.active');
+                if (!currentSection || !currentSection.id.includes('level')) return;
+
+                const data = vocabularyData[levelSelect.value];
+                if (!data || !data[currentVocabIndex]) return;
+
+                switch(e.key) {
+                    case ' ': // Spacebar - Speak word and sentence
+                        e.preventDefault();
+                        speakWordAndSentence(data[currentVocabIndex].word, data[currentVocabIndex].complete_sentence);
+                        break;
+                    case 'ArrowLeft': // Left arrow - Previous word
+                        e.preventDefault();
+                        if (currentVocabIndex > 0) {
+                            currentVocabIndex--;
+                            updateFlashcard();
+                        }
+                        break;
+                    case 'ArrowRight': // Right arrow - Next word
+                        e.preventDefault();
+                        if (currentVocabIndex < data.length - 1) {
+                            currentVocabIndex++;
+                            updateFlashcard();
+                        }
+                        break;
+                    case 'f': // F key - Flip card
+                        e.preventDefault();
+                        flashcardContainer.classList.toggle('is-flipped');
+                        break;
+                }
             });
 
             prevVocabBtn.addEventListener('click', () => {
@@ -1067,6 +1230,13 @@
                                             <p id="flashcard-sentence" class="text-lg leading-relaxed"></p>
                                             <p class="text-sm opacity-75 mt-4">Click to flip</p>
                                         </div>
+                                        <div class="absolute top-3 right-3">
+                                            <button id="main-speaker-front" class="speaker-btn p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30" title="🔊 Read word and sentence">
+                                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                     <div id="flashcard-back" class="flashcard-back bg-gradient-to-br from-green-500 to-teal-600 text-white shadow-xl">
                                         <div class="card-overlay"></div>
@@ -1074,6 +1244,13 @@
                                             <h4 id="flashcard-translation" class="text-3xl font-bold mb-4">Translation</h4>
                                             <p id="flashcard-sentence-translation" class="text-lg leading-relaxed mb-4"></p>
                                             <p class="text-sm opacity-75">Click to flip back</p>
+                                        </div>
+                                        <div class="absolute top-3 right-3">
+                                            <button id="main-speaker-back" class="speaker-btn p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20" title="🔊 Read word and sentence">
+                                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                                                </svg>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
