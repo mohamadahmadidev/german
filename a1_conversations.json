@@ -1,0 +1,189 @@
+{
+  "conversations": [
+    {
+      "situation": "At the bakery",
+      "dialogue": [
+        { "de": "Guten Morgen!", "en": "Good morning!" },
+        { "de": "Guten Morgen. Ich möchte ein Brot, bitte.", "en": "Good morning. I would like a bread, please." },
+        { "de": "Möchten Sie noch etwas?", "en": "Would you like anything else?" },
+        { "de": "Nein, danke.", "en": "No, thank you." },
+        { "de": "Das macht drei Euro.", "en": "That will be three euros." }
+      ]
+    },
+    {
+      "situation": "Asking for directions",
+      "dialogue": [
+        { "de": "Entschuldigung, wo ist der Bahnhof?", "en": "Excuse me, where is the train station?" },
+        { "de": "Geradeaus und dann links.", "en": "Straight ahead and then left." },
+        { "de": "Vielen Dank!", "en": "Thank you very much!" },
+        { "de": "Gern geschehen.", "en": "You're welcome." }
+      ]
+    },
+    {
+      "situation": "At the supermarket",
+      "dialogue": [
+        { "de": "Hallo, wo sind die Äpfel?", "en": "Hello, where are the apples?" },
+        { "de": "Die Äpfel sind dort hinten.", "en": "The apples are back there." },
+        { "de": "Danke!", "en": "Thanks!" },
+        { "de": "Bitte.", "en": "You're welcome." }
+      ]
+    },
+    {
+      "situation": "Meeting someone new",
+      "dialogue": [
+        { "de": "Hallo! Wie heißt du?", "en": "Hello! What is your name?" },
+        { "de": "Ich heiße Anna. Und du?", "en": "My name is Anna. And you?" },
+        { "de": "Ich heiße Paul.", "en": "My name is Paul." },
+        { "de": "Schön, dich kennenzulernen.", "en": "Nice to meet you." },
+        { "de": "Freut mich auch.", "en": "Nice to meet you too." }
+      ]
+    },
+    {
+      "situation": "Ordering in a café",
+      "dialogue": [
+        { "de": "Guten Tag. Was möchten Sie?", "en": "Good day. What would you like?" },
+        { "de": "Einen Kaffee und ein Stück Kuchen, bitte.", "en": "A coffee and a piece of cake, please." },
+        { "de": "Mit Milch und Zucker?", "en": "With milk and sugar?" },
+        { "de": "Ja, bitte.", "en": "Yes, please." },
+        { "de": "Kommt sofort.", "en": "Coming right up." }
+      ]
+    },
+    {
+      "situation": "At the bus stop",
+      "dialogue": [
+        { "de": "Entschuldigung, fährt dieser Bus zum Zentrum?", "en": "Excuse me, does this bus go to the center?" },
+        { "de": "Ja, genau.", "en": "Yes, exactly." },
+        { "de": "Danke für die Auskunft.", "en": "Thanks for the information." },
+        { "de": "Kein Problem.", "en": "No problem." }
+      ]
+    },
+    {
+      "situation": "Buying a ticket",
+      "dialogue": [
+        { "de": "Einmal nach Berlin, bitte.", "en": "One ticket to Berlin, please." },
+        { "de": "Hin und zurück?", "en": "Round trip?" },
+        { "de": "Nein, nur hin.", "en": "No, one way only." },
+        { "de": "Das kostet zehn Euro.", "en": "That costs ten euros." }
+      ]
+    },
+    {
+      "situation": "At the pharmacy",
+      "dialogue": [
+        { "de": "Guten Tag. Ich brauche Medizin gegen Kopfschmerzen.", "en": "Good day. I need medicine for a headache." },
+        { "de": "Möchten Sie Tabletten oder Tropfen?", "en": "Would you like tablets or drops?" },
+        { "de": "Tabletten, bitte.", "en": "Tablets, please." },
+        { "de": "Hier, bitte.", "en": "Here you go." },
+        { "de": "Danke schön.", "en": "Thank you very much." }
+      ]
+    },
+    {
+      "situation": "Small talk about weather",
+      "dialogue": [
+        { "de": "Schönes Wetter heute!", "en": "Nice weather today!" },
+        { "de": "Ja, die Sonne scheint.", "en": "Yes, the sun is shining." },
+        { "de": "Ich hoffe, es bleibt so.", "en": "I hope it stays like this." },
+        { "de": "Ich auch.", "en": "Me too." }
+      ]
+    },
+    {
+      "situation": "In a clothing store",
+      "dialogue": [
+        { "de": "Kann ich Ihnen helfen?", "en": "Can I help you?" },
+        { "de": "Ja, ich suche ein Hemd.", "en": "Yes, I am looking for a shirt." },
+        { "de": "Welche Größe haben Sie?", "en": "What size are you?" },
+        { "de": "M, bitte.", "en": "Medium, please." },
+        { "de": "Hier ist ein schönes Hemd.", "en": "Here is a nice shirt." }
+      ]
+    },
+    {
+      "situation": "At the post office",
+      "dialogue": [
+        { "de": "Guten Tag. Ich möchte ein Paket schicken.", "en": "Good day. I want to send a package." },
+        { "de": "Wohin soll es gehen?", "en": "Where should it go?" },
+        { "de": "Nach München.", "en": "To Munich." },
+        { "de": "Bitte füllen Sie dieses Formular aus.", "en": "Please fill out this form." }
+      ]
+    },
+    {
+      "situation": "Making an appointment",
+      "dialogue": [
+        { "de": "Hallo, ich brauche einen Termin.", "en": "Hello, I need an appointment." },
+        { "de": "Wann passt es Ihnen?", "en": "When is it convenient for you?" },
+        { "de": "Am Freitag, bitte.", "en": "On Friday, please." },
+        { "de": "Gut, um zehn Uhr.", "en": "Good, at ten o'clock." }
+      ]
+    },
+    {
+      "situation": "In a restaurant",
+      "dialogue": [
+        { "de": "Guten Abend. Haben Sie einen Tisch für zwei?", "en": "Good evening. Do you have a table for two?" },
+        { "de": "Ja, bitte folgen Sie mir.", "en": "Yes, please follow me." },
+        { "de": "Kann ich die Karte sehen?", "en": "Can I see the menu?" },
+        { "de": "Natürlich.", "en": "Of course." }
+      ]
+    },
+    {
+      "situation": "At school",
+      "dialogue": [
+        { "de": "Wie heißt deine Lehrerin?", "en": "What is your teacher’s name?" },
+        { "de": "Sie heißt Frau Müller.", "en": "Her name is Mrs. Müller." },
+        { "de": "Ist sie nett?", "en": "Is she nice?" },
+        { "de": "Ja, sehr nett.", "en": "Yes, very nice." }
+      ]
+    },
+    {
+      "situation": "Talking about hobbies",
+      "dialogue": [
+        { "de": "Was machst du gern?", "en": "What do you like to do?" },
+        { "de": "Ich spiele gern Fußball.", "en": "I like to play football." },
+        { "de": "Ich lese gern Bücher.", "en": "I like to read books." },
+        { "de": "Das ist toll!", "en": "That’s great!" }
+      ]
+    },
+    {
+      "situation": "On the phone",
+      "dialogue": [
+        { "de": "Hallo, hier ist Maria.", "en": "Hello, this is Maria." },
+        { "de": "Hallo Maria, wie geht es dir?", "en": "Hello Maria, how are you?" },
+        { "de": "Gut, danke. Und dir?", "en": "Good, thanks. And you?" },
+        { "de": "Auch gut.", "en": "Also good." }
+      ]
+    },
+    {
+      "situation": "At the airport",
+      "dialogue": [
+        { "de": "Wo ist der Check-in?", "en": "Where is the check-in?" },
+        { "de": "Dort drüben, neben dem Aufzug.", "en": "Over there, next to the elevator." },
+        { "de": "Vielen Dank.", "en": "Thank you very much." },
+        { "de": "Bitte schön.", "en": "You're welcome." }
+      ]
+    },
+    {
+      "situation": "At the hotel",
+      "dialogue": [
+        { "de": "Guten Tag. Ich habe eine Reservierung.", "en": "Good day. I have a reservation." },
+        { "de": "Wie ist Ihr Name?", "en": "What is your name?" },
+        { "de": "Ich heiße Schneider.", "en": "My name is Schneider." },
+        { "de": "Hier ist Ihr Schlüssel.", "en": "Here is your key." }
+      ]
+    },
+    {
+      "situation": "In a taxi",
+      "dialogue": [
+        { "de": "Zum Hauptbahnhof, bitte.", "en": "To the main station, please." },
+        { "de": "Gern. Möchten Sie mit Karte zahlen?", "en": "Sure. Would you like to pay by card?" },
+        { "de": "Nein, ich zahle bar.", "en": "No, I’ll pay in cash." },
+        { "de": "Alles klar.", "en": "All right." }
+      ]
+    },
+    {
+      "situation": "Shopping for groceries",
+      "dialogue": [
+        { "de": "Haben Sie frische Milch?", "en": "Do you have fresh milk?" },
+        { "de": "Ja, dort im Kühlschrank.", "en": "Yes, there in the fridge." },
+        { "de": "Und Eier?", "en": "And eggs?" },
+        { "de": "Auch dort.", "en": "There as well." }
+      ]
+    }
+  ]
+}

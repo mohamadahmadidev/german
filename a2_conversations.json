@@ -1,0 +1,167 @@
+{
+  "conversations": [
+    {
+      "situation": "Morning at home",
+      "dialogue": [
+        { "de": "Guten Morgen! Hast du gut geschlafen?", "en": "Good morning! Did you sleep well?" },
+        { "de": "Ja, danke. Und du?", "en": "Yes, thanks. And you?" },
+        { "de": "Auch gut, aber ich bin noch müde.", "en": "Also good, but I’m still tired." }
+      ]
+    },
+    {
+      "situation": "Getting ready for work",
+      "dialogue": [
+        { "de": "Wann fängst du heute an zu arbeiten?", "en": "When do you start work today?" },
+        { "de": "Um acht Uhr. Ich muss mich beeilen.", "en": "At eight o'clock. I have to hurry." },
+        { "de": "Soll ich dir einen Kaffee machen?", "en": "Shall I make you a coffee?" },
+        { "de": "Ja, sehr gerne!", "en": "Yes, I'd love that!" }
+      ]
+    },
+    {
+      "situation": "Commuting to work",
+      "dialogue": [
+        { "de": "Nimmst du heute den Bus oder die Bahn?", "en": "Are you taking the bus or the train today?" },
+        { "de": "Ich fahre mit dem Fahrrad.", "en": "I’m going by bike." },
+        { "de": "Das ist gesund!", "en": "That’s healthy!" }
+      ]
+    },
+    {
+      "situation": "Arriving at work",
+      "dialogue": [
+        { "de": "Guten Morgen zusammen!", "en": "Good morning, everyone!" },
+        { "de": "Morgen! Hast du die E-Mails schon gelesen?", "en": "Morning! Have you read the emails yet?" },
+        { "de": "Nein, ich mache das gleich.", "en": "No, I’ll do it right away." }
+      ]
+    },
+    {
+      "situation": "At lunch break",
+      "dialogue": [
+        { "de": "Was essen wir heute?", "en": "What are we eating today?" },
+        { "de": "Ich habe ein Sandwich dabei.", "en": "I brought a sandwich." },
+        { "de": "Ich gehe in die Kantine.", "en": "I’m going to the canteen." }
+      ]
+    },
+    {
+      "situation": "Running late",
+      "dialogue": [
+        { "de": "Tut mir leid, ich komme zu spät.", "en": "Sorry, I’m running late." },
+        { "de": "Kein Problem, wir fangen erst in zehn Minuten an.", "en": "No problem, we start in ten minutes." }
+      ]
+    },
+    {
+      "situation": "Buying breakfast",
+      "dialogue": [
+        { "de": "Ich hätte gern ein belegtes Brötchen.", "en": "I’d like a filled roll." },
+        { "de": "Mit Käse oder Schinken?", "en": "With cheese or ham?" },
+        { "de": "Mit Käse, bitte.", "en": "With cheese, please." }
+      ]
+    },
+    {
+      "situation": "Planning the evening",
+      "dialogue": [
+        { "de": "Hast du heute Abend Zeit?", "en": "Do you have time this evening?" },
+        { "de": "Ja, nach acht Uhr bin ich frei.", "en": "Yes, after eight I’m free." },
+        { "de": "Wollen wir ins Kino gehen?", "en": "Shall we go to the cinema?" },
+        { "de": "Gute Idee!", "en": "Good idea!" }
+      ]
+    },
+    {
+      "situation": "At the gym",
+      "dialogue": [
+        { "de": "Wie oft trainierst du?", "en": "How often do you work out?" },
+        { "de": "Drei Mal pro Woche.", "en": "Three times a week." },
+        { "de": "Super, das ist regelmäßig.", "en": "Great, that’s regular." }
+      ]
+    },
+    {
+      "situation": "In the supermarket",
+      "dialogue": [
+        { "de": "Wir brauchen noch Milch und Brot.", "en": "We still need milk and bread." },
+        { "de": "Soll ich auch Obst kaufen?", "en": "Should I also buy fruit?" },
+        { "de": "Ja, bitte ein Kilo Äpfel.", "en": "Yes, please, one kilo of apples." }
+      ]
+    },
+    {
+      "situation": "Meeting a friend",
+      "dialogue": [
+        { "de": "Hallo! Lange nicht gesehen.", "en": "Hello! Long time no see." },
+        { "de": "Ja, wie geht’s dir?", "en": "Yes, how are you?" },
+        { "de": "Gut, ich habe viel zu tun bei der Arbeit.", "en": "Good, I’m busy at work." },
+        { "de": "Das kenne ich.", "en": "I know that feeling." }
+      ]
+    },
+    {
+      "situation": "Calling a doctor",
+      "dialogue": [
+        { "de": "Guten Tag, ich möchte einen Termin machen.", "en": "Good day, I’d like to make an appointment." },
+        { "de": "Wann passt es Ihnen?", "en": "When is it convenient for you?" },
+        { "de": "Am Mittwochvormittag, wenn möglich.", "en": "On Wednesday morning, if possible." }
+      ]
+    },
+    {
+      "situation": "Picking up children",
+      "dialogue": [
+        { "de": "Hallo, wie war die Schule?", "en": "Hello, how was school?" },
+        { "de": "Gut, wir haben heute Sport gemacht.", "en": "Good, we had sports today." },
+        { "de": "Super! Bist du hungrig?", "en": "Great! Are you hungry?" },
+        { "de": "Ja, sehr!", "en": "Yes, very!" }
+      ]
+    },
+    {
+      "situation": "Making a shopping list",
+      "dialogue": [
+        { "de": "Was brauchen wir für das Abendessen?", "en": "What do we need for dinner?" },
+        { "de": "Nudeln, Tomaten und Käse.", "en": "Pasta, tomatoes and cheese." },
+        { "de": "Ich schreibe das auf.", "en": "I’ll write it down." }
+      ]
+    },
+    {
+      "situation": "Waiting for the bus",
+      "dialogue": [
+        { "de": "Wann kommt der nächste Bus?", "en": "When is the next bus coming?" },
+        { "de": "In fünf Minuten.", "en": "In five minutes." },
+        { "de": "Gut, dann haben wir noch Zeit.", "en": "Good, then we still have time." }
+      ]
+    },
+    {
+      "situation": "Evening at home",
+      "dialogue": [
+        { "de": "Was wollen wir heute Abend essen?", "en": "What shall we eat tonight?" },
+        { "de": "Lass uns Pizza bestellen.", "en": "Let’s order pizza." },
+        { "de": "Klingt lecker!", "en": "Sounds tasty!" }
+      ]
+    },
+    {
+      "situation": "In the office",
+      "dialogue": [
+        { "de": "Kannst du mir bei diesem Projekt helfen?", "en": "Can you help me with this project?" },
+        { "de": "Ja, kein Problem. Worum geht es?", "en": "Yes, no problem. What’s it about?" },
+        { "de": "Es geht um die neuen Kunden.", "en": "It’s about the new clients." }
+      ]
+    },
+    {
+      "situation": "Getting ready for bed",
+      "dialogue": [
+        { "de": "Ich bin müde. Ich gehe schlafen.", "en": "I’m tired. I’m going to bed." },
+        { "de": "Gute Nacht!", "en": "Good night!" },
+        { "de": "Schlaf gut.", "en": "Sleep well." }
+      ]
+    },
+    {
+      "situation": "Asking about plans",
+      "dialogue": [
+        { "de": "Was machst du am Wochenende?", "en": "What are you doing on the weekend?" },
+        { "de": "Ich treffe Freunde und gehe spazieren.", "en": "I’m meeting friends and going for a walk." },
+        { "de": "Klingt entspannt.", "en": "Sounds relaxing." }
+      ]
+    },
+    {
+      "situation": "Talking about breakfast",
+      "dialogue": [
+        { "de": "Was frühstückst du normalerweise?", "en": "What do you usually have for breakfast?" },
+        { "de": "Meistens Müsli mit Milch.", "en": "Mostly cereal with milk." },
+        { "de": "Ich esse lieber Brötchen mit Marmelade.", "en": "I prefer rolls with jam." }
+      ]
+    }
+  ]
+}
