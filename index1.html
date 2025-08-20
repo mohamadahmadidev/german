@@ -29,8 +29,14 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .rtl { direction: rtl; }
 
-        /* Vocab Town Styles */
-        .town-modal { transition: opacity 0.3s ease-in-out; }
+        /* Conversation Styles */
+        .conversation-card { transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; }
+        .conversation-card:hover { transform: translateY(-10px) scale(1.05); }
+        .conversation-tab.active { background-color: #3b82f6; color: white; border-bottom: 2px solid #3b82f6; }
+        .conversation-tab:not(.active) { color: #6b7280; }
+        .conversation-tab:not(.active):hover { color: #3b82f6; }
+        .dialogue-line { transition: all 0.2s ease; }
+        .dialogue-line:hover { transform: translateX(5px); }
         .flashcard { perspective: 1000px; }
         .flashcard-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
         .flashcard.is-flipped .flashcard-inner { transform: rotateY(180deg); }
@@ -421,7 +427,7 @@
     <main id="app-container" class="container mx-auto p-4 md:p-8">
         <section id="alphabet-view" class="app-section"></section>
         <section id="levels-view" class="app-section"></section>
-        <section id="town-view" class="app-section"></section>
+        <section id="conversations-view" class="app-section"></section>
         <section id="patterns-view" class="app-section"></section>
     </main>
 
@@ -433,19 +439,20 @@
         let userProgress = { completedStations: ['alphabet'] };
         let initializedModules = [];
         let vocabularyData = { a1: [], a2: [], a1_attachments: [], a2_attachments: [] };
+        let conversationsData = { conversations: [] };
 
         const uiTranslations = {
             'station-alphabet-title': { en: 'Alphabet', fa: 'الفبا', ku: 'ئەلفوبێ' },
             'station-levels-title': { en: 'A1/A2 Vocab', fa: 'واژگان A1/A2', ku: 'وشەکانی A1/A2' },
-            'station-town-title': { en: 'Vocab Town', fa: 'شهر واژگان', ku: 'شاری وشەکان' },
+            'station-conversations-title': { en: 'Conversations', fa: 'مکالمات', ku: 'گفتگۆکان' },
             'station-patterns-title': { en: 'Sentence Patterns', fa: 'الگوهای جمله', ku: 'شێوازەکانی ڕستە' },
         };
 
         const navStations = [
             { id: 'alphabet', title: 'station-alphabet-title', icon: '🔤', dependsOn: null },
             { id: 'levels', title: 'station-levels-title', icon: '📚', dependsOn: 'alphabet' },
-            { id: 'town', title: 'station-town-title', icon: '🏘️', dependsOn: 'levels' },
-            { id: 'patterns', title: 'station-patterns-title', icon: '🧩', dependsOn: 'town' },
+            { id: 'conversations', title: 'station-conversations-title', icon: '💬', dependsOn: 'levels' },
+            { id: 'patterns', title: 'station-patterns-title', icon: '🧩', dependsOn: 'conversations' },
         ];
 
         // --- CORE APP LOGIC ---
@@ -470,18 +477,20 @@
 
         async function loadAllData() {
             try {
-                const [a1Res, a2Res, a1AttachRes, a2AttachRes] = await Promise.all([
+                const [a1Res, a2Res, a1AttachRes, a2AttachRes, conversationsRes] = await Promise.all([
                     fetch('a1_multi_language.json').then(res => res.json()),
                     fetch('a2_multi_language.json').then(res => res.json()),
                     fetch('a1_atachments.json').then(res => res.json()),
-                    fetch('a2_attachments.json').then(res => res.json())
+                    fetch('a2_attachments.json').then(res => res.json()),
+                    fetch('a1_conversations.json').then(res => res.json())
                 ]);
                 vocabularyData.a1 = a1Res;
                 vocabularyData.a2 = a2Res;
                 vocabularyData.a1_attachments = a1AttachRes;
                 vocabularyData.a2_attachments = a2AttachRes;
+                conversationsData = conversationsRes;
             } catch (error) {
-                console.error("Failed to load vocabulary data:", error);
+                console.error("Failed to load data:", error);
             }
         }
 
@@ -530,7 +539,7 @@
             if (!initializedModules.includes(stationId) || forceReload) {
                 const sectionView = document.getElementById(`${stationId}-view`);
                 switch(stationId) {
-                    case 'town': initializeTown(sectionView); break;
+                    case 'conversations': initializeConversations(sectionView); break;
                     case 'levels': initializeVocabularyLevels(sectionView); break;
                     case 'alphabet': initializeAlphabet(sectionView); break;
                     case 'patterns': initializePatternDrill(sectionView); break;
@@ -541,250 +550,360 @@
 
         // --- MODULE INITIALIZATION FUNCTIONS ---
 
-        function initializeTown(container) {
-            const data = vocabularyData.a1_attachments;
+        function initializeConversations(container) {
+            const data = conversationsData.conversations;
             if (!data || data.length === 0) {
-                container.innerHTML = `<p class="text-center text-slate-500">Town vocabulary data could not be loaded.</p>`;
+                container.innerHTML = `<p class="text-center text-slate-500">Conversation data could not be loaded.</p>`;
                 return;
             }
 
-            // Group words by their starting letter to create themed "districts"
-            const letterCategories = data.reduce((acc, wordObj) => {
-                const firstLetter = wordObj.word.charAt(0).toUpperCase();
-                if (!acc[firstLetter]) {
-                    acc[firstLetter] = [];
-                }
-                acc[firstLetter].push(wordObj);
-                return acc;
-            }, {});
+            let currentConversationIndex = 0;
 
-            // Create buildings HTML dynamically
-            const buildingsHTML = Object.keys(letterCategories).map((letter, index) => {
-                const colors = [
-                    'bg-red-400 bg-red-200 text-red-500',
-                    'bg-blue-500 bg-blue-200 text-blue-600',
-                    'bg-green-500 bg-green-200 text-green-600',
-                    'bg-purple-500 bg-purple-200 text-purple-600',
-                    'bg-yellow-500 bg-yellow-200 text-yellow-600',
-                    'bg-pink-500 bg-pink-200 text-pink-600',
-                    'bg-indigo-500 bg-indigo-200 text-indigo-600',
-                    'bg-teal-500 bg-teal-200 text-teal-600'
-                ];
-                const colorSet = colors[index % colors.length].split(' ');
-                const roofColor = colorSet[0];
-                const wallColor = colorSet[1];
-                const iconColor = colorSet[2];
+            function renderConversationView() {
+                const currentConversation = data[currentConversationIndex];
 
-                const wordCount = letterCategories[letter].length;
+                container.innerHTML = `
+                <div class="conversations-section bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-slate-800 antialiased rounded-3xl p-6 min-h-[85vh]">
+                    <div class="container mx-auto max-w-7xl">
+                        <!-- Header with animated background -->
+                        <header class="text-center mb-12 relative">
+                            <div class="absolute inset-0 bg-gradient-to-r from-emerald-400 via-cyan-500 to-blue-500 rounded-3xl transform -rotate-1"></div>
+                            <div class="relative bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white p-8 md:p-12 rounded-3xl shadow-2xl">
+                                <h1 class="font-display text-4xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-100">
+                                    💬 German Conversations
+                                </h1>
+                                <p class="text-xl md:text-2xl opacity-90 font-medium">Practice real-life scenarios and improve your speaking skills!</p>
+                                <div class="absolute -top-4 -right-4 w-8 h-8 bg-yellow-300 rounded-full animate-ping"></div>
+                                <div class="absolute -bottom-2 -left-2 w-6 h-6 bg-pink-300 rounded-full animate-bounce"></div>
+                            </div>
+                        </header>
 
-                return `
-                    <div class="town-building" data-category="${letter}">
-                        <div class="${roofColor} p-4 rounded-t-lg text-center text-white font-bold shadow-md">
-                            Letter ${letter} <span class="text-sm opacity-75">(${wordCount} words)</span>
+                    <!-- Featured Conversation -->
+                    <div class="bg-white rounded-2xl shadow-xl mb-8 overflow-hidden max-w-4xl mx-auto">
+                        <div class="bg-gradient-to-r from-indigo-500 to-blue-600 text-white p-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mr-4">
+                                        <span class="text-xl font-bold">${currentConversationIndex + 1}</span>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-2xl font-bold mb-1">${currentConversation.situation}</h2>
+                                        <p class="text-blue-100">${currentConversation.dialogue.length} lines conversation</p>
+                                    </div>
+                                </div>
+                                <button id="expand-conversation" class="bg-white/20 hover:bg-white/30 rounded-full p-3 transition-colors">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                        <div class="${wallColor} h-40 rounded-b-lg flex items-center justify-center shadow-lg">
-                            <div class="text-center">
-                                <div class="text-6xl font-bold ${iconColor} mb-2">${letter}</div>
-                                <div class="text-sm ${iconColor} font-medium">${letterCategories[letter][0].word}</div>
+
+                        <div class="p-6">
+                            <!-- Preview of first few lines -->
+                            <div class="space-y-4 mb-6">
+                                ${currentConversation.dialogue.slice(0, 3).map((line, index) => `
+                                    <div class="flex items-start space-x-4 p-4 rounded-lg ${index % 2 === 0 ? 'bg-blue-50' : 'bg-gray-50'}">
+                                        <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-indigo-400 to-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                            ${index % 2 === 0 ? 'A' : 'B'}
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="font-semibold text-gray-800 mb-1">${line.de}</p>
+                                            <p class="text-sm text-gray-500">${line.en}</p>
+                                        </div>
+                                        <button class="speak-preview-btn text-gray-400 hover:text-indigo-500 transition-colors p-1 rounded-full hover:bg-indigo-50" data-text="${line.de}">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                `).join('')}
+                                ${currentConversation.dialogue.length > 3 ? `
+                                    <div class="text-center py-2">
+                                        <span class="text-gray-500 text-sm">... and ${currentConversation.dialogue.length - 3} more lines</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex flex-wrap gap-3 justify-center">
+                                <button id="play-conversation-preview" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 px-6 rounded-full hover:from-green-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                    � Play Full Conversation
+                                </button>
+                                <button id="expand-conversation-detail" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 px-6 rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                    � View Full Conversation
+                                </button>
                             </div>
                         </div>
                     </div>
-                `;
-            }).join('');
 
-            container.innerHTML = `
-            <div class="relative bg-[#f0f9ff] rounded-2xl overflow-hidden">
-                <div class="container mx-auto px-4 py-8 min-h-[70vh] flex flex-col justify-center items-center relative">
-                    <header class="text-center mb-12">
-                        <h1 class="font-display text-5xl md:text-6xl text-sky-700 mb-2">Willkommen in der Lern-Stadt!</h1>
-                        <p class="text-lg text-gray-600">Klicken Sie auf ein Gebäude, um den Wortschatz zu entdecken.</p>
-                    </header>
-                    <main class="w-full max-w-6xl grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 md:gap-12 z-10">
-                        ${buildingsHTML}
-                    </main>
+                    <!-- Navigation Controls -->
+                    <div class="flex justify-center items-center space-x-4 mb-8">
+                        <button id="prev-conversation" class="bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${currentConversationIndex === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'}" ${currentConversationIndex === 0 ? 'disabled' : ''}>
+                            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="bg-white rounded-full px-6 py-3 shadow-lg">
+                            <span class="text-gray-600 font-medium">${currentConversationIndex + 1} of ${data.length}</span>
+                        </div>
+                        <button id="next-conversation" class="bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${currentConversationIndex === data.length - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'}" ${currentConversationIndex === data.length - 1 ? 'disabled' : ''}>
+                            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Conversation List -->
+                    <div class="max-w-6xl mx-auto">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-4 text-center">All Conversations</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            ${data.map((conversation, index) => `
+                                <div class="conversation-item bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:-translate-y-1 p-4 ${index === currentConversationIndex ? 'ring-2 ring-indigo-500 bg-indigo-50' : ''}" data-index="${index}">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-gradient-to-br from-indigo-400 to-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
+                                                ${index + 1}
+                                            </div>
+                                            <h4 class="font-semibold text-gray-800 text-sm">${conversation.situation}</h4>
+                                        </div>
+                                        ${index === currentConversationIndex ? '<div class="text-indigo-500"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg></div>' : ''}
+                                    </div>
+                                    <p class="text-xs text-gray-500 mb-2">${conversation.dialogue.length} lines</p>
+                                    <p class="text-xs text-gray-600 bg-gray-100 rounded p-2 truncate">"${conversation.dialogue[0].de}"</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
                 </div>
-                <div id="vocab-modal" class="town-modal absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50">
-                    <div id="modal-content" class="bg-white w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col">
-                        <div class="p-6 border-b border-gray-200 flex justify-between items-center flex-shrink-0">
-                            <h2 id="modal-title" class="font-display text-3xl text-gray-700">Wortschatz</h2>
-                            <button id="close-modal" class="text-gray-400 hover:text-gray-700 transition-colors">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+
+                <!-- Full Conversation Modal -->
+                <div id="conversation-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50 transition-all duration-300">
+                    <div id="conversation-modal-content" class="bg-white/95 backdrop-blur-xl w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col border border-white/50 relative overflow-hidden">
+                        <!-- Decorative elements -->
+                        <div class="absolute -top-3 -left-3 w-6 h-6 bg-gradient-to-br from-blue-400/30 to-purple-400/30 rounded-full blur-sm"></div>
+                        <div class="absolute -bottom-3 -right-3 w-8 h-8 bg-gradient-to-br from-pink-400/30 to-yellow-400/30 rounded-full blur-sm"></div>
+
+                        <div class="p-6 border-b border-gray-200/50 flex justify-between items-center flex-shrink-0 bg-gradient-to-r from-indigo-50/80 to-purple-50/80 backdrop-blur-sm">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold mr-4 shadow-lg">
+                                    💬
+                                </div>
+                                <div>
+                                    <h2 id="modal-conversation-title" class="font-display text-2xl font-bold text-gray-800">${currentConversation.situation}</h2>
+                                    <p class="text-sm text-gray-500">Full Conversation Experience</p>
+                                </div>
+                            </div>
+                            <button id="close-conversation-modal" class="text-gray-400 hover:text-gray-700 transition-all duration-300 p-3 rounded-2xl hover:bg-white/50 backdrop-blur-sm transform hover:scale-110">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
                             </button>
                         </div>
-                        <div id="modal-body" class="p-6 md:p-8 overflow-y-auto flex-grow">
-                            <div id="flashcard-view">
-                                <div class="text-center mb-6"><button id="start-practice-btn" class="bg-green-500 text-white font-bold py-2 px-6 rounded-full hover:bg-green-600 transition-colors">Start Practice</button></div>
-                                <div id="flashcard-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+                        <div id="modal-conversation-content" class="flex-1 overflow-y-auto p-6 backdrop-blur-sm">
+                            <div class="space-y-5">
+                                ${currentConversation.dialogue.map((line, index) => `
+                                    <div class="dialogue-line group bg-white/70 backdrop-blur-sm rounded-2xl p-5 shadow-md border border-white/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
+                                        <!-- Line number indicator -->
+                                        <div class="absolute -left-2 -top-2 w-6 h-6 bg-gradient-to-br ${index % 2 === 0 ? 'from-blue-400 to-indigo-500' : 'from-purple-400 to-pink-500'} rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
+                                            ${index + 1}
+                                        </div>
+
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1 pl-4">
+                                                <div class="flex items-center mb-3">
+                                                    <div class="w-10 h-10 bg-gradient-to-br ${index % 2 === 0 ? 'from-blue-400 to-indigo-500' : 'from-purple-400 to-pink-500'} rounded-2xl flex items-center justify-center text-white text-sm font-bold mr-3 shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                                                        ${index % 2 === 0 ? 'A' : 'B'}
+                                                    </div>
+                                                    <span class="text-xs text-gray-500 uppercase tracking-wider font-semibold px-3 py-1 bg-white/50 rounded-full border border-white/50">
+                                                        ${index % 2 === 0 ? 'Person A' : 'Person B'}
+                                                    </span>
+                                                </div>
+                                                <div class="ml-13">
+                                                    <p class="text-lg font-semibold text-gray-800 mb-3 leading-relaxed">${line.de}</p>
+                                                    <p class="text-sm text-gray-600 italic bg-gray-50/80 rounded-lg p-2 border border-gray-100/50">${line.en}</p>
+                                                </div>
+                                            </div>
+                                            <button class="speak-modal-btn ml-4 p-3 text-gray-400 hover:text-indigo-600 transition-all duration-300 rounded-2xl hover:bg-white/70 backdrop-blur-sm shadow-sm hover:shadow-md transform hover:scale-110" data-text="${line.de}">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                `).join('')}
                             </div>
-                            <div id="quiz-view" class="hidden"><div class="text-center max-w-lg mx-auto"><div class="mb-4 flex justify-between items-center"><button id="back-to-cards-btn" class="text-sm text-blue-600 hover:underline">&larr; Back to Flashcards</button><div id="quiz-progress" class="text-lg font-semibold text-gray-700"></div></div><div class="bg-gray-100 p-8 rounded-lg shadow-inner"><p class="text-gray-600 mb-2">What is the English translation of:</p><h3 id="quiz-question-word" class="text-4xl font-bold text-sky-700 mb-6"></h3><div id="quiz-options" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div></div><div id="quiz-feedback" class="mt-4 h-12 flex items-center justify-center"><button id="next-question-btn" class="hidden bg-blue-500 text-white font-bold py-2 px-8 rounded-full hover:bg-blue-600 transition-colors">Next</button></div></div></div>
+
+                            <!-- Modal action button -->
+                            <div class="mt-8 text-center">
+                                <button id="play-modal-conversation" class="primary-btn bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl border-2 border-white/20 backdrop-blur-sm">
+                                    <span class="flex items-center">
+                                        <span class="text-xl mr-2">🎭</span>
+                                        Play Complete Conversation
+                                    </span>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>`;
+                </div>`;
 
-            // Use the actual vocabulary data
-            const vocabulary = letterCategories;
-            const categoryTitles = Object.keys(letterCategories).reduce((acc, letter) => {
-                acc[letter] = `Letter ${letter} - Words`;
-                return acc;
-            }, {});
-
-            const buildings = container.querySelectorAll('.town-building');
-            const modal = container.querySelector('#vocab-modal');
-            const modalContent = container.querySelector('#modal-content');
-            const modalTitle = container.querySelector('#modal-title');
-            const closeModalBtn = container.querySelector('#close-modal');
-            const flashcardContainer = container.querySelector('#flashcard-container');
-            const flashcardView = container.querySelector('#flashcard-view');
-            const quizView = container.querySelector('#quiz-view');
-            const startPracticeBtn = container.querySelector('#start-practice-btn');
-            const backToCardsBtn = container.querySelector('#back-to-cards-btn');
-            const quizQuestionWord = container.querySelector('#quiz-question-word');
-            const quizOptions = container.querySelector('#quiz-options');
-            const quizFeedback = container.querySelector('#quiz-feedback');
-            const nextQuestionBtn = container.querySelector('#next-question-btn');
-            const quizProgress = container.querySelector('#quiz-progress');
-            let currentCategory = '';
-            let quizWords = [];
-            let currentQuestionIndex = 0;
-            let score = 0;
-            const QUIZ_LENGTH = Math.min(5, Math.max(...Object.values(vocabulary).map(arr => arr.length)));
-
-            function createFlashcard(word) {
-                const card = document.createElement('div');
-                card.className = 'flashcard h-64';
-                // Generate a simple colored background since we don't have images
-                const colors = ['#f87171', '#60a5fa', '#34d399', '#fbbf24', '#a78bfa', '#fb7185'];
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-
-                card.innerHTML = `<div class="flashcard-inner"><div class="flashcard-front bg-gradient-to-br from-slate-200 to-slate-300"><div class="card-overlay bg-black opacity-20"></div><div class="card-content p-4 text-center text-slate-800"><div class="text-sm text-slate-600 mb-2">${word.article || ''}</div><p class="text-2xl font-semibold mb-4">${word.word}</p><p class="text-sm italic">${word.complete_sentence}</p></div><div class="absolute top-2 right-2"><button class="vocab-speaker-btn speaker-btn p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30" title="🔊 Read word and sentence"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg></button></div><div class="absolute bottom-2 right-2"><button class="flip-btn p-1 text-slate-600" title="Übersetzung anzeigen"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg></button></div></div><div class="flashcard-back bg-indigo-800 text-indigo-100"><div class="card-content p-4 text-center"><p class="text-xl font-semibold mb-4">${word[currentLanguage + '_translation']}</p><p class="text-sm italic">${word[currentLanguage + '_sentence_translation']}</p></div><div class="absolute top-2 right-2"><button class="vocab-speaker-back-btn speaker-btn p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20" title="🔊 Read word and sentence"><svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg></button></div><div class="absolute bottom-2 right-2"><button class="flip-btn p-1" title="Zurück"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" /></svg></button></div></div></div>`;
-                card.querySelectorAll('.flip-btn').forEach(btn => btn.addEventListener('click', e => { e.stopPropagation(); card.classList.toggle('is-flipped'); }));
-
-                // Add speaker button event listeners - single button reads word + sentence
-                const vocabSpeakerBtn = card.querySelector('.vocab-speaker-btn');
-                const vocabSpeakerBackBtn = card.querySelector('.vocab-speaker-back-btn');
-
-                if (vocabSpeakerBtn) {
-                    vocabSpeakerBtn.addEventListener('click', e => {
-                        e.stopPropagation();
-                        // Read both word and sentence with a pause
-                        speakWordAndSentence(word.word, word.complete_sentence, vocabSpeakerBtn);
-                    });
-                }
-
-                if (vocabSpeakerBackBtn) {
-                    vocabSpeakerBackBtn.addEventListener('click', e => {
-                        e.stopPropagation();
-                        // Read both word and sentence with a pause
-                        speakWordAndSentence(word.word, word.complete_sentence, vocabSpeakerBackBtn);
-                    });
-                }
-
-                return card;
+                // Add event listeners
+                addEventListeners();
             }
 
-            function openVocabModal(category) {
-                currentCategory = category;
-                const words = vocabulary[category];
-                if (!words) return;
-                modalTitle.textContent = categoryTitles[category] || 'Wortschatz';
-                flashcardContainer.innerHTML = '';
-                words.forEach(word => flashcardContainer.appendChild(createFlashcard(word)));
-                flashcardView.classList.remove('hidden');
-                quizView.classList.add('hidden');
+            function addEventListeners() {
+                // Navigation buttons
+                const prevBtn = container.querySelector('#prev-conversation');
+                const nextBtn = container.querySelector('#next-conversation');
+                const playBtn = container.querySelector('#play-conversation-preview');
+                const conversationItems = container.querySelectorAll('.conversation-item');
+
+                // Modal elements
+                const modal = container.querySelector('#conversation-modal');
+                const modalContent = container.querySelector('#conversation-modal-content');
+                const closeModalBtn = container.querySelector('#close-conversation-modal');
+
+                // Previous conversation
+                if (prevBtn && !prevBtn.disabled) {
+                    prevBtn.addEventListener('click', () => {
+                        if (currentConversationIndex > 0) {
+                            currentConversationIndex--;
+                            renderConversationView();
+                        }
+                    });
+                }
+
+                // Next conversation
+                if (nextBtn && !nextBtn.disabled) {
+                    nextBtn.addEventListener('click', () => {
+                        if (currentConversationIndex < data.length - 1) {
+                            currentConversationIndex++;
+                            renderConversationView();
+                        }
+                    });
+                }
+
+                // Conversation list items
+                conversationItems.forEach(item => {
+                    item.addEventListener('click', () => {
+                        currentConversationIndex = parseInt(item.dataset.index);
+                        renderConversationView();
+                    });
+                });
+
+                // Expand buttons
+                const expandBtn = container.querySelector('#expand-conversation');
+                const expandDetailBtn = container.querySelector('#expand-conversation-detail');
+
+                if (expandBtn) {
+                    expandBtn.addEventListener('click', openModal);
+                }
+                if (expandDetailBtn) {
+                    expandDetailBtn.addEventListener('click', openModal);
+                }
+
+                // Play conversation
+                if (playBtn) {
+                    playBtn.addEventListener('click', playFullConversation);
+                }
+
+                // Modal close
+                if (closeModalBtn) {
+                    closeModalBtn.addEventListener('click', closeModal);
+                }
+
+                // Modal play button
+                const modalPlayBtn = container.querySelector('#play-modal-conversation');
+                if (modalPlayBtn) {
+                    modalPlayBtn.addEventListener('click', playFullConversation);
+                }
+
+                // Close modal when clicking outside
+                if (modal) {
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            closeModal();
+                        }
+                    });
+                }
+
+                // Speech buttons
+                container.querySelectorAll('.speak-preview-btn, .speak-modal-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const text = btn.dataset.text;
+                        speakText(text, btn);
+                    });
+                });
+            }
+
+            function openModal() {
+                const modal = container.querySelector('#conversation-modal');
+                const modalContent = container.querySelector('#conversation-modal-content');
                 modal.classList.remove('opacity-0', 'pointer-events-none');
                 modalContent.classList.remove('scale-95');
             }
 
-            function closeVocabModal() {
+            function closeModal() {
+                const modal = container.querySelector('#conversation-modal');
+                const modalContent = container.querySelector('#conversation-modal-content');
                 modal.classList.add('opacity-0', 'pointer-events-none');
                 modalContent.classList.add('scale-95');
             }
 
-            function startPractice() {
-                flashcardView.classList.add('hidden');
-                quizView.classList.remove('hidden');
-                let allWords = [...vocabulary[currentCategory]];
-                const availableWords = Math.min(QUIZ_LENGTH, allWords.length);
-                quizWords = allWords.sort(() => 0.5 - Math.random()).slice(0, availableWords);
-                currentQuestionIndex = 0;
-                score = 0;
-                if (quizWords.length < 2) {
-                    quizQuestionWord.textContent = "Not enough words for quiz.";
-                    quizOptions.innerHTML = "";
-                    return;
-                }
-                displayQuestion();
-            }
+            // Speech synthesis function
+            function speakText(text, button = null) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'de-DE';
+                    utterance.rate = 0.8;
 
-            function displayQuestion() {
-                if (currentQuestionIndex >= quizWords.length) {
-                    showFinalScore();
-                    return;
-                }
-                quizProgress.textContent = `Question ${currentQuestionIndex + 1} / ${quizWords.length}`;
-                const currentWord = quizWords[currentQuestionIndex];
-                quizQuestionWord.textContent = currentWord.word;
-
-                // Get all other words from all categories for wrong answers
-                const allOtherWords = Object.values(vocabulary).flat().filter(w => w.word !== currentWord.word);
-                const options = [currentWord];
-
-                while (options.length < Math.min(4, allOtherWords.length + 1)) {
-                    let randomWord = allOtherWords[Math.floor(Math.random() * allOtherWords.length)];
-                    if (!options.some(o => o.word === randomWord.word)) {
-                        options.push(randomWord);
+                    if (button) {
+                        button.classList.add('text-indigo-500', 'bg-indigo-50');
+                        utterance.onend = () => {
+                            button.classList.remove('text-indigo-500', 'bg-indigo-50');
+                        };
                     }
-                }
-                options.sort(() => 0.5 - Math.random());
 
-                quizOptions.innerHTML = '';
-                options.forEach(option => {
-                    const button = document.createElement('button');
-                    button.textContent = option[currentLanguage + '_translation'];
-                    button.className = 'quiz-option w-full bg-white border-2 p-3 rounded-lg hover:bg-slate-50';
-                    button.onclick = () => checkAnswer(option.word === currentWord.word, button);
-                    quizOptions.appendChild(button);
-                });
-                nextQuestionBtn.classList.add('hidden');
-            }
-
-            function checkAnswer(isCorrect, button) {
-                document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = true);
-                if (isCorrect) {
-                    score++;
-                    button.classList.add('correct');
+                    window.speechSynthesis.speak(utterance);
                 } else {
-                    button.classList.add('incorrect');
-                    // Highlight correct answer
-                    const currentWord = quizWords[currentQuestionIndex];
-                    document.querySelectorAll('.quiz-option').forEach(btn => {
-                        if (btn.textContent === currentWord[currentLanguage + '_translation']) {
-                            btn.classList.add('correct');
-                        }
-                    });
+                    console.warn('Speech synthesis not supported');
                 }
-                currentQuestionIndex++;
-                nextQuestionBtn.classList.remove('hidden');
             }
 
-            function showFinalScore() {
-                quizQuestionWord.textContent = "Practice Complete!";
-                quizOptions.innerHTML = `<p class="text-lg">Your score: ${score} / ${quizWords.length}</p>`;
-                nextQuestionBtn.textContent = 'Practice Again';
-                nextQuestionBtn.classList.remove('hidden');
+            // Play full conversation
+            function playFullConversation() {
+                const currentConversation = data[currentConversationIndex];
+                const dialogue = currentConversation.dialogue;
+                let currentIndex = 0;
+
+                function playNext() {
+                    if (currentIndex >= dialogue.length) return;
+
+                    const line = dialogue[currentIndex];
+                    const utterance = new SpeechSynthesisUtterance(line.de);
+                    utterance.lang = 'de-DE';
+                    utterance.rate = 0.8;
+
+                    utterance.onend = () => {
+                        setTimeout(() => {
+                            currentIndex++;
+                            playNext();
+                        }, 1000); // Pause between lines
+                    };
+
+                    window.speechSynthesis.speak(utterance);
+                }
+
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    playNext();
+                }
             }
 
-            buildings.forEach(b => b.addEventListener('click', () => openVocabModal(b.dataset.category)));
-            closeModalBtn.addEventListener('click', closeVocabModal);
-            startPracticeBtn.addEventListener('click', startPractice);
-            backToCardsBtn.addEventListener('click', () => {
-                quizView.classList.add('hidden');
-                flashcardView.classList.remove('hidden');
-            });
-            nextQuestionBtn.addEventListener('click', () => {
-                 if (currentQuestionIndex >= quizWords.length) { startPractice(); } else { displayQuestion(); }
-            });
+            // Initialize with first conversation
+            renderConversationView();
         }
 
         function initializeAlphabet(container) {
