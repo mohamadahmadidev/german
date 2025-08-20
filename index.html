@@ -1,471 +1,1958 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Polyglot Practice</title>
+    <title>German Learning Journey</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Baloo+2:wght@700;800&family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; /* slate-100 */ }
+        .font-display { font-family: 'Baloo 2', cursive; }
+        .font-fa { font-family: 'Vazirmatn', sans-serif; }
+
+        /* Tab Navigation Styles */
+        .progress-nav-item { transition: all 0.3s ease; cursor: pointer; }
+        .progress-nav-item .nav-bubble { transition: all 0.3s ease; }
+        .progress-nav-item.active .nav-bubble { background-color: #3b82f6; color: white; border-color: #2563eb; transform: scale(1.1); }
+        .progress-nav-item.active .nav-label { color: #1e3a8a; font-weight: 600; }
+        .progress-nav-item.locked { cursor: not-allowed; color: #9ca3af; }
+        .progress-nav-item.locked .nav-bubble { background-color: #e5e7eb; border-color: #d1d5db; color: #9ca3af; }
+        .progress-arrow { color: #d1d5db; }
+        .progress-nav-item.completed .progress-arrow { color: #3b82f6; }
+
+        /* General App & Module Styles */
+        .app-section { display: none; }
+        .app-section.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .rtl { direction: rtl; }
+
+        /* Conversation Styles */
+        .conversation-card { transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; }
+        .conversation-card:hover { transform: translateY(-10px) scale(1.05); }
+        .conversation-tab.active { background-color: #3b82f6; color: white; border-bottom: 2px solid #3b82f6; }
+        .conversation-tab:not(.active) { color: #6b7280; }
+        .conversation-tab:not(.active):hover { color: #3b82f6; }
+        .dialogue-line { transition: all 0.2s ease; }
+        .dialogue-line:hover { transform: translateX(5px); }
+        .flashcard { perspective: 1000px; }
+        .flashcard-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flashcard.is-flipped .flashcard-inner { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 0.75rem; padding: 1rem; text-align: center; background-size: cover; background-position: center; color: white; }
+        .card-overlay { position: absolute; inset: 0; background-color: rgba(0,0,0,0.5); border-radius: 0.75rem; z-index: 1; }
+        .card-content { position: relative; z-index: 2; }
+        .flashcard-back { transform: rotateY(180deg); }
+
+        /* Enhanced Flashcard Styles */
+        #flashcard-container { box-shadow: 0 20px 40px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        #flashcard-container:hover { transform: translateY(-5px); box-shadow: 0 25px 50px rgba(0,0,0,0.15); }
+        #flashcard-container .flashcard-front { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        #flashcard-container .flashcard-back { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .flashcard-section { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
+
+        .town-building { transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; }
+        .town-building:hover { transform: translateY(-10px) scale(1.05); }
+        .quiz-option.correct { background-color: #10B981 !important; border-color: #059669 !important; color: white !important; }
+        .quiz-option.incorrect { background-color: #EF4444 !important; border-color: #DC2626 !important; color: white !important; }
+
+        /* Sentence Patterns Styles */
+        .case-card { transition: all 0.3s ease-in-out; }
+        .practice-mode .answer { background-color: #e5e7eb; color: #e5e7eb; border-radius: 4px; padding: 0 4px; cursor: pointer; transition: all 0.2s ease; }
+        .practice-mode .answer.revealed { background-color: transparent; color: inherit; }
+        .translation { color: #6b7280; }
+
+        /* Flashcard Pattern Styles */
+        .ending {
+            font-weight: 700;
+            color: #3b82f6; /* blue-500 */
         }
-        .card {
-            background-color: white;
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        .flashcard-container, .practice-container {
+            display: none; /* Hidden by default */
         }
-        .btn {
-            transition: all 0.2s ease-in-out;
+
+        /* Enhanced Pattern Section Styles */
+        .patterns-section {
+            min-height: 100vh;
         }
-        .btn:hover {
+
+        .case-tab {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .case-tab:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s;
+        }
+
+        .case-tab:hover:before {
+            left: 100%;
+        }
+
+        .case-tab.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border-color: #1d4ed8 !important;
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .case-section {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .case-section:hover {
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             transform: translateY(-2px);
         }
-        .btn:disabled {
+
+        #gender-selector {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        #gender-selector:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+
+        #gender-selector:hover {
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+        }
+
+        .flashcard-sentence-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flashcard-sentence-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.1) 100%);
+            pointer-events: none;
+        }
+
+        .flashcard-sentence-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(102, 126, 234, 0.4);
+        }
+
+        .pattern-nav-btn {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 2px solid #cbd5e1;
+            color: #475569;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pattern-nav-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            border-color: #94a3b8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .pattern-nav-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
-        /* Flip Card Styles */
-        .flip-card {
-            background-color: transparent;
-            width: 100%;
-            height: 250px;
-            perspective: 1000px;
-        }
-        .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-        .flip-card.is-flipped .flip-card-inner {
-            transform: rotateY(180deg);
-        }
-        .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            border-radius: 1rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .flip-card-front {
-            background-color: #f3f4f6; /* bg-gray-100 */
-            color: black;
-            cursor: pointer;
-        }
-        .flip-card-back {
-            background-color: #4f46e5; /* bg-indigo-600 */
+
+        .primary-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border: 2px solid #1d4ed8;
             color: white;
-            transform: rotateY(180deg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        /* Tab Styles */
-        .tab {
-            cursor: pointer;
-            padding: 10px 20px;
-            border-bottom: 3px solid transparent;
+
+        .primary-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s;
         }
-        .tab.active {
-            border-bottom-color: #4f46e5; /* indigo-600 */
-            color: #4f46e5;
+
+        .primary-btn:hover:before {
+            left: 100%;
+        }
+
+        .primary-btn:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        .choice-btn {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid #e2e8f0;
+            color: #475569;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .choice-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: all 0.5s;
+        }
+
+        .choice-btn:hover:not(:disabled):before {
+            left: 100%;
+        }
+
+        .choice-btn:hover:not(:disabled) {
+            border-color: #3b82f6;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .choice-btn.correct {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%) !important;
+            border-color: #22c55e !important;
+            color: #166534 !important;
+            font-weight: 600 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3) !important;
+        }
+
+        .choice-btn.incorrect {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%) !important;
+            border-color: #ef4444 !important;
+            color: #991b1b !important;
+            font-weight: 600 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3) !important;
+        }
+
+        .choice-btn:disabled:not(.correct):not(.incorrect) {
+            opacity: 0.6;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .practice-item {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .practice-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .form-display {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            font-family: 'Inter', monospace;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* Animated progress indicator */
+        .progress-counter {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #cbd5e1;
+            color: #475569;
             font-weight: 600;
+        }
+
+        /* Add subtle animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .slide-in {
+            animation: slideInUp 0.5s ease-out;
+        }
+
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        /* Alphabet Styles */
+        .alphabet-grid-container { grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); }
+        @media (min-width: 640px) { .alphabet-grid-container { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); } }
+        .letter-btn {
+            background-color: #f1f5f9;
+            color: #334155;
+            border: 2px solid #e2e8f0;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .letter-btn:hover:not(.disabled) {
+            background-color: #e2e8f0;
+            transform: translateY(-2px);
+        }
+        .letter-btn.active {
+            background-color: #3b82f6 !important;
+            color: white !important;
+            border-color: #2563eb !important;
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+        .letter-btn.disabled {
+            background-color: #f8fafc;
+            color: #94a3b8;
+            border-color: #f1f5f9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .letter-btn.disabled:hover {
+            transform: none;
+            background-color: #f8fafc;
+        }
+
+        /* A1/A2 Levels Styles */
+        .level-card.is-flipped .level-card-inner { transform: rotateY(180deg); }
+
+        /* Pagination Styles */
+        #pagination-container button:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Speaker Button Styles */
+        .speaker-btn {
+            transition: all 0.2s ease-in-out;
+            color: #64748b;
+        }
+        .speaker-btn:hover:not(:disabled) {
+            color: #3b82f6;
+            transform: scale(1.1);
+        }
+        .speaker-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #pagination-container button:disabled {
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 640px) {
+            #pagination-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            #pagination-container .flex {
+                margin-top: 1rem;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800 flex items-center justify-center min-h-screen p-4">
+<body class="bg-slate-100 text-slate-800">
 
-    <div id="app" class="w-full max-w-4xl mx-auto">
-        <div class="card p-6 md:p-8">
-            <header class="text-center mb-8">
-                <h1 class="text-4xl font-bold text-indigo-600">Polyglot Practice</h1>
-                <p class="text-gray-500 mt-2">Select your level and start your interactive practice session.</p>
-            </header>
-
-            <!-- Initial Setup: Language/Level Selection -->
-            <div id="setup-area">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div>
-                        <label for="language-select" class="block text-sm font-medium text-gray-700 mb-2">Language to Learn</label>
-                        <select id="language-select" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                            <option value="de">Deutsch (German)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="level-select" class="block text-sm font-medium text-gray-700 mb-2">Level</label>
-                        <select id="level-select" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                            <option value="a1">A1</option>
-                            <option value="a2">A2</option>
-                        </select>
-                    </div>
+    <!-- Global Header -->
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="font-display text-2xl font-bold text-blue-600">Lern-Weg</h1>
                 </div>
-                <div class="text-center">
-                     <button id="start-btn" class="btn bg-indigo-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-indigo-700 w-full md:w-auto">
-                        Start Practice
-                    </button>
-                </div>
-            </div>
-
-            <!-- Practice Area -->
-            <div id="practice-area" class="hidden">
-                 <!-- Top Bar: Back Button & Translation Selector -->
-                <div class="flex justify-between items-center mb-4">
-                    <button id="back-to-setup" class="btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300">&larr; Change Level</button>
-                    <div class="flex items-center">
-                        <label for="translation-select" class="text-sm font-medium text-gray-700 mr-2">Translation:</label>
-                        <select id="translation-select" class="p-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500">
-                            <option value="en">English</option>
-                            <option value="fa">Farsi</option>
-                            <option value="ku">Kurdish</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Tabs -->
-                <div class="flex justify-center border-b mb-6">
-                    <div id="vocab-tab" class="tab active">Vocab Cards</div>
-                    <div id="sentence-tab" class="tab">Sentence Cards</div>
-                    <div id="quiz-tab" class="tab">Quiz</div>
-                </div>
-
-                <!-- Tab Content -->
-                <div id="vocab-content" class="practice-content">
-                    <div id="vocab-flip-card" class="flip-card mx-auto">
-                        <div class="flip-card-inner">
-                            <div id="vocab-card-front" class="flip-card-front"></div>
-                            <div id="vocab-card-back" class="flip-card-back"></div>
-                        </div>
-                    </div>
-                </div>
-                <div id="sentence-content" class="practice-content hidden">
-                     <div id="sentence-flip-card" class="flip-card mx-auto">
-                        <div class="flip-card-inner">
-                            <div id="sentence-card-front" class="flip-card-front"></div>
-                            <div id="sentence-card-back" class="flip-card-back"></div>
-                        </div>
-                    </div>
-                </div>
-                <div id="quiz-content" class="practice-content hidden text-center">
-                    <div class="mb-6 p-6 bg-indigo-50 rounded-lg min-h-[100px] flex items-center justify-center">
-                        <p class="text-lg md:text-xl text-gray-700" id="quiz-sentence"></p>
-                    </div>
-                    <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
-                    <p id="quiz-feedback" class="mt-4 font-semibold h-6"></p>
-                </div>
-
-                <!-- Navigation -->
-                <div class="flex justify-between items-center mt-6">
-                    <button id="prev-btn" class="btn bg-gray-500 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-gray-600">Previous</button>
-                    <span id="progress-indicator" class="text-gray-600 font-medium">1 / 10</span>
-                    <button id="next-btn" class="btn bg-gray-500 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-gray-600">Next</button>
-                </div>
-            </div>
-
-            <!-- Stats -->
-            <div id="stats-area" class="hidden mt-8 flex justify-center gap-8 text-center">
-                <div>
-                    <p class="text-3xl font-bold text-green-500" id="success-count">0</p>
-                    <p class="text-sm text-gray-500">Correct</p>
-                </div>
-                <div>
-                    <p class="text-3xl font-bold text-red-500" id="fail-count">0</p>
-                    <p class="text-sm text-gray-500">Incorrect</p>
+                <div class="flex items-center">
+                    <label for="language-select" class="sr-only">Language</label>
+                    <select id="language-select" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm">
+                        <option value="en">🇺🇸 English</option>
+                        <option value="fa">🇮🇷 فارسی</option>
+                        <option value="ku">🇹🇯 کوردی</option>
+                    </select>
                 </div>
             </div>
         </div>
-    </div>
+        <!-- New Progress Navigation Bar -->
+        <nav id="progress-nav" class="bg-white border-t border-slate-200">
+            <div id="progress-nav-inner" class="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3 overflow-x-auto">
+                <!-- Nav items will be injected here -->
+            </div>
+        </nav>
+    </header>
+
+    <main id="app-container" class="container mx-auto p-4 md:p-8">
+        <section id="alphabet-view" class="app-section"></section>
+        <section id="levels-view" class="app-section"></section>
+        <section id="conversations-view" class="app-section"></section>
+        <section id="patterns-view" class="app-section"></section>
+    </main>
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // --- Vocabulary Data ---
-        const a1_data = [
-            { "word": "ab", "article": null, "plural": null, "en_translation": "from, starting from", "fa_translation": "از", "ku_translation": "لەوە، لە", "exercise_sentence": "__ morgen muss ich wieder arbeiten.", "complete_sentence": "Ab morgen muss ich wieder arbeiten.", "en_sentence_translation": "Starting tomorrow, I have to work again.", "fa_sentence_translation": "از فردا دوباره باید کار کنم.", "ku_sentence_translation": "لە سبەینێوە دەبێت دووبارە کار بکەم." },
-            { "word": "aber", "article": null, "plural": null, "en_translation": "but, however", "fa_translation": "اما، ولی", "ku_translation": "بەڵام", "exercise_sentence": "Heute kann ich nicht kommen, __ morgen habe ich Zeit.", "complete_sentence": "Heute kann ich nicht kommen, aber morgen habe ich Zeit.", "en_sentence_translation": "I can't come today, but I have time tomorrow.", "fa_sentence_translation": "امروز نمی‌توانم بیایم، اما فردا وقت دارم.", "ku_sentence_translation": "ئەمڕۆ ناتوانم بێم، بەڵام سبەی کاتم هەیە." },
-            { "word": "das Baby", "article": "das", "plural": "die Babys", "en_translation": "baby", "fa_translation": "نوزاد", "ku_translation": "ساوا", "exercise_sentence": "Wir haben ein __. Es ist sechs Wochen alt.", "complete_sentence": "Wir haben ein Baby. Es ist sechs Wochen alt.", "en_sentence_translation": "We have a baby. It is six weeks old.", "fa_sentence_translation": "ما یک نوزاد داریم. او شش هفته دارد.", "ku_sentence_translation": "ساوایەکمان هەیە. تەمەنی شەش هەفتەیە." }
+    // --- FULL SCRIPT ---
+    (function() {
+        // --- GLOBAL STATE & DATA ---
+        let currentLanguage = 'en';
+        let userProgress = { completedStations: ['alphabet'] };
+        let initializedModules = [];
+        let vocabularyData = { a1: [], a2: [], a1_attachments: [], a2_attachments: [] };
+        let conversationsData = { conversations: [] };
+
+        const uiTranslations = {
+            'station-alphabet-title': { en: 'Alphabet', fa: 'الفبا', ku: 'ئەلفوبێ' },
+            'station-levels-title': { en: 'A1/A2 Vocab', fa: 'واژگان A1/A2', ku: 'وشەکانی A1/A2' },
+            'station-conversations-title': { en: 'Conversations', fa: 'مکالمات', ku: 'گفتگۆکان' },
+            'station-patterns-title': { en: 'Sentence Patterns', fa: 'الگوهای جمله', ku: 'شێوازەکانی ڕستە' },
+        };
+
+        const navStations = [
+            { id: 'alphabet', title: 'station-alphabet-title', icon: '🔤', dependsOn: null },
+            { id: 'levels', title: 'station-levels-title', icon: '📚', dependsOn: 'alphabet' },
+            { id: 'conversations', title: 'station-conversations-title', icon: '💬', dependsOn: 'levels' },
+            { id: 'patterns', title: 'station-patterns-title', icon: '🧩', dependsOn: 'conversations' },
         ];
 
-        const a2_data = [
-            { "word": "die Umwelt", "article": "die", "plural": "die Umwelten", "en_translation": "environment", "fa_translation": "محیط زیست", "ku_translation": "ژینگە", "exercise_sentence": "Wir müssen unsere __ schützen.", "complete_sentence": "Wir müssen unsere Umwelt schützen.", "en_sentence_translation": "We must protect our environment.", "fa_sentence_translation": "ما باید از محیط زیست خود محافظت کنیم.", "ku_sentence_translation": "ئێمە دەبێت ژینگەی خۆمان بپارێزین." },
-            { "word": "die Bedingung", "article": "die", "plural": "die Bedingungen", "en_translation": "condition, requirement", "fa_translation": "شرط، وضعیت", "ku_translation": "مەرج، بارودۆخ", "exercise_sentence": "Was sind die __en für diesen Job?", "complete_sentence": "Was sind die Bedingungen für diesen Job?", "en_sentence_translation": "What are the requirements for this job?", "fa_sentence_translation": "شرایط این کار چیست؟", "ku_sentence_translation": "مەرجەکانی ئەم کارە چین؟" },
-            { "word": "abhängen von", "article": null, "plural": null, "en_translation": "to depend on", "fa_translation": "بستگی داشتن به", "ku_translation": "پەیوەست بوون بە", "exercise_sentence": "Es __t vom Wetter __, ob wir grillen.", "complete_sentence": "Es hängt vom Wetter ab, ob wir grillen.", "en_sentence_translation": "It depends on the weather whether we have a barbecue.", "fa_sentence_translation": "اینکه کباب درست کنیم یا نه به هوا بستگی دارد.", "ku_sentence_translation": "ئەوەی کە کباب دەکەین یان نا، پەیوەستە بە کەش و هەواوە." }
-        ];
+        // --- CORE APP LOGIC ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadAllData();
 
-        // DOM Elements
-        const setupArea = document.getElementById('setup-area');
-        const languageSelect = document.getElementById('language-select');
-        const levelSelect = document.getElementById('level-select');
-        const startBtn = document.getElementById('start-btn');
-
-        const practiceArea = document.getElementById('practice-area');
-        const statsArea = document.getElementById('stats-area');
-        const translationSelect = document.getElementById('translation-select');
-        const backToSetupBtn = document.getElementById('back-to-setup');
-
-        const tabs = document.querySelectorAll('.tab');
-        const practiceContents = document.querySelectorAll('.practice-content');
-        const vocabFlipCard = document.getElementById('vocab-flip-card');
-        const vocabCardFront = document.getElementById('vocab-card-front');
-        const vocabCardBack = document.getElementById('vocab-card-back');
-        const sentenceFlipCard = document.getElementById('sentence-flip-card');
-        const sentenceCardFront = document.getElementById('sentence-card-front');
-        const sentenceCardBack = document.getElementById('sentence-card-back');
-        const quizSentence = document.getElementById('quiz-sentence');
-        const quizOptions = document.getElementById('quiz-options');
-        const quizFeedback = document.getElementById('quiz-feedback');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const progressIndicator = document.getElementById('progress-indicator');
-        const successCountEl = document.getElementById('success-count');
-        const failCountEl = document.getElementById('fail-count');
-
-        // App State
-        let vocabulary = [];
-        let currentIndex = 0;
-        let successCount = 0;
-        let failCount = 0;
-
-        // --- Cookie Management ---
-        const setCookie = (name, value, days) => {
-            let expires = "";
-            if (days) {
-                const date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
-            }
-            document.cookie = `${name}=${value || ""}${expires}; path=/; SameSite=Lax`;
-        };
-
-        const getCookie = (name) => {
-            const nameEQ = name + "=";
-            const ca = document.cookie.split(';');
-            for(let i=0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0)==' ') c = c.substring(1,c.length);
-                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-            }
-            return null;
-        };
-
-        // --- Text-to-Speech ---
-        const speak = (text, lang) => {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = lang;
-                window.speechSynthesis.speak(utterance);
-            } else {
-                console.error("Browser doesn't support text-to-speech.");
-            }
-        };
-
-        // --- Initialization ---
-        const initialize = () => {
-            loadStateFromCookies();
-
-            // Event Listeners
-            startBtn.addEventListener('click', startGame);
-            backToSetupBtn.addEventListener('click', showSetup);
-
-            tabs.forEach(tab => tab.addEventListener('click', switchTab));
-            vocabFlipCard.addEventListener('click', () => vocabFlipCard.classList.toggle('is-flipped'));
-            sentenceFlipCard.addEventListener('click', () => sentenceFlipCard.classList.toggle('is-flipped'));
-            prevBtn.addEventListener('click', showPrevious);
-            nextBtn.addEventListener('click', showNext);
-
-            translationSelect.addEventListener('change', () => {
-                setCookie('lastTranslationLang', translationSelect.value, 30);
-                if (vocabulary.length > 0) displayCurrentWord();
+            const langSelect = document.getElementById('language-select');
+            langSelect.addEventListener('change', (e) => {
+                currentLanguage = e.target.value;
+                document.documentElement.lang = currentLanguage;
+                document.documentElement.dir = (currentLanguage === 'fa' || currentLanguage === 'ku') ? 'rtl' : 'ltr';
+                updateUIText();
+                const activeSectionId = document.querySelector('.app-section.active')?.id.replace('-view', '');
+                if (activeSectionId && initializedModules.includes(activeSectionId)) {
+                    showSection(activeSectionId, true);
+                }
             });
-            languageSelect.addEventListener('change', () => setCookie('lastLanguage', languageSelect.value, 30));
-            levelSelect.addEventListener('change', () => setCookie('lastLevel', levelSelect.value, 30));
 
-            // Auto-start if a session was previously active
-            if (getCookie('sessionActive') === 'true') {
-                startGame();
+            initializeNavigation();
+            showSection('alphabet');
+        });
+
+        async function loadAllData() {
+            try {
+                const [a1Res, a2Res, a1AttachRes, a2AttachRes, conversationsRes] = await Promise.all([
+                    fetch('a1_multi_language.json').then(res => res.json()),
+                    fetch('a2_multi_language.json').then(res => res.json()),
+                    fetch('a1_atachments.json').then(res => res.json()),
+                    fetch('a2_attachments.json').then(res => res.json()),
+                    fetch('a1_conversations.json').then(res => res.json())
+                ]);
+                vocabularyData.a1 = a1Res;
+                vocabularyData.a2 = a2Res;
+                vocabularyData.a1_attachments = a1AttachRes;
+                vocabularyData.a2_attachments = a2AttachRes;
+                conversationsData = conversationsRes;
+            } catch (error) {
+                console.error("Failed to load data:", error);
             }
-        };
+        }
 
-        const loadStateFromCookies = () => {
-            languageSelect.value = getCookie('lastLanguage') || 'de';
-            levelSelect.value = getCookie('lastLevel') || 'a1';
-            translationSelect.value = getCookie('lastTranslationLang') || 'en';
-            successCount = parseInt(getCookie('successCount') || '0', 10);
-            failCount = parseInt(getCookie('failCount') || '0', 10);
-            updateStats();
-        };
+        function updateUIText() {
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                const key = el.dataset.translateKey;
+                if (uiTranslations[key] && uiTranslations[key][currentLanguage]) {
+                    el.textContent = uiTranslations[key][currentLanguage];
+                }
+            });
+        }
 
-        const updateStats = () => {
-            successCountEl.textContent = successCount;
-            failCountEl.textContent = failCount;
-            setCookie('successCount', successCount, 30);
-            setCookie('failCount', failCount, 30);
-        };
+        function initializeNavigation() {
+            const navContainer = document.getElementById('progress-nav-inner');
+            navContainer.innerHTML = '';
+            navStations.forEach((station, index) => {
+                const isLocked = station.dependsOn && !userProgress.completedStations.includes(station.dependsOn);
+                const isCompleted = userProgress.completedStations.includes(station.id);
+                const navItem = document.createElement('div');
+                navItem.className = `progress-nav-item flex items-center ${isLocked ? 'locked' : ''} ${isCompleted ? 'completed' : ''}`;
+                navItem.dataset.stationId = station.id;
+                navItem.innerHTML = `<div class="text-center"><div class="nav-bubble w-12 h-12 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center text-2xl mx-auto">${station.icon}</div><p data-translate-key="${station.title}" class="nav-label text-xs text-slate-500 mt-1">${uiTranslations[station.title][currentLanguage]}</p></div>`;
+                if (!isLocked) {
+                    navItem.addEventListener('click', () => {
+                        showSection(station.id);
+                        if (!userProgress.completedStations.includes(station.id)) {
+                            userProgress.completedStations.push(station.id);
+                            initializeNavigation();
+                        }
+                    });
+                }
+                navContainer.appendChild(navItem);
+                if (index < navStations.length - 1) {
+                    const arrow = document.createElement('div');
+                    arrow.className = 'progress-arrow flex-grow h-1 bg-gray-300 mx-2';
+                    if(isCompleted) arrow.style.background = '#3b82f6';
+                    navContainer.appendChild(arrow);
+                }
+            });
+            updateUIText();
+        }
 
-        // --- Game Logic ---
-        const startGame = () => {
-            const level = levelSelect.value;
-            vocabulary = (level === 'a1') ? a1_data : a2_data;
+        function showSection(stationId, forceReload = false) {
+            document.querySelectorAll('.progress-nav-item').forEach(item => item.classList.toggle('active', item.dataset.stationId === stationId));
+            document.querySelectorAll('.app-section').forEach(section => section.classList.toggle('active', section.id === `${stationId}-view`));
+            if (!initializedModules.includes(stationId) || forceReload) {
+                const sectionView = document.getElementById(`${stationId}-view`);
+                switch(stationId) {
+                    case 'conversations': initializeConversations(sectionView); break;
+                    case 'levels': initializeVocabularyLevels(sectionView); break;
+                    case 'alphabet': initializeAlphabet(sectionView); break;
+                    case 'patterns': initializePatternDrill(sectionView); break;
+                }
+                if (!initializedModules.includes(stationId)) initializedModules.push(stationId);
+            }
+        }
 
-            if (!vocabulary || vocabulary.length === 0) {
-                alert("No vocabulary found for this level.");
+        // --- MODULE INITIALIZATION FUNCTIONS ---
+
+        function initializeConversations(container) {
+            const data = conversationsData.conversations;
+            if (!data || data.length === 0) {
+                container.innerHTML = `<p class="text-center text-slate-500">Conversation data could not be loaded.</p>`;
                 return;
             }
 
-            // Set the session as active
-            setCookie('sessionActive', 'true', 1);
+            let currentConversationIndex = 0;
 
-            // Get the last saved index for this specific level
-            const savedIndexCookie = `lastIndex_${level}`;
-            let savedIndex = parseInt(getCookie(savedIndexCookie) || '0', 10);
+            function renderConversationView() {
+                const currentConversation = data[currentConversationIndex];
 
-            // Ensure the saved index is valid
-            currentIndex = (savedIndex >= 0 && savedIndex < vocabulary.length) ? savedIndex : 0;
+                container.innerHTML = `
+                <div class="conversations-section bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-slate-800 antialiased rounded-3xl p-6 min-h-[85vh]">
+                    <div class="container mx-auto max-w-7xl">
+                        <!-- Header with animated background -->
+                        <header class="text-center mb-12 relative">
+                            <div class="absolute inset-0 bg-gradient-to-r from-emerald-400 via-cyan-500 to-blue-500 rounded-3xl transform -rotate-1"></div>
+                            <div class="relative bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white p-8 md:p-12 rounded-3xl shadow-2xl">
+                                <h1 class="font-display text-4xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-100">
+                                    💬 German Conversations
+                                </h1>
+                                <p class="text-xl md:text-2xl opacity-90 font-medium">Practice real-life scenarios and improve your speaking skills!</p>
+                                <div class="absolute -top-4 -right-4 w-8 h-8 bg-yellow-300 rounded-full animate-ping"></div>
+                                <div class="absolute -bottom-2 -left-2 w-6 h-6 bg-pink-300 rounded-full animate-bounce"></div>
+                            </div>
+                        </header>
 
-            setupArea.classList.add('hidden');
-            practiceArea.classList.remove('hidden');
-            statsArea.classList.remove('hidden');
-            displayCurrentWord();
-        };
+                    <!-- Featured Conversation -->
+                    <div class="bg-white rounded-2xl shadow-xl mb-8 overflow-hidden max-w-4xl mx-auto">
+                        <div class="bg-gradient-to-r from-indigo-500 to-blue-600 text-white p-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mr-4">
+                                        <span class="text-xl font-bold">${currentConversationIndex + 1}</span>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-2xl font-bold mb-1">${currentConversation.situation}</h2>
+                                        <p class="text-blue-100">${currentConversation.dialogue.length} lines conversation</p>
+                                    </div>
+                                </div>
+                                <button id="expand-conversation" class="bg-white/20 hover:bg-white/30 rounded-full p-3 transition-colors">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
 
-        const showSetup = () => {
-            window.speechSynthesis.cancel();
-            // Clear the active session cookie to prevent auto-start next time
-            setCookie('sessionActive', '', -1);
+                        <div class="p-6">
+                            <!-- Preview of first few lines -->
+                            <div class="space-y-4 mb-6">
+                                ${currentConversation.dialogue.slice(0, 3).map((line, index) => `
+                                    <div class="flex items-start space-x-4 p-4 rounded-lg ${index % 2 === 0 ? 'bg-blue-50' : 'bg-gray-50'}">
+                                        <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-indigo-400 to-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                            ${index % 2 === 0 ? 'A' : 'B'}
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="font-semibold text-gray-800 mb-1">${line.de}</p>
+                                            <p class="text-sm text-gray-500">${line.en}</p>
+                                        </div>
+                                        <button class="speak-preview-btn text-gray-400 hover:text-indigo-500 transition-colors p-1 rounded-full hover:bg-indigo-50" data-text="${line.de}">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                `).join('')}
+                                ${currentConversation.dialogue.length > 3 ? `
+                                    <div class="text-center py-2">
+                                        <span class="text-gray-500 text-sm">... and ${currentConversation.dialogue.length - 3} more lines</span>
+                                    </div>
+                                ` : ''}
+                            </div>
 
-            practiceArea.classList.add('hidden');
-            statsArea.classList.add('hidden');
-            setupArea.classList.remove('hidden');
-        };
+                            <!-- Action Buttons -->
+                            <div class="flex flex-wrap gap-3 justify-center">
+                                <button id="play-conversation-preview" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 px-6 rounded-full hover:from-green-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                    � Play Full Conversation
+                                </button>
+                                <button id="expand-conversation-detail" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold py-3 px-6 rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                    � View Full Conversation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-        const displayCurrentWord = () => {
-            if (vocabulary.length === 0) return;
-            const item = vocabulary[currentIndex];
+                    <!-- Navigation Controls -->
+                    <div class="flex justify-center items-center space-x-4 mb-8">
+                        <button id="prev-conversation" class="bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${currentConversationIndex === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'}" ${currentConversationIndex === 0 ? 'disabled' : ''}>
+                            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="bg-white rounded-full px-6 py-3 shadow-lg">
+                            <span class="text-gray-600 font-medium">${currentConversationIndex + 1} of ${data.length}</span>
+                        </div>
+                        <button id="next-conversation" class="bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${currentConversationIndex === data.length - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'}" ${currentConversationIndex === data.length - 1 ? 'disabled' : ''}>
+                            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
 
-            const learnLang = languageSelect.value;
-            const ttsLangCode = learnLang === 'de' ? 'de-DE' : 'en-US';
-            const translationLang = translationSelect.value;
-            const translationKey = `${translationLang}_translation`;
-            const sentenceTranslationKey = `${translationLang}_sentence_translation`;
+                    <!-- Conversation List -->
+                    <div class="max-w-6xl mx-auto">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-4 text-center">All Conversations</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            ${data.map((conversation, index) => `
+                                <div class="conversation-item bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer transform hover:-translate-y-1 p-4 ${index === currentConversationIndex ? 'ring-2 ring-indigo-500 bg-indigo-50' : ''}" data-index="${index}">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-gradient-to-br from-indigo-400 to-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
+                                                ${index + 1}
+                                            </div>
+                                            <h4 class="font-semibold text-gray-800 text-sm">${conversation.situation}</h4>
+                                        </div>
+                                        ${index === currentConversationIndex ? '<div class="text-indigo-500"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg></div>' : ''}
+                                    </div>
+                                    <p class="text-xs text-gray-500 mb-2">${conversation.dialogue.length} lines</p>
+                                    <p class="text-xs text-gray-600 bg-gray-100 rounded p-2 truncate">"${conversation.dialogue[0].de}"</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
 
-            vocabFlipCard.classList.remove('is-flipped');
-            sentenceFlipCard.classList.remove('is-flipped');
+                <!-- Full Conversation Modal -->
+                <div id="conversation-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 opacity-0 pointer-events-none z-50 transition-all duration-300">
+                    <div id="conversation-modal-content" class="bg-white/95 backdrop-blur-xl w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col border border-white/50 relative overflow-hidden">
+                        <!-- Decorative elements -->
+                        <div class="absolute -top-3 -left-3 w-6 h-6 bg-gradient-to-br from-blue-400/30 to-purple-400/30 rounded-full blur-sm"></div>
+                        <div class="absolute -bottom-3 -right-3 w-8 h-8 bg-gradient-to-br from-pink-400/30 to-yellow-400/30 rounded-full blur-sm"></div>
 
-            vocabCardFront.innerHTML = `
-                <div class="relative w-full h-full flex flex-col justify-center items-center">
-                    <h2 class="text-4xl font-bold">${item.word}</h2>
-                    <p class="text-gray-500 mt-2">${item.plural ? `(${item.plural})` : ''}</p>
-                    <p class="mt-4 text-sm text-gray-400">Click card to flip</p>
-                    <button id="speak-vocab-btn" class="absolute top-4 right-4 text-gray-500 hover:text-indigo-600 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
-                    </button>
+                        <div class="p-6 border-b border-gray-200/50 flex justify-between items-center flex-shrink-0 bg-gradient-to-r from-indigo-50/80 to-purple-50/80 backdrop-blur-sm">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-bold mr-4 shadow-lg">
+                                    💬
+                                </div>
+                                <div>
+                                    <h2 id="modal-conversation-title" class="font-display text-2xl font-bold text-gray-800">${currentConversation.situation}</h2>
+                                    <p class="text-sm text-gray-500">Full Conversation Experience</p>
+                                </div>
+                            </div>
+                            <button id="close-conversation-modal" class="text-gray-400 hover:text-gray-700 transition-all duration-300 p-3 rounded-2xl hover:bg-white/50 backdrop-blur-sm transform hover:scale-110">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div id="modal-conversation-content" class="flex-1 overflow-y-auto p-6 backdrop-blur-sm">
+                            <div class="space-y-5">
+                                ${currentConversation.dialogue.map((line, index) => `
+                                    <div class="dialogue-line group bg-white/70 backdrop-blur-sm rounded-2xl p-5 shadow-md border border-white/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden">
+                                        <!-- Line number indicator -->
+                                        <div class="absolute -left-2 -top-2 w-6 h-6 bg-gradient-to-br ${index % 2 === 0 ? 'from-blue-400 to-indigo-500' : 'from-purple-400 to-pink-500'} rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
+                                            ${index + 1}
+                                        </div>
+
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1 pl-4">
+                                                <div class="flex items-center mb-3">
+                                                    <div class="w-10 h-10 bg-gradient-to-br ${index % 2 === 0 ? 'from-blue-400 to-indigo-500' : 'from-purple-400 to-pink-500'} rounded-2xl flex items-center justify-center text-white text-sm font-bold mr-3 shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                                                        ${index % 2 === 0 ? 'A' : 'B'}
+                                                    </div>
+                                                    <span class="text-xs text-gray-500 uppercase tracking-wider font-semibold px-3 py-1 bg-white/50 rounded-full border border-white/50">
+                                                        ${index % 2 === 0 ? 'Person A' : 'Person B'}
+                                                    </span>
+                                                </div>
+                                                <div class="ml-13">
+                                                    <p class="text-lg font-semibold text-gray-800 mb-3 leading-relaxed">${line.de}</p>
+                                                    <p class="text-sm text-gray-600 italic bg-gray-50/80 rounded-lg p-2 border border-gray-100/50">${line.en}</p>
+                                                </div>
+                                            </div>
+                                            <button class="speak-modal-btn ml-4 p-3 text-gray-400 hover:text-indigo-600 transition-all duration-300 rounded-2xl hover:bg-white/70 backdrop-blur-sm shadow-sm hover:shadow-md transform hover:scale-110" data-text="${line.de}">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+
+                            <!-- Modal action button -->
+                            <div class="mt-8 text-center">
+                                <button id="play-modal-conversation" class="primary-btn bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl border-2 border-white/20 backdrop-blur-sm">
+                                    <span class="flex items-center">
+                                        <span class="text-xl mr-2">🎭</span>
+                                        Play Complete Conversation
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>`;
-            vocabCardBack.innerHTML = `<p class="text-3xl font-semibold">${item[translationKey] || 'N/A'}</p>`;
 
-            sentenceCardFront.innerHTML = `
-                <div class="relative w-full h-full flex flex-col justify-center items-center">
-                    <p class="text-xl px-4">${item.exercise_sentence.replace(/__/g, '<strong>_______</strong>')}</p>
-                    <p class="mt-4 text-sm text-gray-400">Click card to flip</p>
-                    <button id="speak-sentence-btn" class="absolute top-4 right-4 text-gray-500 hover:text-indigo-600 p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
-                    </button>
-                </div>`;
-            sentenceCardBack.innerHTML = `
-                <p class="font-semibold text-lg">${item.complete_sentence}</p>
-                <div class="text-md mt-4 text-center w-full border-t pt-4">
-                    <p>${item[sentenceTranslationKey] || 'N/A'}</p>
-                </div>`;
-
-            document.getElementById('speak-vocab-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                speak(item.word, ttsLangCode);
-            });
-            document.getElementById('speak-sentence-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                speak(item.complete_sentence, ttsLangCode);
-            });
-
-            generateQuizOptions(item);
-            progressIndicator.textContent = `${currentIndex + 1} / ${vocabulary.length}`;
-
-            // Save the current index to a cookie specific to the level
-            const level = levelSelect.value;
-            const indexCookieName = `lastIndex_${level}`;
-            setCookie(indexCookieName, currentIndex, 30);
-        };
-
-        const generateQuizOptions = (correctItem) => {
-            quizOptions.innerHTML = '';
-            quizFeedback.textContent = '';
-
-            const correctAnswer = correctItem.word.split(' ').pop();
-            let options = [correctAnswer];
-
-            const wrongAnswers = vocabulary
-                .map(v => v.word.split(' ').pop())
-                .filter(w => w.toLowerCase() !== correctAnswer.toLowerCase());
-
-            while (options.length < 4 && wrongAnswers.length > 0) {
-                const randomIndex = Math.floor(Math.random() * wrongAnswers.length);
-                const randomWord = wrongAnswers.splice(randomIndex, 1)[0];
-                if (!options.includes(randomWord)) options.push(randomWord);
+                // Add event listeners
+                addEventListeners();
             }
 
-            options.sort(() => Math.random() - 0.5);
+            function addEventListeners() {
+                // Navigation buttons
+                const prevBtn = container.querySelector('#prev-conversation');
+                const nextBtn = container.querySelector('#next-conversation');
+                const playBtn = container.querySelector('#play-conversation-preview');
+                const conversationItems = container.querySelectorAll('.conversation-item');
 
-            options.forEach(option => {
+                // Modal elements
+                const modal = container.querySelector('#conversation-modal');
+                const modalContent = container.querySelector('#conversation-modal-content');
+                const closeModalBtn = container.querySelector('#close-conversation-modal');
+
+                // Previous conversation
+                if (prevBtn && !prevBtn.disabled) {
+                    prevBtn.addEventListener('click', () => {
+                        if (currentConversationIndex > 0) {
+                            currentConversationIndex--;
+                            renderConversationView();
+                        }
+                    });
+                }
+
+                // Next conversation
+                if (nextBtn && !nextBtn.disabled) {
+                    nextBtn.addEventListener('click', () => {
+                        if (currentConversationIndex < data.length - 1) {
+                            currentConversationIndex++;
+                            renderConversationView();
+                        }
+                    });
+                }
+
+                // Conversation list items
+                conversationItems.forEach(item => {
+                    item.addEventListener('click', () => {
+                        currentConversationIndex = parseInt(item.dataset.index);
+                        renderConversationView();
+                    });
+                });
+
+                // Expand buttons
+                const expandBtn = container.querySelector('#expand-conversation');
+                const expandDetailBtn = container.querySelector('#expand-conversation-detail');
+
+                if (expandBtn) {
+                    expandBtn.addEventListener('click', openModal);
+                }
+                if (expandDetailBtn) {
+                    expandDetailBtn.addEventListener('click', openModal);
+                }
+
+                // Play conversation
+                if (playBtn) {
+                    playBtn.addEventListener('click', playFullConversation);
+                }
+
+                // Modal close
+                if (closeModalBtn) {
+                    closeModalBtn.addEventListener('click', closeModal);
+                }
+
+                // Modal play button
+                const modalPlayBtn = container.querySelector('#play-modal-conversation');
+                if (modalPlayBtn) {
+                    modalPlayBtn.addEventListener('click', playFullConversation);
+                }
+
+                // Close modal when clicking outside
+                if (modal) {
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            closeModal();
+                        }
+                    });
+                }
+
+                // Speech buttons
+                container.querySelectorAll('.speak-preview-btn, .speak-modal-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const text = btn.dataset.text;
+                        speakText(text, btn);
+                    });
+                });
+            }
+
+            function openModal() {
+                const modal = container.querySelector('#conversation-modal');
+                const modalContent = container.querySelector('#conversation-modal-content');
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modalContent.classList.remove('scale-95');
+            }
+
+            function closeModal() {
+                const modal = container.querySelector('#conversation-modal');
+                const modalContent = container.querySelector('#conversation-modal-content');
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                modalContent.classList.add('scale-95');
+            }
+
+            // Speech synthesis function
+            function speakText(text, button = null) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'de-DE';
+                    utterance.rate = 0.8;
+
+                    if (button) {
+                        button.classList.add('text-indigo-500', 'bg-indigo-50');
+                        utterance.onend = () => {
+                            button.classList.remove('text-indigo-500', 'bg-indigo-50');
+                        };
+                    }
+
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    console.warn('Speech synthesis not supported');
+                }
+            }
+
+            // Play full conversation
+            function playFullConversation() {
+                const currentConversation = data[currentConversationIndex];
+                const dialogue = currentConversation.dialogue;
+                let currentIndex = 0;
+
+                function playNext() {
+                    if (currentIndex >= dialogue.length) return;
+
+                    const line = dialogue[currentIndex];
+                    const utterance = new SpeechSynthesisUtterance(line.de);
+                    utterance.lang = 'de-DE';
+                    utterance.rate = 0.8;
+
+                    utterance.onend = () => {
+                        setTimeout(() => {
+                            currentIndex++;
+                            playNext();
+                        }, 1000); // Pause between lines
+                    };
+
+                    window.speechSynthesis.speak(utterance);
+                }
+
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    playNext();
+                }
+            }
+
+            // Initialize with first conversation
+            renderConversationView();
+        }
+
+        function initializeAlphabet(container) {
+            container.innerHTML = getAlphabetContent();
+            const data = vocabularyData.a1_attachments;
+
+            if (!data || data.length === 0) {
+                container.innerHTML = `<p class="text-center text-slate-500">Alphabet data could not be loaded. Please refresh the page.</p>`;
+                return;
+            }
+
+            const alphabetData = data.reduce((acc, wordObj) => {
+                const firstLetter = wordObj.word.charAt(0).toUpperCase();
+                if (!acc[firstLetter]) {
+                    acc[firstLetter] = [];
+                }
+                acc[firstLetter].push(wordObj);
+
+                // Special case: if the word contains "ß", also add it to the ß category
+                if (wordObj.word.includes('ß')) {
+                    if (!acc['ẞ']) {
+                        acc['ẞ'] = [];
+                    }
+                    acc['ẞ'].push(wordObj);
+                }
+
+                return acc;
+            }, {});
+
+            const germanAlphabetLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞ".split('');
+            let currentLetterIndex = 0;
+            let availableLetters = []; // Will store letters that have words
+
+            const displayLetter = container.querySelector('#display-letter');
+            const displayPronunciation = container.querySelector('#display-pronunciation');
+            const letterAudioBtn = container.querySelector('#letter-audio-btn');
+            const examplesContainer = container.querySelector('#examples-container');
+            const alphabetGrid = container.querySelector('#alphabet-grid');
+
+            // Check if all required elements are found
+            if (!displayLetter || !displayPronunciation || !letterAudioBtn || !examplesContainer || !alphabetGrid) {
+                console.error('Required DOM elements not found for alphabet initialization');
+                container.innerHTML = '<p class="text-center text-red-500">Error: Required elements not found. Please refresh the page.</p>';
+                return;
+            }
+
+            let activeLetterButton = null;
+
+            // Touch gesture variables
+            let touchStartX = 0;
+            let touchEndX = 0;
+            let touchStartY = 0;
+            let touchEndY = 0;
+            const minSwipeDistance = 50;
+
+            function speak(text, button = null) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'de-DE';
+                    utterance.rate = 0.9;
+
+                    // Visual feedback
+                    if (button) {
+                        button.classList.add('text-blue-400', 'animate-pulse');
+                        button.disabled = true;
+                    }
+
+                    utterance.onend = () => {
+                        if (button) {
+                            button.classList.remove('text-blue-400', 'animate-pulse');
+                            button.disabled = false;
+                        }
+                    };
+
+                    utterance.onerror = () => {
+                        if (button) {
+                            button.classList.remove('text-blue-400', 'animate-pulse');
+                            button.disabled = false;
+                        }
+                    };
+
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    alert("Your browser doesn't support text-to-speech. Please use Chrome, Firefox, or Safari.");
+                }
+            }
+
+            function speakWordAndSentence(word, sentence, button = null) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+
+                    // Visual feedback
+                    if (button) {
+                        button.classList.add('text-blue-400', 'animate-pulse');
+                        button.disabled = true;
+                    }
+
+                    // First, speak the word
+                    const wordUtterance = new SpeechSynthesisUtterance(word);
+                    wordUtterance.lang = 'de-DE';
+                    wordUtterance.rate = 0.8; // Slightly slower for clarity
+
+                    wordUtterance.onend = () => {
+                        // After word is spoken, pause briefly then speak the sentence
+                        setTimeout(() => {
+                            const sentenceUtterance = new SpeechSynthesisUtterance(sentence);
+                            sentenceUtterance.lang = 'de-DE';
+                            sentenceUtterance.rate = 0.9;
+
+                            sentenceUtterance.onend = () => {
+                                if (button) {
+                                    button.classList.remove('text-blue-400', 'animate-pulse');
+                                    button.disabled = false;
+                                }
+                            };
+
+                            sentenceUtterance.onerror = () => {
+                                if (button) {
+                                    button.classList.remove('text-blue-400', 'animate-pulse');
+                                    button.disabled = false;
+                                }
+                            };
+
+                            window.speechSynthesis.speak(sentenceUtterance);
+                        }, 800); // 800ms pause between word and sentence
+                    };
+
+                    wordUtterance.onerror = () => {
+                        if (button) {
+                            button.classList.remove('text-blue-400', 'animate-pulse');
+                            button.disabled = false;
+                        }
+                    };
+
+                    window.speechSynthesis.speak(wordUtterance);
+                } else {
+                    alert("Your browser doesn't support text-to-speech. Please use Chrome, Firefox, or Safari.");
+                }
+            }
+
+            function navigateToLetter(letter) {
+                const button = alphabetGrid.querySelector(`button[data-letter="${letter}"]`);
+                if (button) {
+                    button.click();
+                    // Scroll the button into view
+                    button.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            }
+
+            function navigateToNextLetter() {
+                if (currentLetterIndex < availableLetters.length - 1) {
+                    currentLetterIndex++;
+                    navigateToLetter(availableLetters[currentLetterIndex]);
+                }
+            }
+
+            function navigateToPrevLetter() {
+                if (currentLetterIndex > 0) {
+                    currentLetterIndex--;
+                    navigateToLetter(availableLetters[currentLetterIndex]);
+                }
+            }
+
+            function updateDisplay(letter) {
+                displayLetter.textContent = `${letter} ${letter.toLowerCase()}`;
+                if (letter === 'ẞ') displayLetter.textContent = 'ß';
+
+                if (letter === 'ẞ') {
+                    displayPronunciation.textContent = `Words containing ß`;
+                } else {
+                    displayPronunciation.textContent = `Words starting with ${letter}`;
+                }
+
+                const words = alphabetData[letter] || [];
+                examplesContainer.innerHTML = '';
+                words.slice(0,3).forEach(wordData => {
+                    const card = document.createElement('button');
+                    card.className = 'example-card bg-white/20 hover:bg-white/30 p-4 rounded-lg text-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-white';
+
+                    // Get the translation based on current language
+                    let translation = '';
+                    if (currentLanguage === 'en' && wordData.en_translation) {
+                        translation = wordData.en_translation;
+                    } else if (currentLanguage === 'fa' && wordData.fa_translation) {
+                        translation = wordData.fa_translation;
+                    } else if (currentLanguage === 'ku' && wordData.ku_translation) {
+                        translation = wordData.ku_translation;
+                    } else if (wordData.en_translation) {
+                        translation = wordData.en_translation; // fallback to English
+                    }
+
+                    card.innerHTML = `<p class="font-semibold text-lg">${wordData.word}</p><p class="text-blue-200 text-sm">${translation}</p>`;
+                    card.addEventListener('click', () => speak(wordData.word));
+                    examplesContainer.appendChild(card);
+                });
+                letterAudioBtn.onclick = () => speak(letter, letterAudioBtn);
+
+                // Update current index
+                currentLetterIndex = availableLetters.indexOf(letter);
+            }
+
+            alphabetGrid.innerHTML = '';
+            availableLetters = []; // Reset available letters list
+
+            germanAlphabetLetters.forEach(letter => {
                 const button = document.createElement('button');
-                button.textContent = option;
-                button.className = "btn w-full p-4 border rounded-lg text-lg hover:bg-gray-100";
-                button.addEventListener('click', () => checkQuizAnswer(option, correctAnswer));
-                quizOptions.appendChild(button);
+                button.className = 'letter-btn py-3 rounded-lg transition-all duration-200 text-xl md:text-2xl';
+                button.textContent = letter;
+                button.dataset.letter = letter; // Add data attribute for easy selection
+
+                // Check if this letter has words available
+                if (alphabetData[letter] && alphabetData[letter].length > 0) {
+                    availableLetters.push(letter); // Add to available letters list
+
+                    // Letter has words - make it clickable
+                    button.addEventListener('click', () => {
+                        updateDisplay(letter);
+                        if (activeLetterButton) activeLetterButton.classList.remove('active');
+                        button.classList.add('active');
+                        activeLetterButton = button;
+                    });
+                } else {
+                    // Letter has no words - make it disabled but visible
+                    button.classList.add('disabled');
+                    button.title = `No words available starting with ${letter}`;
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        // Show message that no words are available for this letter
+                        displayLetter.textContent = `${letter} ${letter.toLowerCase()}`;
+                        if (letter === 'ẞ') displayLetter.textContent = 'ß';
+
+                        if (letter === 'ẞ') {
+                            displayPronunciation.textContent = `No words containing ß available`;
+                        } else {
+                            displayPronunciation.textContent = `No words available starting with ${letter}`;
+                        }
+
+                        examplesContainer.innerHTML = '<p class="text-white/60 text-center py-8">No example words available for this letter yet.</p>';
+                        letterAudioBtn.onclick = () => speak(letter, letterAudioBtn);
+
+                        if (activeLetterButton) activeLetterButton.classList.remove('active');
+                        button.classList.add('active');
+                        activeLetterButton = button;
+                    });
+                }
+                alphabetGrid.appendChild(button);
             });
-        };
 
-        const checkQuizAnswer = (selected, correct) => {
-            quizOptions.querySelectorAll('button').forEach(b => b.disabled = true);
-
-            if (selected.toLowerCase() === correct.toLowerCase()) {
-                successCount++;
-                quizFeedback.textContent = "Correct! 🎉";
-                quizFeedback.className = "mt-4 font-semibold h-6 text-green-500";
+            // Select first available letter
+            const firstButton = alphabetGrid.querySelector('button:not(.disabled)');
+            if (firstButton) {
+                setTimeout(() => firstButton.click(), 100); // Small delay to ensure DOM is ready
             } else {
-                failCount++;
-                quizFeedback.textContent = `Not quite. The answer is "${correct}".`;
-                quizFeedback.className = "mt-4 font-semibold h-6 text-red-500";
+                // If no buttons with words are available, click the first button anyway
+                const anyButton = alphabetGrid.querySelector('button');
+                if (anyButton) {
+                    setTimeout(() => anyButton.click(), 100);
+                }
             }
-            updateStats();
-        };
 
-        // --- Navigation ---
-        const showNext = () => {
-            window.speechSynthesis.cancel();
-            currentIndex = (currentIndex + 1) % vocabulary.length;
-            displayCurrentWord();
-        };
+            // Add touch gesture support to the main display area
+            const alphabetDisplayArea = container.querySelector('.bg-gradient-to-br');
 
-        const showPrevious = () => {
-            window.speechSynthesis.cancel();
-            currentIndex = (currentIndex - 1 + vocabulary.length) % vocabulary.length;
-            displayCurrentWord();
-        };
+            // Touch event handlers
+            function handleTouchStart(e) {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            }
 
-        const switchTab = (event) => {
-            tabs.forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
-            practiceContents.forEach(content => content.classList.add('hidden'));
-            document.getElementById(event.target.id.replace('-tab', '-content')).classList.remove('hidden');
-        };
+            function handleTouchEnd(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                touchEndY = e.changedTouches[0].screenY;
+                handleGesture();
+            }
 
-        // Start the app
-        initialize();
-    });
+            function handleGesture() {
+                const deltaX = touchEndX - touchStartX;
+                const deltaY = touchEndY - touchStartY;
+
+                // Check if horizontal swipe is more significant than vertical
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    // Horizontal swipe detected
+                    if (Math.abs(deltaX) > minSwipeDistance) {
+                        if (deltaX > 0) {
+                            // Swipe right - go to previous letter
+                            navigateToPrevLetter();
+                        } else {
+                            // Swipe left - go to next letter
+                            navigateToNextLetter();
+                        }
+                    }
+                }
+            }
+
+            // Add keyboard navigation support
+            function handleKeyDown(e) {
+                // Only handle keyboard events when alphabet section is active
+                const alphabetSection = document.querySelector('[data-section="alphabet"]');
+                if (!alphabetSection || !alphabetSection.style.display || alphabetSection.style.display === 'none') {
+                    return;
+                }
+
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        navigateToPrevLetter();
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        navigateToNextLetter();
+                        break;
+                }
+            }
+
+            // Attach event listeners
+            if (alphabetDisplayArea) {
+                alphabetDisplayArea.addEventListener('touchstart', handleTouchStart, { passive: true });
+                alphabetDisplayArea.addEventListener('touchend', handleTouchEnd, { passive: true });
+            }
+
+            // Add keyboard support
+            document.addEventListener('keydown', handleKeyDown);
+
+            // Cleanup function (store for later use if needed)
+            container._cleanup = () => {
+                if (alphabetDisplayArea) {
+                    alphabetDisplayArea.removeEventListener('touchstart', handleTouchStart);
+                    alphabetDisplayArea.removeEventListener('touchend', handleTouchEnd);
+                }
+                document.removeEventListener('keydown', handleKeyDown);
+            };
+        }
+
+        function initializePatternDrill(container) {
+            container.innerHTML = getPatternsContent();
+
+            // Load sentence structure data
+            fetch('./sentence_structur.json')
+                .then(response => response.json())
+                .then(germanData => {
+                    const contentArea = container.querySelector('#content-area');
+                    const caseTabs = container.querySelectorAll('.case-tab');
+                    let currentFlashcardIndex = 0;
+
+                    function renderCase(caseName) {
+                        const data = germanData[caseName];
+                        if (!data) return;
+
+                        const html = `
+                            <section id="${caseName}-section" class="case-section bg-white p-8 md:p-10 rounded-3xl shadow-2xl slide-in">
+                                <div class="relative mb-8">
+                                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25"></div>
+                                    <div class="relative bg-white rounded-2xl p-6 border border-slate-200">
+                                        <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-3">${data.title}</h2>
+                                        <p class="text-slate-600 text-lg leading-relaxed max-w-prose">${data.explanation}</p>
+                                    </div>
+                                </div>
+
+                                <div class="mb-8">
+                                    <h3 class="text-2xl font-bold text-slate-700 mb-4 flex items-center">
+                                        <span class="bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">1</span>
+                                        Choose a Gender to Study
+                                    </h3>
+                                    <div class="max-w-sm relative">
+                                        <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-xl blur opacity-20"></div>
+                                        <select id="gender-selector" data-case="${caseName}" class="relative w-full bg-white border-2 border-slate-200 rounded-xl py-4 px-6 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg font-semibold shadow-lg">
+                                            <option value="">✨ Select Gender ✨</option>
+                                            <option value="masculine">🦁 Masculine (der)</option>
+                                            <option value="feminine">🌸 Feminine (die)</option>
+                                            <option value="neuter">⭐ Neuter (das)</option>
+                                            <option value="plural">🎪 Plural (die)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div id="study-area" class="mt-10">
+                                    <div id="flashcard-container" class="flashcard-container" style="display: none;"></div>
+                                    <div id="practice-container" class="practice-container" style="display: none;"></div>
+                                </div>
+                            </section>
+                        `;
+                        contentArea.innerHTML = html;
+                        addGenderSelectorListener();
+                    }
+
+                    function addGenderSelectorListener() {
+                        const selector = container.querySelector('#gender-selector');
+                        selector.addEventListener('change', (e) => {
+                            const caseName = e.currentTarget.dataset.case;
+                            const genderKey = e.currentTarget.value;
+                            if (genderKey) {
+                                startFlashcards(caseName, genderKey);
+                            } else {
+                                // Clear the study area if the user selects the placeholder
+                                container.querySelector('#flashcard-container').style.display = 'none';
+                                container.querySelector('#practice-container').style.display = 'none';
+                            }
+                        });
+                    }
+
+                    function startFlashcards(caseName, genderKey) {
+                        currentFlashcardIndex = 0;
+                        container.querySelector('#practice-container').style.display = 'none';
+                        container.querySelector('#practice-container').innerHTML = '';
+                        container.querySelector('#flashcard-container').style.display = 'block';
+                        renderFlashcard(caseName, genderKey);
+                    }
+
+                    function renderFlashcard(caseName, genderKey) {
+                        const genderData = germanData[caseName].genders[genderKey];
+                        const flashcards = genderData.flashcards;
+                        const card = flashcards[currentFlashcardIndex];
+                        const flashcardContainer = container.querySelector('#flashcard-container');
+                        const isLastCard = currentFlashcardIndex === flashcards.length - 1;
+
+                        flashcardContainer.innerHTML = `
+                            <div class="mb-8">
+                                <h3 class="text-2xl font-bold text-slate-700 mb-4 flex items-center">
+                                    <span class="bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">2</span>
+                                    Repeat the Sentences
+                                </h3>
+                                <div class="mb-6">
+                                    <p class="text-slate-600 mb-3 text-lg">📝 <strong>Studying Form:</strong></p>
+                                    <div class="form-display inline-block px-6 py-3 rounded-xl text-lg font-semibold shadow-inner">
+                                        ${genderData.form}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flashcard-sentence-card rounded-3xl p-8 md:p-12 text-center min-h-[200px] flex flex-col justify-center mb-8 text-white relative overflow-hidden">
+                                <div class="absolute top-4 left-4 progress-counter px-4 py-2 rounded-full text-sm">
+                                    📚 Card ${currentFlashcardIndex + 1} of ${flashcards.length}
+                                </div>
+                                <div class="relative z-10">
+                                    <p class="text-3xl md:text-4xl font-bold mb-6 leading-relaxed drop-shadow-lg">${card.sentence}</p>
+                                    <div class="w-16 h-1 bg-white/30 mx-auto mb-6 rounded-full"></div>
+                                    <p class="text-xl md:text-2xl italic opacity-90 font-medium">${card.translation}</p>
+                                </div>
+                                <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
+                                <div class="absolute -top-8 -left-8 w-32 h-32 bg-white/5 rounded-full"></div>
+                            </div>
+
+                            <div class="flex justify-between items-center">
+                                <button id="prev-btn" class="pattern-nav-btn px-6 py-3 rounded-xl shadow-lg hover:shadow-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center space-x-2">
+                                    <span>←</span>
+                                    <span>Previous</span>
+                                </button>
+                                <div class="progress-counter px-6 py-3 rounded-xl shadow-md">
+                                    <span class="font-bold text-lg">${currentFlashcardIndex + 1}</span>
+                                    <span class="mx-2 text-slate-400">/</span>
+                                    <span class="text-slate-600">${flashcards.length}</span>
+                                </div>
+                                <button id="next-btn" class="primary-btn px-6 py-3 rounded-xl shadow-lg hover:shadow-xl font-semibold transition-all duration-300 flex items-center space-x-2">
+                                    <span>${isLastCard ? '🚀 Start Practice' : 'Next'}</span>
+                                    <span>→</span>
+                                </button>
+                            </div>
+                        `;
+
+                        const prevBtn = container.querySelector('#prev-btn');
+                        const nextBtn = container.querySelector('#next-btn');
+
+                        prevBtn.disabled = currentFlashcardIndex === 0;
+
+                        prevBtn.addEventListener('click', () => {
+                            if (currentFlashcardIndex > 0) {
+                                currentFlashcardIndex--;
+                                renderFlashcard(caseName, genderKey);
+                            }
+                        });
+
+                        nextBtn.addEventListener('click', () => {
+                            if (!isLastCard) {
+                                currentFlashcardIndex++;
+                                renderFlashcard(caseName, genderKey);
+                            } else {
+                                renderPractice(caseName, genderKey);
+                            }
+                        });
+                    }
+
+                    function renderPractice(caseName, genderKey) {
+                        const practiceData = germanData[caseName].genders[genderKey].practice;
+                        const practiceContainer = container.querySelector('#practice-container');
+                        container.querySelector('#flashcard-container').style.display = 'none';
+                        practiceContainer.style.display = 'block';
+
+                        if (!practiceData || practiceData.length === 0) {
+                            practiceContainer.innerHTML = `
+                                <div class="text-center py-12">
+                                    <div class="relative">
+                                        <div class="absolute inset-0 bg-gradient-to-r from-green-400 to-blue-500 rounded-3xl transform rotate-3"></div>
+                                        <div class="relative bg-gradient-to-r from-green-500 to-teal-500 text-white p-8 rounded-3xl shadow-2xl">
+                                            <div class="text-6xl mb-4">🎉</div>
+                                            <h3 class="text-3xl font-bold mb-4">Practice Complete!</h3>
+                                            <p class="text-xl opacity-90">Fantastic work! Select another gender to continue your learning journey.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            return;
+                        }
+
+                        const practiceItems = practiceData.map((item, index) => {
+                            const choiceButtons = item.options.map(option =>
+                                `<button class="choice-btn w-full sm:w-auto flex-grow text-center border-2 rounded-xl py-3 px-6 font-semibold transition-all duration-300 hover:transform hover:scale-105" data-answer="${option}">${option}</button>`
+                            ).join('');
+                            return `
+                                <li class="practice-item p-6 rounded-2xl mb-6 shadow-lg transition-all duration-300" data-correct-answer="${item.answer}">
+                                    <div class="mb-6">
+                                        <div class="flex items-center mb-3">
+                                            <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">${index + 1}</span>
+                                            <p class="text-slate-700 text-xl font-semibold">${item.sentence.replace('______', `<span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">(${item.pronoun})</span>`)}</p>
+                                        </div>
+                                        <p class="text-slate-500 italic ml-11 text-lg">${item.translation}</p>
+                                    </div>
+                                    <div class="flex flex-col sm:flex-row gap-3 ml-11">${choiceButtons}</div>
+                                </li>
+                            `;
+                        }).join('');
+
+                        practiceContainer.innerHTML = `
+                            <div class="mb-8">
+                                <h3 class="text-2xl font-bold text-slate-700 mb-6 flex items-center">
+                                    <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">3</span>
+                                    Test Your Knowledge
+                                </h3>
+                                <div class="bg-gradient-to-r from-purple-100 to-pink-100 p-4 rounded-2xl border border-purple-200">
+                                    <p class="text-purple-800 font-semibold flex items-center">
+                                        <span class="text-2xl mr-2">💡</span>
+                                        Choose the correct possessive pronoun for each sentence!
+                                    </p>
+                                </div>
+                            </div>
+                            <ul class="space-y-4">${practiceItems}</ul>
+                        `;
+                        addPracticeListeners();
+                    }
+
+                    function addPracticeListeners() {
+                        container.querySelectorAll('.practice-item').forEach(item => {
+                            const correctAnswer = item.dataset.correctAnswer;
+                            const buttons = item.querySelectorAll('.choice-btn');
+                            buttons.forEach(button => {
+                                button.addEventListener('click', () => {
+                                    buttons.forEach(btn => btn.disabled = true);
+                                    if (button.dataset.answer === correctAnswer) {
+                                        button.style.backgroundColor = '#dcfce7';
+                                        button.style.borderColor = '#22c55e';
+                                        button.style.color = '#166534';
+                                        button.style.fontWeight = '600';
+                                    } else {
+                                        button.style.backgroundColor = '#fee2e2';
+                                        button.style.borderColor = '#ef4444';
+                                        button.style.color = '#991b1b';
+                                        button.style.fontWeight = '600';
+                                        // Show correct answer
+                                        const correctBtn = item.querySelector(`[data-answer="${correctAnswer}"]`);
+                                        correctBtn.style.backgroundColor = '#dcfce7';
+                                        correctBtn.style.borderColor = '#22c55e';
+                                        correctBtn.style.color = '#166534';
+                                        correctBtn.style.fontWeight = '600';
+                                    }
+                                });
+                            });
+                        });
+                    }
+
+                    function handleTabClick(e) {
+                        const clickedTab = e.target.closest('.case-tab');
+                        if (!clickedTab) return;
+                        const caseName = clickedTab.dataset.case;
+                        caseTabs.forEach(tab => {
+                            tab.classList.toggle('border-blue-500', tab === clickedTab);
+                            tab.classList.toggle('text-blue-600', tab === clickedTab);
+                            tab.classList.toggle('border-transparent', tab !== clickedTab);
+                            tab.classList.toggle('text-slate-500', tab !== clickedTab);
+                        });
+                        renderCase(caseName);
+                    }
+
+                    // Initialize
+                    renderCase('nominative');
+                    caseTabs.forEach(tab => tab.addEventListener('click', handleTabClick));
+                })
+                .catch(error => {
+                    console.error('Error loading sentence structure data:', error);
+                    container.querySelector('#content-area').innerHTML = `<p class="text-center text-red-500">Error loading data. Please check if sentence_structur.json is available.</p>`;
+                });
+        }
+
+        function initializeVocabularyLevels(container) {
+            container.innerHTML = getLevelsContent();
+            const levelSelect = container.querySelector('#level-select');
+            const langSelect = container.querySelector('#lang-select');
+            const cardsContainer = container.querySelector('#level-cards-container');
+            const paginationContainer = container.querySelector('#pagination-container');
+            const currentPageSpan = container.querySelector('#current-page');
+            const totalPagesSpan = container.querySelector('#total-pages');
+            const prevButton = container.querySelector('#prev-page');
+            const nextButton = container.querySelector('#next-page');
+            const firstButton = container.querySelector('#first-page');
+            const lastButton = container.querySelector('#last-page');
+            const wordsInfoSpan = container.querySelector('#words-info');
+
+            // Flashcard elements
+            const flashcardContainer = container.querySelector('#flashcard-container');
+            const flashcardFront = container.querySelector('#flashcard-front');
+            const flashcardBack = container.querySelector('#flashcard-back');
+            const flashcardArticle = container.querySelector('#flashcard-article');
+            const flashcardWord = container.querySelector('#flashcard-word');
+            const flashcardSentence = container.querySelector('#flashcard-sentence');
+            const flashcardTranslation = container.querySelector('#flashcard-translation');
+            const flashcardSentenceTranslation = container.querySelector('#flashcard-sentence-translation');
+            const flashcardCounter = container.querySelector('#flashcard-counter');
+            const flashcardLevel = container.querySelector('#flashcard-level');
+            const prevVocabBtn = container.querySelector('#prev-vocab');
+            const nextVocabBtn = container.querySelector('#next-vocab');
+
+            langSelect.value = currentLanguage;
+            let currentVocabIndex = 0;
+
+            let currentPage = 1;
+            const wordsPerPage = 12; // Show 12 cards per page
+
+            // Flashcard functionality
+            function updateFlashcard() {
+                const level = levelSelect.value;
+                const lang = langSelect.value;
+                const isRTL = lang === 'fa' || lang === 'ku';
+                const data = vocabularyData[level];
+
+                if (!data || data.length === 0) {
+                    flashcardWord.textContent = 'No data available';
+                    return;
+                }
+
+                const currentWord = data[currentVocabIndex];
+
+                // Reset flip state
+                flashcardContainer.classList.remove('is-flipped');
+
+                // Update front of card
+                flashcardArticle.textContent = currentWord.article || '';
+                flashcardWord.textContent = currentWord.word;
+                flashcardSentence.innerHTML = currentWord.exercise_sentence.replace(/__/g, `<span class="font-bold text-yellow-300">${currentWord.word}</span>`);
+
+                // Update back of card
+                flashcardTranslation.textContent = currentWord[lang + '_translation'];
+                flashcardTranslation.className = `text-3xl font-bold mb-4 ${isRTL ? 'font-fa' : ''}`;
+                flashcardSentenceTranslation.textContent = currentWord[lang + '_sentence_translation'];
+                flashcardSentenceTranslation.className = `text-lg leading-relaxed mb-4 ${isRTL ? 'font-fa' : ''}`;
+
+                // Update counter and level info
+                flashcardCounter.textContent = `Word ${currentVocabIndex + 1} of ${data.length}`;
+                flashcardLevel.textContent = `${level.toUpperCase()} Level`;
+
+                // Update button states
+                prevVocabBtn.disabled = currentVocabIndex === 0;
+                nextVocabBtn.disabled = currentVocabIndex === data.length - 1;
+            }
+
+            // Flashcard event listeners
+            flashcardContainer.addEventListener('click', () => {
+                flashcardContainer.classList.toggle('is-flipped');
+            });
+
+            // Speaker button event listeners
+            document.getElementById('main-speaker-front').addEventListener('click', (e) => {
+                e.stopPropagation();
+                const data = vocabularyData[levelSelect.value];
+                if (data && data[currentVocabIndex]) {
+                    speakWordAndSentence(data[currentVocabIndex].word, data[currentVocabIndex].complete_sentence, e.target.closest('button'));
+                }
+            });
+
+            document.getElementById('main-speaker-back').addEventListener('click', (e) => {
+                e.stopPropagation();
+                const data = vocabularyData[levelSelect.value];
+                if (data && data[currentVocabIndex]) {
+                    speakWordAndSentence(data[currentVocabIndex].word, data[currentVocabIndex].complete_sentence, e.target.closest('button'));
+                }
+            });
+
+            // Add keyboard shortcuts for better accessibility
+            document.addEventListener('keydown', (e) => {
+                // Only handle keyboard shortcuts when in the A1/A2 section
+                const currentSection = document.querySelector('.app-section.active');
+                if (!currentSection || !currentSection.id.includes('level')) return;
+
+                const data = vocabularyData[levelSelect.value];
+                if (!data || !data[currentVocabIndex]) return;
+
+                switch(e.key) {
+                    case ' ': // Spacebar - Speak word and sentence
+                        e.preventDefault();
+                        speakWordAndSentence(data[currentVocabIndex].word, data[currentVocabIndex].complete_sentence);
+                        break;
+                    case 'ArrowLeft': // Left arrow - Previous word
+                        e.preventDefault();
+                        if (currentVocabIndex > 0) {
+                            currentVocabIndex--;
+                            updateFlashcard();
+                        }
+                        break;
+                    case 'ArrowRight': // Right arrow - Next word
+                        e.preventDefault();
+                        if (currentVocabIndex < data.length - 1) {
+                            currentVocabIndex++;
+                            updateFlashcard();
+                        }
+                        break;
+                    case 'f': // F key - Flip card
+                        e.preventDefault();
+                        flashcardContainer.classList.toggle('is-flipped');
+                        break;
+                }
+            });
+
+            prevVocabBtn.addEventListener('click', () => {
+                const data = vocabularyData[levelSelect.value];
+                if (currentVocabIndex > 0) {
+                    currentVocabIndex--;
+                    updateFlashcard();
+                }
+            });
+
+            nextVocabBtn.addEventListener('click', () => {
+                const data = vocabularyData[levelSelect.value];
+                if (currentVocabIndex < data.length - 1) {
+                    currentVocabIndex++;
+                    updateFlashcard();
+                }
+            });
+
+            function renderCards() {
+                const level = levelSelect.value;
+                const lang = langSelect.value;
+                const isRTL = lang === 'fa' || lang === 'ku';
+                cardsContainer.innerHTML = '';
+                cardsContainer.dir = isRTL ? 'rtl' : 'ltr';
+
+                const data = vocabularyData[level];
+                if (!data || data.length === 0) {
+                    cardsContainer.innerHTML = `<p class="col-span-full text-center text-slate-500">Vocabulary data could not be loaded.</p>`;
+                    paginationContainer.style.display = 'none';
+                    return;
+                }
+
+                // Calculate pagination
+                const totalWords = data.length;
+                const totalPages = Math.ceil(totalWords / wordsPerPage);
+                const startIndex = (currentPage - 1) * wordsPerPage;
+                const endIndex = Math.min(startIndex + wordsPerPage, totalWords);
+                const currentPageData = data.slice(startIndex, endIndex);
+
+                // Update pagination info
+                currentPageSpan.textContent = currentPage;
+                totalPagesSpan.textContent = totalPages;
+                wordsInfoSpan.textContent = `${startIndex + 1}-${endIndex} of ${totalWords} words`;
+
+                // Update button states
+                prevButton.disabled = currentPage === 1;
+                nextButton.disabled = currentPage === totalPages;
+                firstButton.disabled = currentPage === 1;
+                lastButton.disabled = currentPage === totalPages;
+
+                // Show/hide pagination if needed
+                if (totalPages > 1) {
+                    paginationContainer.style.display = 'flex';
+                } else {
+                    paginationContainer.style.display = 'none';
+                }
+
+                // Render cards for current page
+                currentPageData.forEach(word => {
+                    const card = document.createElement('div');
+                    card.className = 'level-card h-80 flashcard';
+                    card.innerHTML = `
+                        <div class="level-card-inner flashcard-inner w-full h-full">
+                            <div class="flashcard-front bg-white border rounded-lg p-4 flex flex-col justify-between shadow-md">
+                                <div>
+                                    <p class="text-sm text-slate-500">${word.article || ''}</p>
+                                    <h3 class="text-3xl font-bold text-slate-800 mb-4">${word.word}</h3>
+                                    <p class="text-slate-600 text-lg">${word.exercise_sentence.replace(/__/g, `<span class="font-bold text-blue-500">${word.word}</span>`)}</p>
+                                </div>
+                                <button class="flip-btn self-center text-blue-500 font-semibold">Show Translation &rarr;</button>
+                            </div>
+                            <div class="flashcard-back bg-slate-800 text-white rounded-lg p-4 flex flex-col justify-between shadow-md">
+                                <div class="text-center">
+                                    <h4 class="text-2xl font-bold ${isRTL ? 'font-fa' : ''}">${word[lang + '_translation']}</h4>
+                                    <p class="text-slate-300 mt-4 ${isRTL ? 'font-fa' : ''}">${word[lang + '_sentence_translation']}</p>
+                                </div>
+                                <button class="flip-btn self-center text-slate-300 font-semibold">&larr; Back to German</button>
+                            </div>
+                        </div>`;
+                    card.querySelectorAll('.flip-btn').forEach(btn => {
+                        btn.addEventListener('click', () => card.classList.toggle('is-flipped'));
+                    });
+                    cardsContainer.appendChild(card);
+                });
+
+                // Smooth scroll to top of cards when changing pages
+                if (currentPage > 1) {
+                    cardsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+
+            // Event listeners for pagination
+            prevButton.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderCards();
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                const totalPages = Math.ceil(vocabularyData[levelSelect.value].length / wordsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderCards();
+                }
+            });
+
+            firstButton.addEventListener('click', () => {
+                currentPage = 1;
+                renderCards();
+            });
+
+            lastButton.addEventListener('click', () => {
+                currentPage = Math.ceil(vocabularyData[levelSelect.value].length / wordsPerPage);
+                renderCards();
+            });
+
+            levelSelect.addEventListener('change', () => {
+                currentPage = 1; // Reset to first page when changing level
+                currentVocabIndex = 0; // Reset flashcard to first word
+                renderCards();
+                updateFlashcard();
+            });
+
+            langSelect.addEventListener('change', (e) => {
+                currentLanguage = e.target.value;
+                document.documentElement.lang = currentLanguage;
+                document.documentElement.dir = (currentLanguage === 'fa' || currentLanguage === 'ku') ? 'rtl' : 'ltr';
+                renderCards();
+                updateFlashcard();
+                updateUIText();
+            });
+
+            renderCards();
+            updateFlashcard();
+        }
+
+        // --- TEMPLATE FUNCTIONS ---
+        function getAlphabetContent() {
+            return `
+                <div class="alphabet-section">
+                    <header class="text-center mb-12 bg-gradient-to-r from-purple-500 to-blue-500 text-white p-8 rounded-2xl">
+                        <h1 data-translate-key="alphabet-title" class="font-display text-5xl md:text-6xl mb-4">German Alphabet</h1>
+                        <p class="text-xl opacity-90">Learn the German alphabet with pronunciation and example words</p>
+                    </header>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-gradient-to-br from-blue-500 to-purple-600 text-white p-8 rounded-2xl">
+                            <div class="text-center mb-6">
+                                <div id="display-letter" class="text-8xl font-bold mb-2">A a</div>
+                                <p id="display-pronunciation" class="text-xl opacity-90">Words starting with A</p>
+                                <button id="letter-audio-btn" class="mt-4 bg-white/20 hover:bg-white/30 px-6 py-3 rounded-full text-white font-semibold transition-colors">
+                                    🔊 Play Sound
+                                </button>
+                            </div>
+                            <div id="examples-container" class="grid grid-cols-1 gap-3 mt-6">
+                                <!-- Example words will be loaded here -->
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-8 rounded-2xl shadow-lg">
+                            <h3 class="text-2xl font-bold text-slate-800 mb-6 text-center">Select a Letter</h3>
+                            <div id="alphabet-grid" class="alphabet-grid-container grid gap-2">
+                                <!-- Alphabet buttons will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getPatternsContent() {
+            return `
+                <div class="patterns-section bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-slate-800 antialiased">
+                    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-6xl">
+                        <header class="text-center mb-12 relative">
+                            <div class="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-3xl transform -rotate-1"></div>
+                            <div class="relative bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white p-8 md:p-12 rounded-3xl shadow-2xl">
+                                <h1 class="font-display text-4xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-100">
+                                    ✨ Possessive Pronouns ✨
+                                </h1>
+                                <p class="text-xl md:text-2xl opacity-90 font-medium">Master German grammar with interactive flashcards!</p>
+                                <div class="absolute -top-4 -right-4 w-8 h-8 bg-yellow-300 rounded-full animate-ping"></div>
+                                <div class="absolute -bottom-2 -left-2 w-6 h-6 bg-pink-300 rounded-full animate-bounce"></div>
+                            </div>
+                        </header>
+
+                        <!-- Case Selection Tabs -->
+                        <div class="flex flex-wrap justify-center border-b-2 border-slate-200 mb-12 bg-white/50 backdrop-blur-sm rounded-2xl p-2 shadow-lg">
+                            <button data-case="nominative" class="case-tab text-lg font-bold py-4 px-8 rounded-xl mx-1 mb-2 border-b-4 border-blue-500 text-blue-600 transition-all duration-300">
+                                <span class="block text-2xl mb-1">🎯</span>
+                                1. Nominative
+                            </button>
+                            <button data-case="accusative" class="case-tab text-lg font-bold py-4 px-8 rounded-xl mx-1 mb-2 border-b-4 border-transparent text-slate-500 hover:text-blue-600 transition-all duration-300">
+                                <span class="block text-2xl mb-1">🎪</span>
+                                2. Accusative
+                            </button>
+                            <button data-case="dative" class="case-tab text-lg font-bold py-4 px-8 rounded-xl mx-1 mb-2 border-b-4 border-transparent text-slate-500 hover:text-blue-600 transition-all duration-300">
+                                <span class="block text-2xl mb-1">🎨</span>
+                                3. Dative
+                            </button>
+                        </div>
+
+                        <main id="content-area" class="slide-in">
+                            <!-- Content will be injected here by JavaScript -->
+                        </main>
+
+                        <footer class="text-center mt-16 text-slate-400">
+                            <div class="inline-flex items-center space-x-2 bg-white/30 backdrop-blur-sm rounded-full px-6 py-3">
+                                <span>Designed with</span>
+                                <span class="text-red-500 text-xl animate-pulse">❤️</span>
+                                <span>for German learners</span>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getLevelsContent() {
+            return `
+                <div class="levels-section">
+                    <header class="text-center mb-8 bg-gradient-to-r from-orange-500 to-red-500 text-white p-8 rounded-2xl">
+                        <h1 data-translate-key="levels-title" class="font-display text-5xl md:text-6xl mb-4">A1/A2 Vocabulary</h1>
+                        <p class="text-xl opacity-90">Essential German words for beginners</p>
+                    </header>
+
+                    <!-- Flashcard Section -->
+                    <div class="flashcard-section mb-12 bg-white p-6 rounded-2xl shadow-lg">
+                        <h2 class="text-2xl font-bold text-center text-slate-800 mb-6">📚 Vocabulary Flashcard</h2>
+
+                        <div class="flex items-center justify-center gap-4 mb-6">
+                            <button id="prev-vocab" class="bg-blue-500 hover:bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+                                ←
+                            </button>
+
+                            <div id="flashcard-container" class="flashcard w-80 h-60 cursor-pointer">
+                                <div class="flashcard-inner w-full h-full">
+                                    <div id="flashcard-front" class="flashcard-front bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-xl">
+                                        <div class="card-overlay"></div>
+                                        <div class="card-content text-center">
+                                            <p id="flashcard-article" class="text-sm opacity-80 mb-2"></p>
+                                            <h3 id="flashcard-word" class="text-4xl font-bold mb-4">Click to start</h3>
+                                            <p id="flashcard-sentence" class="text-lg leading-relaxed"></p>
+                                            <p class="text-sm opacity-75 mt-4">Click to flip</p>
+                                        </div>
+                                        <div class="absolute top-3 right-3">
+                                            <button id="main-speaker-front" class="speaker-btn p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30" title="🔊 Read word and sentence">
+                                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div id="flashcard-back" class="flashcard-back bg-gradient-to-br from-green-500 to-teal-600 text-white shadow-xl">
+                                        <div class="card-overlay"></div>
+                                        <div class="card-content text-center">
+                                            <h4 id="flashcard-translation" class="text-3xl font-bold mb-4">Translation</h4>
+                                            <p id="flashcard-sentence-translation" class="text-lg leading-relaxed mb-4"></p>
+                                            <p class="text-sm opacity-75">Click to flip back</p>
+                                        </div>
+                                        <div class="absolute top-3 right-3">
+                                            <button id="main-speaker-back" class="speaker-btn p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20" title="🔊 Read word and sentence">
+                                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button id="next-vocab" class="bg-blue-500 hover:bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+                                →
+                            </button>
+                        </div>
+
+                        <div class="text-center text-sm text-slate-600">
+                            <span id="flashcard-counter">Word 1 of 1000</span> •
+                            <span id="flashcard-level">A1 Level</span>
+                        </div>
+                    </div>
+
+                    <div class="controls mb-8 flex flex-wrap gap-4 justify-center">
+                        <div>
+                            <label for="level-select" class="block text-sm font-medium text-slate-700 mb-2">Level:</label>
+                            <select id="level-select" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                <option value="a1">A1 - Beginner</option>
+                                <option value="a2">A2 - Elementary</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="lang-select" class="block text-sm font-medium text-slate-700 mb-2">Translation Language:</label>
+                            <select id="lang-select" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                <option value="en">🇺🇸 English</option>
+                                <option value="fa">🇮🇷 فارسی</option>
+                                <option value="ku">🇹🇯 کوردی</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Pagination Info and Controls -->
+                    <div id="pagination-container" class="flex flex-col sm:flex-row items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-sm">
+                        <div class="text-slate-600 mb-4 sm:mb-0">
+                            <span id="words-info">1-12 of 1000 words</span> •
+                            Page <span id="current-page">1</span> of <span id="total-pages">1</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button id="first-page" class="px-3 py-1 text-sm bg-slate-200 hover:bg-slate-300 text-slate-700 rounded disabled:opacity-50 disabled:cursor-not-allowed">
+                                First
+                            </button>
+                            <button id="prev-page" class="px-3 py-1 text-sm bg-slate-200 hover:bg-slate-300 text-slate-700 rounded disabled:opacity-50 disabled:cursor-not-allowed">
+                                ← Prev
+                            </button>
+                            <button id="next-page" class="px-3 py-1 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed">
+                                Next →
+                            </button>
+                            <button id="last-page" class="px-3 py-1 text-sm bg-slate-200 hover:bg-slate-300 text-slate-700 rounded disabled:opacity-50 disabled:cursor-not-allowed">
+                                Last
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="level-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <!-- Vocabulary cards will be loaded here -->
+                    </div>
+                </div>
+            `;
+        }
+
+    })();
     </script>
 </body>
 </html>
