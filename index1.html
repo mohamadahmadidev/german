@@ -38,6 +38,14 @@
         .card-overlay { position: absolute; inset: 0; background-color: rgba(0,0,0,0.5); border-radius: 0.75rem; z-index: 1; }
         .card-content { position: relative; z-index: 2; }
         .flashcard-back { transform: rotateY(180deg); }
+
+        /* Enhanced Flashcard Styles */
+        #flashcard-container { box-shadow: 0 20px 40px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        #flashcard-container:hover { transform: translateY(-5px); box-shadow: 0 25px 50px rgba(0,0,0,0.15); }
+        #flashcard-container .flashcard-front { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        #flashcard-container .flashcard-back { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .flashcard-section { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
+
         .town-building { transition: transform 0.3s ease, box-shadow 0.3s ease; cursor: pointer; }
         .town-building:hover { transform: translateY(-10px) scale(1.05); }
         .quiz-option.correct { background-color: #10B981 !important; border-color: #059669 !important; color: white !important; }
@@ -786,10 +794,83 @@
             const lastButton = container.querySelector('#last-page');
             const wordsInfoSpan = container.querySelector('#words-info');
 
+            // Flashcard elements
+            const flashcardContainer = container.querySelector('#flashcard-container');
+            const flashcardFront = container.querySelector('#flashcard-front');
+            const flashcardBack = container.querySelector('#flashcard-back');
+            const flashcardArticle = container.querySelector('#flashcard-article');
+            const flashcardWord = container.querySelector('#flashcard-word');
+            const flashcardSentence = container.querySelector('#flashcard-sentence');
+            const flashcardTranslation = container.querySelector('#flashcard-translation');
+            const flashcardSentenceTranslation = container.querySelector('#flashcard-sentence-translation');
+            const flashcardCounter = container.querySelector('#flashcard-counter');
+            const flashcardLevel = container.querySelector('#flashcard-level');
+            const prevVocabBtn = container.querySelector('#prev-vocab');
+            const nextVocabBtn = container.querySelector('#next-vocab');
+
             langSelect.value = currentLanguage;
+            let currentVocabIndex = 0;
 
             let currentPage = 1;
             const wordsPerPage = 12; // Show 12 cards per page
+
+            // Flashcard functionality
+            function updateFlashcard() {
+                const level = levelSelect.value;
+                const lang = langSelect.value;
+                const isRTL = lang === 'fa' || lang === 'ku';
+                const data = vocabularyData[level];
+
+                if (!data || data.length === 0) {
+                    flashcardWord.textContent = 'No data available';
+                    return;
+                }
+
+                const currentWord = data[currentVocabIndex];
+
+                // Reset flip state
+                flashcardContainer.classList.remove('is-flipped');
+
+                // Update front of card
+                flashcardArticle.textContent = currentWord.article || '';
+                flashcardWord.textContent = currentWord.word;
+                flashcardSentence.innerHTML = currentWord.exercise_sentence.replace(/__/g, `<span class="font-bold text-yellow-300">${currentWord.word}</span>`);
+
+                // Update back of card
+                flashcardTranslation.textContent = currentWord[lang + '_translation'];
+                flashcardTranslation.className = `text-3xl font-bold mb-4 ${isRTL ? 'font-fa' : ''}`;
+                flashcardSentenceTranslation.textContent = currentWord[lang + '_sentence_translation'];
+                flashcardSentenceTranslation.className = `text-lg leading-relaxed mb-4 ${isRTL ? 'font-fa' : ''}`;
+
+                // Update counter and level info
+                flashcardCounter.textContent = `Word ${currentVocabIndex + 1} of ${data.length}`;
+                flashcardLevel.textContent = `${level.toUpperCase()} Level`;
+
+                // Update button states
+                prevVocabBtn.disabled = currentVocabIndex === 0;
+                nextVocabBtn.disabled = currentVocabIndex === data.length - 1;
+            }
+
+            // Flashcard event listeners
+            flashcardContainer.addEventListener('click', () => {
+                flashcardContainer.classList.toggle('is-flipped');
+            });
+
+            prevVocabBtn.addEventListener('click', () => {
+                const data = vocabularyData[levelSelect.value];
+                if (currentVocabIndex > 0) {
+                    currentVocabIndex--;
+                    updateFlashcard();
+                }
+            });
+
+            nextVocabBtn.addEventListener('click', () => {
+                const data = vocabularyData[levelSelect.value];
+                if (currentVocabIndex < data.length - 1) {
+                    currentVocabIndex++;
+                    updateFlashcard();
+                }
+            });
 
             function renderCards() {
                 const level = levelSelect.value;
@@ -892,7 +973,9 @@
 
             levelSelect.addEventListener('change', () => {
                 currentPage = 1; // Reset to first page when changing level
+                currentVocabIndex = 0; // Reset flashcard to first word
                 renderCards();
+                updateFlashcard();
             });
 
             langSelect.addEventListener('change', (e) => {
@@ -900,10 +983,12 @@
                 document.documentElement.lang = currentLanguage;
                 document.documentElement.dir = (currentLanguage === 'fa' || currentLanguage === 'ku') ? 'rtl' : 'ltr';
                 renderCards();
+                updateFlashcard();
                 updateUIText();
             });
 
             renderCards();
+            updateFlashcard();
         }
 
         // --- TEMPLATE FUNCTIONS ---
@@ -962,6 +1047,48 @@
                         <h1 data-translate-key="levels-title" class="font-display text-5xl md:text-6xl mb-4">A1/A2 Vocabulary</h1>
                         <p class="text-xl opacity-90">Essential German words for beginners</p>
                     </header>
+
+                    <!-- Flashcard Section -->
+                    <div class="flashcard-section mb-12 bg-white p-6 rounded-2xl shadow-lg">
+                        <h2 class="text-2xl font-bold text-center text-slate-800 mb-6">📚 Vocabulary Flashcard</h2>
+
+                        <div class="flex items-center justify-center gap-4 mb-6">
+                            <button id="prev-vocab" class="bg-blue-500 hover:bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+                                ←
+                            </button>
+
+                            <div id="flashcard-container" class="flashcard w-80 h-60 cursor-pointer">
+                                <div class="flashcard-inner w-full h-full">
+                                    <div id="flashcard-front" class="flashcard-front bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-xl">
+                                        <div class="card-overlay"></div>
+                                        <div class="card-content text-center">
+                                            <p id="flashcard-article" class="text-sm opacity-80 mb-2"></p>
+                                            <h3 id="flashcard-word" class="text-4xl font-bold mb-4">Click to start</h3>
+                                            <p id="flashcard-sentence" class="text-lg leading-relaxed"></p>
+                                            <p class="text-sm opacity-75 mt-4">Click to flip</p>
+                                        </div>
+                                    </div>
+                                    <div id="flashcard-back" class="flashcard-back bg-gradient-to-br from-green-500 to-teal-600 text-white shadow-xl">
+                                        <div class="card-overlay"></div>
+                                        <div class="card-content text-center">
+                                            <h4 id="flashcard-translation" class="text-3xl font-bold mb-4">Translation</h4>
+                                            <p id="flashcard-sentence-translation" class="text-lg leading-relaxed mb-4"></p>
+                                            <p class="text-sm opacity-75">Click to flip back</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button id="next-vocab" class="bg-blue-500 hover:bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+                                →
+                            </button>
+                        </div>
+
+                        <div class="text-center text-sm text-slate-600">
+                            <span id="flashcard-counter">Word 1 of 1000</span> •
+                            <span id="flashcard-level">A1 Level</span>
+                        </div>
+                    </div>
 
                     <div class="controls mb-8 flex flex-wrap gap-4 justify-center">
                         <div>
