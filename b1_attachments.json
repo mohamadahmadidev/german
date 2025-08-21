@@ -1,0 +1,504 @@
+{
+  "wortgruppen": {
+    "abkuerzungen": [
+      {
+        "abkuerzung": "Abo",
+        "plural": "-s",
+        "bedeutung": "das Abonnement, -s/-e"
+      },
+      {
+        "abkuerzung": "Akku",
+        "plural": "-s",
+        "bedeutung": "der Akkumulator (Batterie)"
+      },
+      {
+        "abkuerzung": "Azubi",
+        "plural": "-s",
+        "herkunft": "D",
+        "bedeutung": "der/die Auszubildende, -n"
+      },
+      {
+        "abkuerzung": "bzw.",
+        "bedeutung": "beziehungsweise"
+      },
+      {
+        "abkuerzung": "ca.",
+        "bedeutung": "circa/zirka"
+      },
+      {
+        "abkuerzung": "d. h.",
+        "bedeutung": "das heißt"
+      },
+      {
+        "abkuerzung": "DVD",
+        "plural": "-s",
+        "bedeutung": "Datenträger (Digital Video Disc)"
+      },
+      {
+        "abkuerzung": "EG, OG, UG",
+        "bedeutung": "das Erdgeschoss, das Obergeschoss, das Untergeschoss (D, CH); das Erdgeschoß, das Untergeschoß (A)"
+      },
+      {
+        "abkuerzung": "etc.",
+        "bedeutung": "et cetera"
+      },
+      {
+        "abkuerzung": "ICE",
+        "bedeutung": "der Inter City Express"
+      },
+      {
+        "abkuerzung": "Kfz",
+        "plural": "-s",
+        "bedeutung": "das Kraftfahrzeug, -e"
+      },
+      {
+        "abkuerzung": "Lkw",
+        "plural": "-s",
+        "bedeutung": "der Last(kraft)wagen, -"
+      },
+      {
+        "abkuerzung": "PC",
+        "plural": "-s",
+        "bedeutung": "der Personal Computer, -"
+      },
+      {
+        "abkuerzung": "Pkw",
+        "plural": "-s",
+        "bedeutung": "der Personenkraftwagen, -"
+      },
+      {
+        "abkuerzung": "SMS",
+        "plural": "-",
+        "artikel": "die (D, A) / das (CH)",
+        "bedeutung": "Textnachricht"
+      },
+      {
+        "abkuerzung": "TV",
+        "plural": "-",
+        "bedeutung": "Television"
+      },
+      {
+        "abkuerzung": "usw.",
+        "bedeutung": "und so weiter"
+      },
+      {
+        "abkuerzung": "vgl.",
+        "bedeutung": "vergleiche"
+      },
+      {
+        "abkuerzung": "WC",
+        "plural": "-s",
+        "bedeutung": "Wasserklosett (water closet)"
+      },
+      {
+        "abkuerzung": "WG",
+        "plural": "-s",
+        "bedeutung": "die Wohngemeinschaft, -en"
+      },
+      {
+        "abkuerzung": "z. B.",
+        "bedeutung": "zum Beispiel"
+      }
+    ],
+    "anglizismen": [
+      { "typ": "Nomen", "wort": "Baby", "artikel": "das", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Babysitter", "artikel": "der", "plural": "-", "feminin": "die Babysitterin, -nen" },
+      { "typ": "Nomen", "wort": "Band", "artikel": "die", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Bar", "artikel": "die", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Bikini", "artikel": "der", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Blog", "artikel": "der", "plural": "-s" },
+      { "typ": "Verb", "infinitiv": "bloggen", "praesens": "bloggt", "praeteritum": "bloggte", "perfekt": "hat gebloggt" },
+      { "typ": "Nomen", "wort": "Camp", "artikel": "das", "plural": "-s" },
+      { "typ": "Verb", "infinitiv": "campen", "praesens": "campt", "praeteritum": "campte", "perfekt": "hat gecampt" },
+      { "typ": "Nomen", "wort": "Castingshow", "artikel": "die", "plural": "-s" },
+      { "typ": "Nomen", "wort": "CD-Player", "artikel": "der", "plural": "-" },
+      { "typ": "Nomen", "wort": "Chat(room)", "artikel": "der", "plural": "-s" },
+      { "typ": "Verb", "infinitiv": "chatten", "praesens": "chattet", "praeteritum": "chattete", "perfekt": "hat gechattet" },
+      { "typ": "Verb", "infinitiv": "checken", "praesens": "checkt", "praeteritum": "checkte", "perfekt": "hat gecheckt" },
+      { "typ": "Nomen", "wort": "Chip", "artikel": "der", "plural": "-s" },
+      { "typ": "Nomen", "wort": "City", "artikel": "die", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Club", "artikel": "der", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Cola", "artikel": "die/das", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Comic", "artikel": "der/das", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Computer", "artikel": "der", "plural": "-" },
+      { "typ": "Adjektiv", "wort": "cool" },
+      { "typ": "Nomen", "wort": "E-Bike", "artikel": "das", "plural": "-s" },
+      { "typ": "Nomen", "wort": "E-Book", "artikel": "das", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Fan", "artikel": "der", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Fax", "artikel": "das", "plural": "-e" },
+      { "typ": "Verb", "infinitiv": "faxen", "praesens": "faxt", "praeteritum": "faxte", "perfekt": "hat gefaxt" },
+      { "typ": "Nomen", "wort": "Festival", "artikel": "das", "plural": "-s" },
+      { "typ": "Adjektiv", "wort": "fit" },
+      { "typ": "Nomen", "wort": "Fitness", "artikel": "die", "plural": "-" },
+      { "typ": "Adjektiv", "wort": "global" },
+      { "typ": "Verb", "infinitiv": "googeln", "praesens": "googelt", "praeteritum": "googelte", "perfekt": "hat gegoogelt" },
+      { "typ": "Nomen", "wort": "Hamburger", "artikel": "der", "plural": "-" },
+      { "typ": "Nomen", "wort": "Hit", "artikel": "der", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Homepage", "artikel": "die", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Internet", "artikel": "das", "plural": null },
+      { "typ": "Nomen", "wort": "Jazz", "artikel": "der", "plural": null },
+      { "typ": "Nomen", "wort": "Job", "artikel": "der", "plural": "-s" },
+      { "typ": "Verb", "infinitiv": "jobben", "praesens": "jobbt", "praeteritum": "jobbte", "perfekt": "hat gejobbt" },
+      { "typ": "Verb", "infinitiv": "joggen", "praesens": "joggt", "praeteritum": "joggte", "perfekt": "ist/hat gejoggt" },
+      { "typ": "Nomen", "wort": "Ketchup/Ketschup", "artikel": "der/das", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Killer", "artikel": "der", "plural": "-", "feminin": "die Killerin, -nen" },
+      { "typ": "Nomen", "wort": "Laptop", "artikel": "der", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Link", "artikel": "der", "plural": "-s" },
+      { "typ": "Adjektiv", "wort": "live" },
+      { "typ": "Nomen", "wort": "(E-)Mail", "artikel": "die (D, A)/das (A, CH)", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Mailbox", "artikel": "die", "plural": "-en" },
+      { "typ": "Verb", "infinitiv": "mailen", "praesens": "mailt", "praeteritum": "mailte", "perfekt": "hat gemailt" },
+      { "typ": "Nomen", "wort": "Manager", "artikel": "der", "plural": "-", "feminin": "die Managerin, -nen" },
+      { "typ": "Nomen", "wort": "Mobilbox", "artikel": "die", "plural": "-en" },
+      { "typ": "Nomen", "wort": "Mountainbike", "artikel": "das", "plural": "-s" },
+      { "typ": "Adjektiv", "wort": "o.k./O.K./okay" },
+      { "typ": "Adjektiv", "wort": "online" },
+      { "typ": "Nomen", "wort": "Plattform", "artikel": "die", "plural": "-en" },
+      { "typ": "Nomen", "wort": "Poster", "artikel": "das", "plural": "-" },
+      { "typ": "Nomen", "wort": "Puzzle", "artikel": "das", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Sandwich", "artikel": "das/der", "plural": "-(e)s/-e" },
+      { "typ": "Nomen", "wort": "Show", "artikel": "die", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Smartphone", "artikel": "das", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Snack", "artikel": "der", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Software", "artikel": "die", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Song", "artikel": "der", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Spot", "artikel": "der", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Steak", "artikel": "das", "plural": "-s" },
+      { "typ": "Verb", "infinitiv": "surfen", "praesens": "surft", "praeteritum": "surfte", "perfekt": "ist/hat gesurft" },
+      { "typ": "Nomen", "wort": "Swimmingpool", "artikel": "der", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Taxi", "artikel": "das", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Team", "artikel": "das", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Terminal", "artikel": "der", "plural": "-s" },
+      { "typ": "Nomen", "wort": "Tour", "artikel": "die", "plural": "-en" },
+      { "typ": "Nomen", "wort": "Trend", "artikel": "der", "plural": "-s" },
+      { "typ": "Nomen", "wort": "T-Shirt", "artikel": "das", "plural": "-s" },
+      { "typ": "Verb", "infinitiv": "twittern", "praesens": "twittert", "praeteritum": "twitterte", "perfekt": "hat getwittert" },
+      { "typ": "Nomen", "wort": "User", "artikel": "der", "plural": "-", "feminin": "die Userin, -nen" }
+    ],
+    "anweisungssprache_zertifikat_b1": [
+      { "typ": "Nomen", "wort": "Aufgabe", "artikel": "die", "plural": "-n", "beispiel": "Für jede Aufgabe gibt es nur eine richtige Lösung." },
+      { "typ": "Verb", "infinitiv": "ankreuzen", "praesens": "kreuzt an", "praeteritum": "kreuzte an", "perfekt": "hat angekreuzt", "beispiel": "Kreuzen Sie bitte auf dem Antwortbogen an." },
+      { "typ": "Nomen", "wort": "Antwortbogen", "artikel": "der", "plural": "-/-\"-", "beispiel": "Bitte übertragen Sie Ihre Lösungen auf den Antwortbogen." },
+      { "typ": "Nomen", "wort": "Anzeige", "artikel": "die", "plural": "-n", "beispiel": "Lesen Sie die Anzeigen." },
+      { "typ": "Nomen", "wort": "Aussage", "artikel": "die", "plural": "-n", "beispiel": "Sind die Aussagen richtig oder falsch?" },
+      { "typ": "Nomen", "wort": "Durchsage", "artikel": "die", "plural": "-n", "beispiel": "Sie hören eine Durchsage im Radio." },
+      { "typ": "Nomen", "wort": "Einleitung", "artikel": "die", "plural": "-en", "beispiel": "Schreiben Sie eine passende Einleitung und einen Schluss." },
+      { "typ": "Nomen", "wort": "Folie", "artikel": "die", "plural": "-n", "beispiel": "Dazu finden Sie hier fünf Folien." },
+      { "typ": "Nomen", "wort": "Hilfsmittel", "artikel": "das", "plural": "-", "beispiel": "Hilfsmittel wie Mobiltelefone oder Wörterbücher sind nicht erlaubt." },
+      { "typ": "Nomen", "wort": "Kommentar", "artikel": "der", "plural": "-e", "beispiel": "Sie lesen Kommentare zu einem Artikel." },
+      { "typ": "Verb", "infinitiv": "lösen", "praesens": "löst", "praeteritum": "löste", "perfekt": "hat gelöst", "beispiel": "Dazu lösen Sie acht Aufgaben." },
+      { "typ": "Nomen", "wort": "Lösung", "artikel": "die", "plural": "-en", "beispiel": "Wählen Sie bei jeder Aufgabe die richtige Lösung." },
+      { "typ": "Nomen", "wort": "Moderator", "artikel": "der", "plural": "-en", "feminin": "die Moderatorin, -nen", "beispiel": "Die Moderatorin der Radiosendung diskutiert mit zwei Gästen." },
+      { "typ": "Nomen", "wort": "Modul", "artikel": "das", "plural": "-e", "beispiel": "Das Modul Hören besteht aus vier Teilen." },
+      { "typ": "Nomen", "wort": "Präsentation", "artikel": "die", "plural": "-en", "beispiel": "Erklären Sie den Inhalt und die Struktur Ihrer Präsentation." },
+      { "typ": "Nomen", "wort": "Punkt", "artikel": "der", "plural": "-e", "beispiel": "Schreiben Sie etwas zu allen drei Punkten." },
+      { "typ": "Nomen", "wort": "Rückmeldung", "artikel": "die", "plural": "-en", "beispiel": "Reagieren Sie auf die Rückmeldung." },
+      { "typ": "Nomen", "wort": "Struktur", "artikel": "die", "plural": "-en", "beispiel": "Erklären Sie den Inhalt und die Struktur Ihrer Präsentation." },
+      { "typ": "Nomen", "wort": "Textaufbau", "artikel": "der", "plural": null, "beispiel": "Achten Sie auf den Textaufbau." },
+      { "typ": "Verb", "infinitiv": "übertragen", "praesens": "überträgt", "praeteritum": "übertrug", "perfekt": "hat übertragen", "beispiel": "Vergessen Sie bitte nicht, Ihre Lösungen auf den Antwortbogen zu übertragen." },
+      { "typ": "Verb", "infinitiv": "zuordnen", "praesens": "ordnet zu", "praeteritum": "ordnete zu", "perfekt": "hat zugeordnet", "beispiel": "Ordnen Sie die Aussagen zu." }
+    ],
+    "bildungseinrichtungen": {
+      "deutschland": [
+        "die Krippe/der Kindergarten/die Kindertagesstätte (Kita)",
+        "die Grundschule/Mittelschule/Realschule/Gesamtschule/Berufsschule/Sonderschule",
+        "das Gymnasium",
+        "die (Fach-)Hochschule, Universität (Uni)",
+        "die Volkshochschule"
+      ],
+      "oesterreich": [
+        "die Krippe/der Kindergarten",
+        "die Volksschule/Hauptschule/Neue Mittelschule/Berufsschule",
+        "die Allgemeinbildende Höhere Schule (AHS) = das Gymnasium",
+        "die Berufsbildende Höhere Schule (BHS)",
+        "die (Fach-)Hochschule, Akademie, Universität (Uni)",
+        "die Pädagogische Hochschule",
+        "die Volkshochschule"
+      ],
+      "schweiz": [
+        "die Krippe/die Spielgruppe/der Kindergarten",
+        "die Primarschule",
+        "Sekundarstufe I: die Realschule, Sekundarschule, Bezirksschule, Orientierungsstufe",
+        "Sekundarstufe II: die Mittelschule = das Gymnasium, die Berufsschule, die Berufsmittelschule, die Diplommittelschule",
+        "die (Fach-)Hochschule, Universität (Uni)",
+        "die Pädagogische Hochschule",
+        "die Volkshochschule"
+      ]
+    },
+    "bildung_schulfaecher": [
+      "Biologie",
+      "Chemie",
+      "Geografie",
+      "Geschichte",
+      "Mathe(matik)",
+      "Musik",
+      "Philosophie",
+      "Physik",
+      "Sport"
+    ],
+    "bildung_schulnoten": {
+      "deutschland": [
+        { "note": 1, "bezeichnung": "sehr gut", "umgangssprachlich": "die/eine Eins" },
+        { "note": 2, "bezeichnung": "gut", "umgangssprachlich": "die/eine Zwei" },
+        { "note": 3, "bezeichnung": "befriedigend", "umgangssprachlich": "die/eine Drei" },
+        { "note": 4, "bezeichnung": "ausreichend", "umgangssprachlich": "die/eine Vier" },
+        { "note": 5, "bezeichnung": "mangelhaft", "umgangssprachlich": "die/eine Fünf" },
+        { "note": 6, "bezeichnung": "ungenügend", "umgangssprachlich": "die/eine Sechs" }
+      ],
+      "oesterreich": [
+        { "note": 1, "bezeichnung": "sehr gut", "umgangssprachlich": "der/ein Einser" },
+        { "note": 2, "bezeichnung": "gut", "umgangssprachlich": "der/ein Zweier" },
+        { "note": 3, "bezeichnung": "befriedigend", "umgangssprachlich": "der/ein Dreier" },
+        { "note": 4, "bezeichnung": "genügend", "umgangssprachlich": "der/ein Vierer" },
+        { "note": 5, "bezeichnung": "nicht genügend", "umgangssprachlich": "der/ein Fünfer" }
+      ],
+      "schweiz": [
+        { "note": 6, "bezeichnung": "sehr gut", "umgangssprachlich": "der/ein Sechser" },
+        { "note": 5, "bezeichnung": "gut", "umgangssprachlich": "der/ein Fünfer" },
+        { "note": 4, "bezeichnung": "genügend", "umgangssprachlich": "der/ein Vierer" },
+        { "note": 3, "bezeichnung": "ungenügend", "umgangssprachlich": "der/ein Dreier" },
+        { "note": 2, "bezeichnung": "schlecht", "umgangssprachlich": "der/ein Zweier" },
+        { "note": 1, "bezeichnung": "sehr schlecht", "umgangssprachlich": "der/ein Einer" }
+      ]
+    },
+    "farben": {
+      "praefixe": ["hell-", "dunkel-"],
+      "liste": [
+        "blau", "braun", "gelb", "grau", "grün", "lila", "orange", "rosa", "rot", "schwarz", "violett", "weiß"
+      ]
+    },
+    "himmelsrichtungen": [
+      { "richtung": "Norden", "praefix": "Nord-", "adjektiv": "nördlich" },
+      { "richtung": "Osten", "praefix": "Ost-", "adjektiv": "östlich" },
+      { "richtung": "Süden", "praefix": "Süd-", "adjektiv": "südlich" },
+      { "richtung": "Westen", "praefix": "West-", "adjektiv": "westlich" }
+    ],
+    "laender_nationalitaeten_sprachen": [
+      {
+        "land": "Deutschland",
+        "bewohner": "der Deutsche, -n",
+        "bewohnerin": "die Deutsche, -n",
+        "adjektiv": "deutsch",
+        "sprache": "Deutsch"
+      },
+      {
+        "kontinent": "Europa",
+        "bewohner": "der Europäer, -",
+        "bewohnerin": "die Europäerin, -nen",
+        "adjektiv": "europäisch",
+        "sprache": null
+      },
+      {
+        "land": "Österreich",
+        "bewohner": "der Österreicher, -",
+        "bewohnerin": "die Österreicherin, -nen",
+        "adjektiv": "österreichisch",
+        "sprache": "Deutsch"
+      },
+      {
+        "land": "die Schweiz",
+        "bewohner": "der Schweizer, -",
+        "bewohnerin": "die Schweizerin, -nen",
+        "adjektiv": ["Schweizer", "schweizerisch"],
+        "sprache": "Deutsch, Französisch, Italienisch, Rätoromanisch"
+      },
+      {
+        "land": "Griechenland",
+        "bewohner": "der Grieche, -n",
+        "bewohnerin": "die Griechin, -nen",
+        "adjektiv": "griechisch",
+        "sprache": "Griechisch"
+      },
+      {
+        "land": "die Türkei",
+        "bewohner": "der Türke, -n",
+        "bewohnerin": "die Türkin, -nen",
+        "adjektiv": "türkisch",
+        "sprache": "Türkisch"
+      },
+      {
+        "land": "die Ukraine",
+        "bewohner": "der Ukrainer, -",
+        "bewohnerin": "die Ukrainerin, -nen",
+        "adjektiv": "ukrainisch",
+        "sprache": "Ukrainisch"
+      }
+    ],
+    "politische_begriffe": {
+      "allgemein": [
+        { "begriff": "Bund", "praefix": "Bundes-" },
+        { "begriff": "Bundeskanzler", "plural": "-", "feminin": "die Bundeskanzlerin, -nen" },
+        { "begriff": "Bundespräsident", "plural": "-", "feminin": "die Bundespräsidentin, -nen" },
+        { "begriff": "Bürgermeister", "plural": "-", "feminin": "die Bürgermeisterin, -nen" },
+        { "begriff": "Demokratie", "plural": "-n", "adjektiv": "demokratisch" },
+        { "begriff": "Europäische Union", "abkuerzung": "die EU" },
+        { "begriff": "Gemeinde" },
+        { "begriff": "konservativ" },
+        { "begriff": "liberal" },
+        { "begriff": "Minister", "plural": "-", "feminin": "die Ministerin, -nen" },
+        { "begriff": "Parlament", "beispiel": "das Europäische Parlament" },
+        { "begriff": "Partei", "plural": "-en" },
+        { "begriff": "Regierung", "plural": "-en" },
+        { "begriff": "Staat", "plural": "-en", "adjektiv": "staatlich" }
+      ],
+      "deutschland": [
+        "das Bundesland",
+        "Bundesrepublik Deutschland",
+        "der Bundestag"
+      ],
+      "oesterreich": [
+        "das Bundesland",
+        "der Nationalrat",
+        "Republik Österreich"
+      ],
+      "schweiz": [
+        { "begriff": "Ammann", "plural": "\"-er", "feminin": "die Ammännin, -nen" },
+        { "begriff": "Bundesrat", "plural": "\"-e", "feminin": "die Bundesrätin, -nen" },
+        "Confoederatio Helvetica (CH), die Schweizerische Eidgenossenschaft",
+        "der Kanton",
+        "der Nationalrat",
+        { "begriff": "Regierungsrat", "plural": "\"-e", "feminin": "die Regierungsrätin, -nen" },
+        { "begriff": "Stadtpräsident", "plural": "-en", "feminin": "die Stadtpräsidentin, -nen" },
+        "der Ständerat"
+      ]
+    },
+    "tiere": [
+      { "tier": "Affe", "artikel": "der", "plural": "-n" },
+      { "tier": "Bär", "artikel": "der", "plural": "-en" },
+      { "tier": "Biene", "artikel": "die", "plural": "-n" },
+      { "tier": "Elefant", "artikel": "der", "plural": "-en" },
+      { "tier": "Ente", "artikel": "die", "plural": "-n" },
+      { "tier": "Fisch", "artikel": "der", "plural": "-e" },
+      { "tier": "Fliege", "artikel": "die", "plural": "-n" },
+      { "tier": "Giraffe", "artikel": "die", "plural": "-n" },
+      { "tier": "Hase", "artikel": "der", "plural": "-n" },
+      { "tier": "Hund", "artikel": "der", "plural": "-e" },
+      { "tier": "Insekt", "artikel": "das", "plural": "-en" },
+      { "tier": "Katze", "artikel": "die", "plural": "-n" },
+      { "tier": "Krokodil", "artikel": "das", "plural": "-e" },
+      { "tier": "Kuh", "artikel": "die", "plural": "¨-e" },
+      { "tier": "Löwe", "artikel": "der", "plural": "-n" },
+      { "tier": "Maus", "artikel": "die", "plural": "¨-e" },
+      { "tier": "Mücke", "artikel": "die", "plural": "-n" },
+      { "tier": "Pferd", "artikel": "das", "plural": "-e" },
+      { "tier": "Pinguin", "artikel": "der", "plural": "-e" },
+      { "tier": "Schaf", "artikel": "das", "plural": "-e" },
+      { "tier": "Schildkröte", "artikel": "die", "plural": "-n" },
+      { "tier": "Schlange", "artikel": "die", "plural": "-n" },
+      { "tier": "Schwein", "artikel": "das", "plural": "-e" },
+      { "tier": "Vogel", "artikel": "der", "plural": "¨-" }
+    ],
+    "waehrungen_masse_gewichte": [
+      { "symbol": "€", "name": "Euro", "plural": "-s", "kleineinheit": "Cent" },
+      { "symbol": "sFr.", "name": "Franken", "plural": "-", "kleineinheit": "Rappen, Rp." },
+      { "mass": "m", "name": "Meter" },
+      { "mass": "cm", "name": "Zentimeter" },
+      { "mass": "km", "name": "Kilometer" },
+      { "mass": "m²", "name": "Quadratmeter" },
+      { "mass": "°C", "name": "Grad Celsius" },
+      { "mass": "%", "name": "Prozent" },
+      { "mass": "l", "name": "Liter" },
+      { "mass": "g", "name": "Gramm" },
+      { "mass": "Pfund", "entspricht": "500g / ein halbes Kilo" },
+      { "mass": "kg", "name": "Kilo(gramm)" },
+      { "mass": "dkg/dag", "name": "Deka(gramm)", "anmerkung": "10g, nur in Österreich (A)" },
+      { "mass": "km/h", "name": "Kilometer pro Stunde" }
+    ],
+    "zahlen_bruchzahlen": {
+      "kardinal": [
+        { "ziffer": 1, "wort": "eins" }, { "ziffer": 2, "wort": "zwei" }, { "ziffer": 3, "wort": "drei" },
+        { "ziffer": 4, "wort": "vier" }, { "ziffer": 5, "wort": "fünf" }, { "ziffer": 6, "wort": "sechs" },
+        { "ziffer": 7, "wort": "sieben" }, { "ziffer": 8, "wort": "acht" }, { "ziffer": 9, "wort": "neun" },
+        { "ziffer": 10, "wort": "zehn" }, { "ziffer": 11, "wort": "elf" }, { "ziffer": 12, "wort": "zwölf" },
+        { "ziffer": 13, "wort": "dreizehn" }, { "ziffer": 21, "wort": "einundzwanzig" }, { "ziffer": 30, "wort": "dreißig" },
+        { "ziffer": 100, "wort": "(ein)hundert" }, { "ziffer": 101, "wort": "(ein)hundert(und)eins" },
+        { "ziffer": 1000, "wort": "(ein)tausend" }, { "ziffer": 1000000, "wort": "eine Million, -en" },
+        { "ziffer": 1000000000, "wort": "eine Milliarde, -n" }
+      ],
+      "ordinal": [
+        "der/die/das erste", "zweite", "dritte", "vierte usw."
+      ],
+      "adverbien": [
+        "erstens", "zweitens", "drittens", "viertens usw."
+      ],
+      "wiederholung": [
+        "einmal", "zweimal", "dreimal", "viermal usw."
+      ],
+      "art": [
+        "einfach", "zweifach/doppelt"
+      ],
+      "operatoren": [
+        "plus", "minus"
+      ],
+      "brueche": [
+        { "bruch": "½", "name": "ein halb", "adjektiv": "halb..." },
+        { "bruch": "⅓", "name": "ein Drittel", "adjektiv": "drittel..." },
+        { "bruch": "¼", "name": "ein Viertel", "adjektiv": "Viertel..." }
+      ]
+    },
+    "zeit": {
+      "datum": [
+        { "beispiel": "1999", "aussprache": "neunzehnhundertneunundneunzig" },
+        { "beispiel": "2004", "aussprache": "zweitausend(und)vier" },
+        { "beispiel": "heute ist der 1. März", "aussprache": "heute ist der erste März/der erste Dritte" },
+        { "beispiel": "Berlin, 10. April 2012", "aussprache": "Berlin, zehnter April/zehnter Vierter zweitausendundzwölf/zweitausendzwölf" }
+      ],
+      "feiertage": [
+        "Neujahr", "Ostern", "Pfingsten", "Weihnachten", "Silvester", "Nationalfeiertag"
+      ],
+      "jahreszeiten": [
+        "der Frühling/das Frühjahr", "der Sommer", "der Herbst", "der Winter"
+      ],
+      "monatsnamen": [
+        { "monat": "Januar", "anmerkung": "D, CH; A: Jänner" },
+        { "monat": "Februar", "anmerkung": "D, CH; A: Feber" },
+        { "monat": "März" }, { "monat": "April" }, { "monat": "Mai" }, { "monat": "Juni" },
+        { "monat": "Juli" }, { "monat": "August" }, { "monat": "September" }, { "monat": "Oktober" },
+        { "monat": "November" }, { "monat": "Dezember" }
+      ],
+      "tageszeiten": [
+        { "zeit": "der Tag, -e", "adverb": ["täglich", "tagsüber"] },
+        { "zeit": "der Morgen, -", "adverb": ["morgens", "am Morgen"], "anmerkung": "A: in der Früh" },
+        { "zeit": "der Vormittag, -e", "adverb": ["vormittags", "am Vormittag"] },
+        { "zeit": "der Mittag, -e", "adverb": ["mittags", "zu Mittag", "am Mittag"] },
+        { "zeit": "der Nachmittag, -e", "adverb": ["nachmittags", "am Nachmittag"] },
+        { "zeit": "der Abend, -e", "adverb": ["abends", "am Abend"] },
+        { "zeit": "die Nacht, ¨-e", "adverb": ["nachts", "in der Nacht"] },
+        { "zeit": "die Mitternacht", "adverb": "um Mitternacht" }
+      ],
+      "uhrzeit": [
+        { "digital": "00:03", "aussprache": "null Uhr drei" },
+        { "digital": "07:15", "aussprache": "sieben Uhr fünfzehn" },
+        { "digital": "13:17 Uhr", "aussprache": "dreizehn Uhr siebzehn" },
+        { "digital": "24:00 Uhr", "aussprache": "vierundzwanzig Uhr" },
+        { "umgangssprachlich": "ein Uhr" },
+        { "umgangssprachlich": "fünf Minuten vor/nach eins" },
+        { "umgangssprachlich": "viertel vor/nach zwei", "anmerkung": "A: auch viertel drei (14:15); auch dreiviertel drei (14:45)" },
+        { "umgangssprachlich": "halb drei" }
+      ],
+      "wochentage": [
+        { "tag": "der Wochentag, -e", "adverb": ["wochentags", "werktags"] },
+        { "tag": "das Wochenende, -n", "adverb": "am Wochenende" },
+        { "tag": "der Montag", "adverb": ["montags", "am Montag"] },
+        { "tag": "der Dienstag", "adverb": ["dienstags", "am Dienstag"] },
+        { "tag": "der Mittwoch", "adverb": ["mittwochs", "am Mittwoch"] },
+        { "tag": "der Donnerstag", "adverb": ["donnerstags", "am Donnerstag"] },
+        { "tag": "der Freitag", "adverb": ["freitags", "am Freitag"] },
+        { "tag": "der Samstag", "adverb": ["samstags", "am Samstag"], "anmerkung": "D: der Sonnabend, sonnabends" },
+        { "tag": "der Sonntag", "adverb": ["sonntags", "am Sonntag"] }
+      ],
+      "zeitangaben": [
+        { "einheit": "die Sekunde, -n" },
+        { "einheit": "die Minute, -n" },
+        { "einheit": "die Stunde, -n", "intervall": "stündlich" },
+        { "einheit": "der Tag, -e", "intervall": "täglich" },
+        { "einheit": "die Woche, -n", "intervall": "wöchentlich" },
+        { "einheit": "der Monat, -e", "intervall": "monatlich" },
+        { "einheit": "das Jahr, -e", "intervall": "jährlich" },
+        { "einheit": "das Jahrzehnt, -e" },
+        { "einheit": "das Jahrhundert, -e" },
+        { "einheit": "das Jahrtausend, -e" }
+      ]
+    }
+  }
+}
