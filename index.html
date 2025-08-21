@@ -136,6 +136,42 @@
             transform: translateY(-1px);
         }
 
+        .conversation-level-selector {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .conversation-level-selector:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+
+        .conversation-level-selector:hover {
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+        }
+
+        .vocab-selector {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .vocab-selector:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+
+        .vocab-selector:hover {
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+        }
+
         .flashcard-sentence-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
@@ -262,6 +298,41 @@
             box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3) !important;
         }
 
+        /* Mobile-specific improvements for sentence patterns */
+        @media (max-width: 640px) {
+            .flashcard-sentence-card p {
+                word-break: break-word;
+                hyphens: auto;
+                line-height: 1.4;
+            }
+            
+            .case-tab {
+                min-width: 80px;
+                font-size: 0.875rem;
+            }
+            
+            .patterns-section {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+            
+            .flashcard-sentence-card {
+                min-height: 180px;
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .flashcard-sentence-card p {
+                font-size: 1rem !important;
+                line-height: 1.3;
+            }
+            
+            .flashcard-sentence-card p:last-child {
+                font-size: 0.875rem !important;
+            }
+        }
+
         .choice-btn:disabled:not(.correct):not(.incorrect) {
             opacity: 0.6;
             background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
@@ -385,6 +456,110 @@
             cursor: not-allowed;
         }
 
+        /* Mobile Responsive Fixes */
+        @media (max-width: 768px) {
+            /* Make flashcard back less transparent for better readability */
+            #flashcard-container .flashcard-back {
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+                opacity: 1 !important;
+            }
+
+            /* Better contrast for flashcard text on mobile */
+            .flashcard-back .card-content {
+                text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            }
+
+            /* Smaller headers on mobile */
+            header.text-center.mb-12 h1 {
+                font-size: 2rem !important; /* text-3xl instead of text-5xl/6xl */
+                margin-bottom: 0.5rem !important;
+            }
+
+            header.text-center.mb-12 p {
+                font-size: 1rem !important; /* text-base instead of text-xl */
+            }
+
+            header.text-center.mb-12 {
+                margin-bottom: 2rem !important; /* mb-8 instead of mb-12 */
+                padding: 1.5rem !important; /* p-6 instead of p-8 */
+            }
+
+            /* Smaller progress counter on mobile */
+            .progress-counter.absolute {
+                top: 0.5rem !important;
+                left: 0.5rem !important;
+                padding: 0.375rem 0.75rem !important; /* py-1.5 px-3 instead of py-2 px-4 */
+                font-size: 0.75rem !important; /* text-xs instead of text-sm */
+                background-color: rgba(0,0,0,0.3) !important;
+                backdrop-filter: blur(4px) !important;
+            }
+
+            /* Smaller pagination buttons on mobile */
+            #pagination-container .flex.items-center.space-x-2 button,
+            #pagination-container .flex.items-center.space-x-1 button {
+                padding: 0.375rem 0.75rem !important; /* py-1.5 px-3 instead of larger padding */
+                font-size: 0.875rem !important; /* text-sm */
+            }
+
+            #pagination-container .flex.items-center.space-x-2 span,
+            #pagination-container .flex.items-center.space-x-1 span {
+                font-size: 0.875rem !important; /* text-sm */
+                padding: 0.375rem 0.75rem !important;
+            }
+
+            /* Better mobile flashcard container */
+            #flashcard-container {
+                margin: 0 auto;
+                max-width: 100%;
+            }
+
+            /* Make vocabulary flashcards more readable on mobile */
+            #flashcard-translation {
+                text-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
+                font-weight: 600 !important;
+            }
+
+            #flashcard-sentence-translation {
+                text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+            }
+
+            /* Smaller conversation navigation controls on mobile */
+            .flex.justify-center.items-center.space-x-4.mb-8 button {
+                padding: 0.5rem !important; /* p-2 instead of p-3 */
+            }
+
+            .flex.justify-center.items-center.space-x-4.mb-8 button svg {
+                width: 1rem !important; /* w-4 instead of w-6 */
+                height: 1rem !important; /* h-4 instead of h-6 */
+            }
+
+            .flex.justify-center.items-center.space-x-4.mb-8 > div {
+                padding: 0.5rem 1rem !important; /* py-2 px-4 instead of py-3 px-6 */
+                font-size: 0.875rem !important; /* text-sm */
+            }
+
+            .flex.justify-center.items-center.space-x-4.mb-8 {
+                margin-bottom: 1.5rem !important; /* mb-6 instead of mb-8 */
+                gap: 0.75rem !important; /* space-x-3 instead of space-x-4 */
+            }
+
+            /* Hide section headers on mobile */
+            header.text-center.mb-12,
+            header.text-center.mb-8 {
+                display: none !important;
+            }
+
+            /* Hide case explanation section on mobile */
+            .case-section .relative.mb-8 {
+                display: none !important;
+            }
+
+            /* Hide progress counter on mobile */
+            .progress-counter.px-6.py-3.rounded-xl.shadow-md {
+                display: none !important;
+            }
+        }
+
         @media (max-width: 640px) {
             #pagination-container {
                 flex-direction: column;
@@ -393,6 +568,15 @@
 
             #pagination-container .flex {
                 margin-top: 1rem;
+            }
+
+            /* Extra small screens - even smaller headers */
+            header.text-center.mb-12 h1 {
+                font-size: 1.5rem !important; /* text-2xl */
+            }
+
+            header.text-center.mb-12 {
+                padding: 1rem !important; /* p-4 */
             }
         }
     </style>
@@ -581,11 +765,14 @@
                             <!-- Level Selector -->
                             <div class="flex justify-center mb-8">
                                 <div class="bg-white rounded-2xl p-4 shadow-lg">
-                                    <label for="conversation-level-select" class="block text-sm font-medium text-gray-700 mb-2">Choose Level</label>
-                                    <select id="conversation-level-select" class="bg-white border border-gray-300 rounded-lg px-4 py-2 font-medium text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                        <option value="a1" ${currentLevel === 'a1' ? 'selected' : ''}>A1 - Beginner</option>
-                                        <option value="a2" ${currentLevel === 'a2' ? 'selected' : ''}>A2 - Elementary</option>
-                                    </select>
+                                    <label for="conversation-level-select" class="block text-sm font-medium text-slate-700 mb-2">Level:</label>
+                                    <div class="max-w-sm relative">
+                                        <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-xl blur opacity-20"></div>
+                                        <select id="conversation-level-select" class="relative w-full bg-white border-2 border-slate-200 rounded-xl py-4 px-6 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg font-semibold shadow-lg conversation-level-selector">
+                                            <option value="a1" ${currentLevel === 'a1' ? 'selected' : ''}>🌱 A1 - Beginner</option>
+                                            <option value="a2" ${currentLevel === 'a2' ? 'selected' : ''}>🚀 A2 - Elementary</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 
@@ -631,11 +818,14 @@
                         <!-- Level Selector -->
                         <div class="flex justify-center mb-8">
                             <div class="bg-white rounded-2xl p-4 shadow-lg">
-                                <label for="conversation-level-select" class="block text-sm font-medium text-gray-700 mb-2">Choose Level</label>
-                                <select id="conversation-level-select" class="bg-white border border-gray-300 rounded-lg px-4 py-2 font-medium text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                    <option value="a1" ${currentLevel === 'a1' ? 'selected' : ''}>A1 - Beginner</option>
-                                    <option value="a2" ${currentLevel === 'a2' ? 'selected' : ''}>A2 - Elementary</option>
-                                </select>
+                                <label for="conversation-level-select" class="block text-sm font-medium text-slate-700 mb-2">Level:</label>
+                                <div class="max-w-sm relative">
+                                    <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-xl blur opacity-20"></div>
+                                    <select id="conversation-level-select" class="relative w-full bg-white border-2 border-slate-200 rounded-xl py-4 px-6 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg font-semibold shadow-lg conversation-level-selector">
+                                        <option value="a1" ${currentLevel === 'a1' ? 'selected' : ''}>🌱 A1 - Beginner</option>
+                                        <option value="a2" ${currentLevel === 'a2' ? 'selected' : ''}>🚀 A2 - Elementary</option>
+                                    </select>
+                                </div>
                                 <div class="text-sm text-gray-500 mt-1">${data.length} conversations available</div>
                             </div>
                         </div>
@@ -1034,13 +1224,6 @@
 
             let activeLetterButton = null;
 
-            // Touch gesture variables
-            let touchStartX = 0;
-            let touchEndX = 0;
-            let touchStartY = 0;
-            let touchEndY = 0;
-            const minSwipeDistance = 50;
-
             function speak(text, button = null) {
                 if ('speechSynthesis' in window) {
                     window.speechSynthesis.cancel();
@@ -1247,38 +1430,35 @@
                 }
             }
 
-            // Add touch gesture support to the main display area
-            const alphabetDisplayArea = container.querySelector('.bg-gradient-to-br');
+            // Add navigation button event listeners
+            const prevButton = container.querySelector('#prev-letter');
+            const nextButton = container.querySelector('#next-letter');
+            const letterCounter = container.querySelector('#letter-counter');
 
-            // Touch event handlers
-            function handleTouchStart(e) {
-                touchStartX = e.changedTouches[0].screenX;
-                touchStartY = e.changedTouches[0].screenY;
-            }
+            function updateNavigationButtons() {
+                if (prevButton && nextButton && letterCounter) {
+                    prevButton.disabled = currentLetterIndex === 0;
+                    nextButton.disabled = currentLetterIndex === availableLetters.length - 1;
 
-            function handleTouchEnd(e) {
-                touchEndX = e.changedTouches[0].screenX;
-                touchEndY = e.changedTouches[0].screenY;
-                handleGesture();
-            }
+                    prevButton.classList.toggle('opacity-50', currentLetterIndex === 0);
+                    nextButton.classList.toggle('opacity-50', currentLetterIndex === availableLetters.length - 1);
 
-            function handleGesture() {
-                const deltaX = touchEndX - touchStartX;
-                const deltaY = touchEndY - touchStartY;
-
-                // Check if horizontal swipe is more significant than vertical
-                if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                    // Horizontal swipe detected
-                    if (Math.abs(deltaX) > minSwipeDistance) {
-                        if (deltaX > 0) {
-                            // Swipe right - go to previous letter
-                            navigateToPrevLetter();
-                        } else {
-                            // Swipe left - go to next letter
-                            navigateToNextLetter();
-                        }
-                    }
+                    letterCounter.textContent = `${currentLetterIndex + 1} of ${availableLetters.length}`;
                 }
+            }
+
+            if (prevButton) {
+                prevButton.addEventListener('click', () => {
+                    navigateToPrevLetter();
+                    updateNavigationButtons();
+                });
+            }
+
+            if (nextButton) {
+                nextButton.addEventListener('click', () => {
+                    navigateToNextLetter();
+                    updateNavigationButtons();
+                });
             }
 
             // Add keyboard navigation support
@@ -1293,18 +1473,14 @@
                     case 'ArrowLeft':
                         e.preventDefault();
                         navigateToPrevLetter();
+                        updateNavigationButtons();
                         break;
                     case 'ArrowRight':
                         e.preventDefault();
                         navigateToNextLetter();
+                        updateNavigationButtons();
                         break;
                 }
-            }
-
-            // Attach event listeners
-            if (alphabetDisplayArea) {
-                alphabetDisplayArea.addEventListener('touchstart', handleTouchStart, { passive: true });
-                alphabetDisplayArea.addEventListener('touchend', handleTouchEnd, { passive: true });
             }
 
             // Add keyboard support
@@ -1312,12 +1488,11 @@
 
             // Cleanup function (store for later use if needed)
             container._cleanup = () => {
-                if (alphabetDisplayArea) {
-                    alphabetDisplayArea.removeEventListener('touchstart', handleTouchStart);
-                    alphabetDisplayArea.removeEventListener('touchend', handleTouchEnd);
-                }
                 document.removeEventListener('keydown', handleKeyDown);
             };
+
+            // Initial navigation buttons update
+            setTimeout(() => updateNavigationButtons(), 200);
         }
 
         function initializePatternDrill(container) {
@@ -1336,7 +1511,7 @@
                         if (!data) return;
 
                         const html = `
-                            <section id="${caseName}-section" class="case-section bg-white p-8 md:p-10 rounded-3xl shadow-2xl slide-in">
+                            <section id="${caseName}-section" class="case-section bg-white p-4 sm:p-6 md:p-8 lg:p-10 rounded-3xl shadow-2xl slide-in">
                                 <div class="relative mb-8">
                                     <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25"></div>
                                     <div class="relative bg-white rounded-2xl p-6 border border-slate-200">
@@ -1416,30 +1591,30 @@
                                 </div>
                             </div>
 
-                            <div class="flashcard-sentence-card rounded-3xl p-8 md:p-12 text-center min-h-[200px] flex flex-col justify-center mb-8 text-white relative overflow-hidden">
+                            <div class="flashcard-sentence-card rounded-3xl p-4 sm:p-6 md:p-8 lg:p-12 text-center min-h-[200px] flex flex-col justify-center mb-8 text-white relative overflow-hidden">
                                 <div class="absolute top-4 left-4 progress-counter px-4 py-2 rounded-full text-sm">
                                     📚 Card ${currentFlashcardIndex + 1} of ${flashcards.length}
                                 </div>
                                 <div class="relative z-10">
-                                    <p class="text-3xl md:text-4xl font-bold mb-6 leading-relaxed drop-shadow-lg">${card.sentence}</p>
-                                    <div class="w-16 h-1 bg-white/30 mx-auto mb-6 rounded-full"></div>
-                                    <p class="text-xl md:text-2xl italic opacity-90 font-medium">${card.translation}</p>
+                                    <p class="text-lg sm:text-xl md:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 leading-relaxed drop-shadow-lg px-2">${card.sentence}</p>
+                                    <div class="w-16 h-1 bg-white/30 mx-auto mb-4 sm:mb-6 rounded-full"></div>
+                                    <p class="text-base sm:text-lg md:text-xl lg:text-2xl italic opacity-90 font-medium px-2">${card.translation}</p>
                                 </div>
                                 <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
                                 <div class="absolute -top-8 -left-8 w-32 h-32 bg-white/5 rounded-full"></div>
                             </div>
 
-                            <div class="flex justify-between items-center">
-                                <button id="prev-btn" class="pattern-nav-btn px-6 py-3 rounded-xl shadow-lg hover:shadow-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center space-x-2">
+                            <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                                <button id="prev-btn" class="pattern-nav-btn px-4 sm:px-6 py-2 sm:py-3 rounded-xl shadow-lg hover:shadow-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center space-x-2 w-full sm:w-auto">
                                     <span>←</span>
                                     <span>Previous</span>
                                 </button>
-                                <div class="progress-counter px-6 py-3 rounded-xl shadow-md">
+                                <div class="progress-counter px-4 sm:px-6 py-2 sm:py-3 rounded-xl shadow-md order-first sm:order-none">
                                     <span class="font-bold text-lg">${currentFlashcardIndex + 1}</span>
                                     <span class="mx-2 text-slate-400">/</span>
                                     <span class="text-slate-600">${flashcards.length}</span>
                                 </div>
-                                <button id="next-btn" class="primary-btn px-6 py-3 rounded-xl shadow-lg hover:shadow-xl font-semibold transition-all duration-300 flex items-center space-x-2">
+                                <button id="next-btn" class="primary-btn px-4 sm:px-6 py-2 sm:py-3 rounded-xl shadow-lg hover:shadow-xl font-semibold transition-all duration-300 flex items-center space-x-2 w-full sm:w-auto">
                                     <span>${isLastCard ? '🚀 Start Practice' : 'Next'}</span>
                                     <span>→</span>
                                 </button>
@@ -1859,6 +2034,22 @@
                                     🔊 Play Sound
                                 </button>
                             </div>
+
+                            <!-- Navigation buttons -->
+                            <div class="flex justify-center items-center space-x-4 mb-6">
+                                <button id="prev-letter" class="bg-white/20 hover:bg-white/30 rounded-full p-2 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                    </svg>
+                                </button>
+                                <span class="text-sm opacity-75" id="letter-counter">1 of 29</span>
+                                <button id="next-letter" class="bg-white/20 hover:bg-white/30 rounded-full p-2 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
                             <div id="examples-container" class="grid grid-cols-1 gap-3 mt-6">
                                 <!-- Example words will be loaded here -->
                             </div>
@@ -1878,31 +2069,31 @@
         function getPatternsContent() {
             return `
                 <div class="patterns-section bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-slate-800 antialiased">
-                    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-6xl">
-                        <header class="text-center mb-12 relative">
+                    <div class="container mx-auto p-2 sm:p-4 md:p-6 lg:p-8 max-w-6xl">
+                        <header class="text-center mb-8 sm:mb-12 relative">
                             <div class="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-3xl transform -rotate-1"></div>
-                            <div class="relative bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white p-8 md:p-12 rounded-3xl shadow-2xl">
-                                <h1 class="font-display text-4xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-100">
+                            <div class="relative bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white p-4 sm:p-6 md:p-8 lg:p-12 rounded-3xl shadow-2xl">
+                                <h1 class="font-display text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-2 sm:mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-100">
                                     ✨ Possessive Pronouns ✨
                                 </h1>
-                                <p class="text-xl md:text-2xl opacity-90 font-medium">Master German grammar with interactive flashcards!</p>
+                                <p class="text-base sm:text-lg md:text-xl lg:text-2xl opacity-90 font-medium">Master German grammar with interactive flashcards!</p>
                                 <div class="absolute -top-4 -right-4 w-8 h-8 bg-yellow-300 rounded-full animate-ping"></div>
                                 <div class="absolute -bottom-2 -left-2 w-6 h-6 bg-pink-300 rounded-full animate-bounce"></div>
                             </div>
                         </header>
 
                         <!-- Case Selection Tabs -->
-                        <div class="flex flex-wrap justify-center border-b-2 border-slate-200 mb-12 bg-white/50 backdrop-blur-sm rounded-2xl p-2 shadow-lg">
-                            <button data-case="nominative" class="case-tab text-lg font-bold py-4 px-8 rounded-xl mx-1 mb-2 border-b-4 border-blue-500 text-blue-600 transition-all duration-300">
-                                <span class="block text-2xl mb-1">🎯</span>
+                        <div class="flex flex-wrap justify-center border-b-2 border-slate-200 mb-8 sm:mb-12 bg-white/50 backdrop-blur-sm rounded-2xl p-2 shadow-lg">
+                            <button data-case="nominative" class="case-tab text-sm sm:text-lg font-bold py-3 sm:py-4 px-4 sm:px-8 rounded-xl mx-1 mb-2 border-b-4 border-blue-500 text-blue-600 transition-all duration-300">
+                                <span class="block text-lg sm:text-2xl mb-1">🎯</span>
                                 1. Nominative
                             </button>
-                            <button data-case="accusative" class="case-tab text-lg font-bold py-4 px-8 rounded-xl mx-1 mb-2 border-b-4 border-transparent text-slate-500 hover:text-blue-600 transition-all duration-300">
-                                <span class="block text-2xl mb-1">🎪</span>
+                            <button data-case="accusative" class="case-tab text-sm sm:text-lg font-bold py-3 sm:py-4 px-4 sm:px-8 rounded-xl mx-1 mb-2 border-b-4 border-transparent text-slate-500 hover:text-blue-600 transition-all duration-300">
+                                <span class="block text-lg sm:text-2xl mb-1">🎪</span>
                                 2. Accusative
                             </button>
-                            <button data-case="dative" class="case-tab text-lg font-bold py-4 px-8 rounded-xl mx-1 mb-2 border-b-4 border-transparent text-slate-500 hover:text-blue-600 transition-all duration-300">
-                                <span class="block text-2xl mb-1">🎨</span>
+                            <button data-case="dative" class="case-tab text-sm sm:text-lg font-bold py-3 sm:py-4 px-4 sm:px-8 rounded-xl mx-1 mb-2 border-b-4 border-transparent text-slate-500 hover:text-blue-600 transition-all duration-300">
+                                <span class="block text-lg sm:text-2xl mb-1">🎨</span>
                                 3. Dative
                             </button>
                         </div>
@@ -1987,21 +2178,27 @@
                         </div>
                     </div>
 
-                    <div class="controls mb-8 flex flex-wrap gap-4 justify-center">
+                    <div class="controls mb-8 flex flex-wrap gap-6 justify-center">
                         <div>
                             <label for="level-select" class="block text-sm font-medium text-slate-700 mb-2">Level:</label>
-                            <select id="level-select" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                <option value="a1">A1 - Beginner</option>
-                                <option value="a2">A2 - Elementary</option>
-                            </select>
+                            <div class="max-w-sm relative">
+                                <div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-500 rounded-xl blur opacity-20"></div>
+                                <select id="level-select" class="relative w-full bg-white border-2 border-slate-200 rounded-xl py-4 px-6 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg font-semibold shadow-lg vocab-selector">
+                                    <option value="a1">🌱 A1 - Beginner</option>
+                                    <option value="a2">🚀 A2 - Elementary</option>
+                                </select>
+                            </div>
                         </div>
                         <div>
                             <label for="lang-select" class="block text-sm font-medium text-slate-700 mb-2">Translation Language:</label>
-                            <select id="lang-select" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                <option value="en">🇺🇸 English</option>
-                                <option value="fa">🇮🇷 فارسی</option>
-                                <option value="ku">🇹🇯 کوردی</option>
-                            </select>
+                            <div class="max-w-sm relative">
+                                <div class="absolute inset-0 bg-gradient-to-r from-green-400 to-blue-500 rounded-xl blur opacity-20"></div>
+                                <select id="lang-select" class="relative w-full bg-white border-2 border-slate-200 rounded-xl py-4 px-6 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg font-semibold shadow-lg vocab-selector">
+                                    <option value="en">🇺🇸 English</option>
+                                    <option value="fa">🇮🇷 فارسی</option>
+                                    <option value="ku">🇹🇯 کوردی</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
