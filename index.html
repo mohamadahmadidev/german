@@ -1940,11 +1940,35 @@
 
             langSelect.value = currentLanguage;
             let currentVocabIndex = 0;
+            let isLoadingProgress = false;
 
             let currentPage = 1;
             const wordsPerPage = 12; // Show 12 cards per page
 
-            // Flashcard functionality
+            // Load user progress on initialization
+            async function initializeWithProgress() {
+                try {
+                    isLoadingProgress = true;
+                    const progress = await window.loadVocabProgress();
+
+                    // Set initial level and vocab index based on saved progress
+                    if (progress && progress[levelSelect.value]) {
+                        currentVocabIndex = progress[levelSelect.value].currentIndex || 0;
+                        console.log(`Loaded progress: Level ${levelSelect.value}, Word ${currentVocabIndex + 1}`);
+                    }
+
+                    isLoadingProgress = false;
+                    updateFlashcard();
+                    renderCards();
+                } catch (error) {
+                    console.error('Error initializing progress:', error);
+                    isLoadingProgress = false;
+                    updateFlashcard();
+                    renderCards();
+                }
+            }
+
+            // Enhanced updateFlashcard function with progress saving
             function updateFlashcard() {
                 const level = levelSelect.value;
                 const lang = langSelect.value;
@@ -1954,6 +1978,13 @@
                 if (!data || data.length === 0) {
                     flashcardWord.textContent = 'No data available';
                     return;
+                }
+
+                // Ensure currentVocabIndex is within bounds
+                if (currentVocabIndex >= data.length) {
+                    currentVocabIndex = 0;
+                } else if (currentVocabIndex < 0) {
+                    currentVocabIndex = data.length - 1;
                 }
 
                 const currentWord = data[currentVocabIndex];
@@ -1979,6 +2010,18 @@
                 // Update button states
                 prevVocabBtn.disabled = currentVocabIndex === 0;
                 nextVocabBtn.disabled = currentVocabIndex === data.length - 1;
+
+                // Save progress to Firebase (only if not currently loading)
+                if (!isLoadingProgress && window.saveVocabProgress) {
+                    window.saveVocabProgress(level, currentVocabIndex);
+                }
+
+                // Update page to show current word
+                const targetPage = Math.floor(currentVocabIndex / wordsPerPage) + 1;
+                if (targetPage !== currentPage) {
+                    currentPage = targetPage;
+                    renderCards();
+                }
             }
 
             // Flashcard event listeners
@@ -2093,15 +2136,22 @@
                     paginationContainer.style.display = 'none';
                 }
 
-                // Render cards for current page
-                currentPageData.forEach(word => {
+                // Render cards for current page with highlight for current word
+                currentPageData.forEach((word, index) => {
+                    const globalIndex = startIndex + index;
+                    const isCurrentWord = globalIndex === currentVocabIndex;
+
                     const card = document.createElement('div');
-                    card.className = 'level-card h-80 flashcard';
+                    card.className = `level-card h-80 flashcard cursor-pointer ${isCurrentWord ? 'ring-4 ring-blue-500 ring-opacity-50' : ''}`;
+
                     card.innerHTML = `
                         <div class="level-card-inner flashcard-inner w-full h-full">
-                            <div class="flashcard-front bg-white border rounded-lg p-4 flex flex-col justify-between shadow-md">
+                            <div class="flashcard-front bg-white border rounded-lg p-4 flex flex-col justify-between shadow-md ${isCurrentWord ? 'bg-blue-50 border-blue-300' : ''}">
                                 <div>
-                                    <p class="text-sm text-slate-500">${word.article || ''}</p>
+                                    <div class="flex justify-between items-start mb-2">
+                                        <p class="text-sm text-slate-500">${word.article || ''}</p>
+                                        ${isCurrentWord ? '<span class="text-xs bg-blue-500 text-white px-2 py-1 rounded-full">Current</span>' : ''}
+                                    </div>
                                     <h3 class="text-3xl font-bold text-slate-800 mb-4">${word.word}</h3>
                                     <p class="text-slate-600 text-lg">${word.exercise_sentence.replace(/__/g, `<span class="font-bold text-blue-500">${word.word}</span>`)}</p>
                                 </div>
@@ -2115,9 +2165,23 @@
                                 <button class="flip-btn self-center text-slate-300 font-semibold">&larr; Back to German</button>
                             </div>
                         </div>`;
+
+                    // Add flip functionality
                     card.querySelectorAll('.flip-btn').forEach(btn => {
-                        btn.addEventListener('click', () => card.classList.toggle('is-flipped'));
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            card.classList.toggle('is-flipped');
+                        });
                     });
+
+                    // Add click handler to select this word
+                    card.addEventListener('click', () => {
+                        currentVocabIndex = globalIndex;
+                        updateFlashcard();
+                        // Re-render cards to update highlighting
+                        renderCards();
+                    });
+
                     cardsContainer.appendChild(card);
                 });
 
@@ -2153,11 +2217,32 @@
                 renderCards();
             });
 
-            levelSelect.addEventListener('change', () => {
-                currentPage = 1; // Reset to first page when changing level
-                currentVocabIndex = 0; // Reset flashcard to first word
-                renderCards();
-                updateFlashcard();
+            // Enhanced level selector with progress loading
+            levelSelect.addEventListener('change', async () => {
+                try {
+                    isLoadingProgress = true;
+                    const progress = await window.loadVocabProgress();
+
+                    // Load saved progress for the new level
+                    if (progress && progress[levelSelect.value]) {
+                        currentVocabIndex = progress[levelSelect.value].currentIndex || 0;
+                    } else {
+                        currentVocabIndex = 0; // Start from beginning if no progress
+                    }
+
+                    currentPage = Math.floor(currentVocabIndex / wordsPerPage) + 1;
+                    isLoadingProgress = false;
+
+                    renderCards();
+                    updateFlashcard();
+                } catch (error) {
+                    console.error('Error loading level progress:', error);
+                    isLoadingProgress = false;
+                    currentVocabIndex = 0;
+                    currentPage = 1;
+                    renderCards();
+                    updateFlashcard();
+                }
             });
 
             langSelect.addEventListener('change', (e) => {
@@ -2169,8 +2254,8 @@
                 updateUIText();
             });
 
-            renderCards();
-            updateFlashcard();
+            // Initialize with progress
+            initializeWithProgress();
         }
 
         // --- TEMPLATE FUNCTIONS ---
@@ -2389,6 +2474,78 @@
         }
 
     })();
+    </script>
+
+    <!-- Firebase Integration for Vocabulary Progress -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+        import { getFirestore, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDCFKsrCEH0Av8uLmfCTU3c65VWKcST_o8",
+          authDomain: "learnnewlang.firebaseapp.com",
+          projectId: "learnnewlang",
+          storageBucket: "learnnewlang.firebasestorage.app",
+          messagingSenderId: "537712857555",
+          appId: "1:537712857555:web:5d7c6ba0abbcf31f0edf26",
+          measurementId: "G-MKE9TKVNM7"
+          };
+        // Initialize Firebase (uncomment when you add your config)
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Generate a unique user ID (stored in localStorage for persistence)
+        function getUserId() {
+            let userId = localStorage.getItem('german-learning-user-id');
+            if (!userId) {
+                userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('german-learning-user-id', userId);
+            }
+            return userId;
+        }
+
+        // Save vocabulary progress to Firebase
+        async function saveVocabProgress(level, vocabIndex) {
+            try {
+                const userId = getUserId();
+                await setDoc(doc(db, 'users', userId), {
+                    vocabProgress: {
+                        [level]: {
+                            currentIndex: vocabIndex,
+                            lastUpdated: new Date().toISOString()
+                        }
+                    }
+                }, { merge: true });
+                console.log(`Progress saved: ${level} - word ${vocabIndex + 1}`);
+            } catch (error) {
+                console.error('Error saving vocab progress:', error);
+            }
+        }
+
+        // Load vocabulary progress from Firebase
+        async function loadVocabProgress() {
+            try {
+                const userId = getUserId();
+                const docSnap = await getDoc(doc(db, 'users', userId));
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    return data.vocabProgress || {};
+                } else {
+                    console.log('No user progress found');
+                    return {};
+                }
+            } catch (error) {
+                console.error('Error loading vocab progress:', error);
+                return {};
+            }
+        }
+
+        // Make functions available globally
+        window.saveVocabProgress = saveVocabProgress;
+        window.loadVocabProgress = loadVocabProgress;
+        window.getUserId = getUserId;
     </script>
 </body>
 </html>
