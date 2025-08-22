@@ -43,6 +43,8 @@
         .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 0.75rem; padding: 1rem; text-align: center; background-size: cover; background-position: center; color: white; }
         .card-overlay { position: absolute; inset: 0; background-color: rgba(0,0,0,0.1); border-radius: 0.75rem; z-index: 1; }
         .card-content { position: relative; z-index: 2; }
+        /* UPDATED: Explicitly set transforms for both faces to ensure backface-visibility works correctly */
+        .flashcard-front { transform: rotateY(0deg); }
         .flashcard-back { transform: rotateY(180deg); }
 
         /* Enhanced Flashcard Styles */
@@ -2438,7 +2440,7 @@
                                 <select id="lang-select" class="relative w-full bg-white border-2 border-slate-200 rounded-xl py-4 px-6 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg font-semibold shadow-lg vocab-selector">
                                     <option value="en">🇺🇸 English</option>
                                     <option value="fa">🇮🇷 فارسی</option>
-                                    <option value="ku">🇹🇯 کوردی</option>
+                                    <option value="ku">�🇯 کوردی</option>
                                 </select>
                             </div>
                         </div>
@@ -2490,7 +2492,7 @@
           messagingSenderId: "537712857555",
           appId: "1:537712857555:web:5d7c6ba0abbcf31f0edf26",
           measurementId: "G-MKE9TKVNM7"
-          };
+         };
         // Initialize Firebase (uncomment when you add your config)
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -2549,3 +2551,4 @@
     </script>
 </body>
 </html>
+�
